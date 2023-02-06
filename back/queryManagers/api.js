@@ -20,4 +20,4 @@ function addCors(response) {
     response.setHeader('Access-Control-Allow-Credentials', true);
 }
 
-exports.manage = manageRequest;
+export default manageRequest;

@@ -1,15 +1,23 @@
 // The http module contains methods to handle http queries.
-const http = require('http')
+// const http = require('http');
+
+import http from 'http';
+import fileQuery from './queryManagers/front.js';
+import apiQuery from './queryManagers/api.js';
+import { env } from 'process';
+import { WebSocket } from './utils/WebSocket.js';
+
 // Let's import our logic.
-const fileQuery = require('./queryManagers/front.js')
+// const fileQuery = require('./queryManagers/front.js');
+// const apiQuery = require('./queryManagers/api.js');
+// const {Server} = require("socket.io");
+// const { env } = require('process');
+// const { WebSocket } = require('./utils/WebSocket.js');
 
-const apiQuery = require('./queryManagers/api.js');
-const { env } = require('process');
 
-const port = 8000 || env.port;
 
-const {Server} = require("socket.io");
 
+const port = 3000 || env.port;
 
 /* The http module contains a createServer function, which takes one argument, which is the function that
 ** will be called whenever a new request arrives to the server.
@@ -24,10 +32,10 @@ let server = http.createServer(function (request, response) {
     try {
         // If the URL starts by /api, then it's a REST request (you can change that if you want).
         if (filePath[1] === "api") {
-            apiQuery.manage(request, response);
+            apiQuery(request, response);
             // If it doesn't start by /api, then it's a request for a file.
         } else {
-            fileQuery.manage(request, response);
+            fileQuery(request, response);
         }
     } catch(error) {
         console.log(`error while processing ${request.url}: ${error}`)
@@ -36,14 +44,15 @@ let server = http.createServer(function (request, response) {
     }
 // For the server to be listening to request, it needs a port, which is set thanks to the listen function.
 
-}).listen(3000);
+}).listen(port);
+
 
 //create a socket server
-const io = new Server(server);
+WebSocket.connect(server);
 
-io.on('connection', socket => {
-    console.log('Client connected');
-
+//attach an event listener to the socket server
+WebSocket.attachEventListener("connection", (socket) => {
+    console.log("client connected to the socket server");
     socket.on('message', message => {
         console.log(`Received message: ${message}`);
         socket.send(`Echo: ${message}`);

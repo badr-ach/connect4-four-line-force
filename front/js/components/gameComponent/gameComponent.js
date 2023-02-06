@@ -1,7 +1,7 @@
 import { Animator } from "../../scripts/animator.js";
 
 export class Connect4 extends HTMLElement {
-  constructor(app, playerRed, playerYellow) {
+  constructor(app, playerRed, playerYellow, gameId) {
     super();
     this.attachShadow({ mode: "open" });
 
@@ -109,7 +109,7 @@ export class Connect4 extends HTMLElement {
     for (let i = 0; i < this.rows; i++) {
       this.board.push([]);
       for (let j = 0; j < this.columns; j++) {
-        this.board[i].push(null);
+        this.board[i].push(0);
       }
     }
 
@@ -154,7 +154,7 @@ export class Connect4 extends HTMLElement {
     if (row < 0) {
       return;
     }
-    this.board[row][column] = null;
+    this.board[row][column] = 0;
     this.renderBoard();
   }
 
@@ -199,7 +199,7 @@ export class Connect4 extends HTMLElement {
       return;
     }
     let column = e.target.getAttribute("column");
-    if (column === null) {
+    if (column === 0) {
       return;
     }
     let row = this.currColumns[column];
@@ -235,7 +235,7 @@ export class Connect4 extends HTMLElement {
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.columns - 3; j++) {
         if (
-          this.board[i][j] !== null &&
+          this.board[i][j] !== 0 &&
           this.board[i][j] === this.board[i][j + 1] &&
           this.board[i][j] === this.board[i][j + 2] &&
           this.board[i][j] === this.board[i][j + 3]
@@ -252,7 +252,7 @@ export class Connect4 extends HTMLElement {
     for (let i = 0; i < this.rows - 3; i++) {
       for (let j = 0; j < this.columns; j++) {
         if (
-          this.board[i][j] !== null &&
+          this.board[i][j] !== 0 &&
           this.board[i][j] === this.board[i + 1][j] &&
           this.board[i][j] === this.board[i + 2][j] &&
           this.board[i][j] === this.board[i + 3][j]
@@ -269,7 +269,7 @@ export class Connect4 extends HTMLElement {
     for (let i = 0; i < this.rows - 3; i++) {
       for (let j = 0; j < this.columns - 3; j++) {
         if (
-          this.board[i][j] !== null &&
+          this.board[i][j] !== 0 &&
           this.board[i][j] === this.board[i + 1][j + 1] &&
           this.board[i][j] === this.board[i + 2][j + 2] &&
           this.board[i][j] === this.board[i + 3][j + 3]
@@ -286,7 +286,7 @@ export class Connect4 extends HTMLElement {
     for (let i = 0; i < this.rows - 3; i++) {
       for (let j = 3; j < this.columns; j++) {
         if (
-          this.board[i][j] !== null &&
+          this.board[i][j] !== 0 &&
           this.board[i][j] === this.board[i + 1][j - 1] &&
           this.board[i][j] === this.board[i + 2][j - 2] &&
           this.board[i][j] === this.board[i + 3][j - 3]
@@ -303,7 +303,7 @@ export class Connect4 extends HTMLElement {
     let tie = true;
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.columns; j++) {
-        if (this.board[i][j] === null) {
+        if (this.board[i][j] === 0) {
           tie = false;
         }
       }

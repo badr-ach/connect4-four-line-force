@@ -1,9 +1,12 @@
 // url will be used to parse the url (captain obvious at your service).
-const url = require('url');
+// const url = require('url');
+import url from 'url';
 // fs stands for FileSystem, it's the module to use to manipulate files on the disk.
-const fs = require('fs');
+// const fs = require('fs');
+import fs from 'fs';
 // path is used only for its parse method, which creates an object containing useful information about the path.
-const path = require('path');
+// const path = require('path');
+import path from 'path';
 
 // We will limit the search of files in the front folder (../../front from here).
 // Note that fs methods consider the current folder to be the one where the app is run, that's why we don't need the "../.." before front.
@@ -76,4 +79,4 @@ function send404(path, response) {
     response.end(`File ${path} not found!`);
 }
 
-exports.manage = manageRequest;
+export default manageRequest;
