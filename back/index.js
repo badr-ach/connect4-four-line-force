@@ -29,3 +29,30 @@ http.createServer(function (request, response) {
     }
 // For the server to be listening to request, it needs a port, which is set thanks to the listen function.
 }).listen(8000);
+
+//create a socket server
+const server = require('http').createServer();
+const io = require('socket.io')(server,{
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
+
+io.on('connection', socket => {
+    console.log('Client connected');
+
+    socket.on('message', message => {
+        console.log(`Received message: ${message}`);
+        socket.send(`Echo: ${message}`);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
+});
+
+server.listen(3000, () => {
+    console.log('Server listening on port 3000');
+});
+
