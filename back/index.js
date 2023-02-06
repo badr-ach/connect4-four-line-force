@@ -8,7 +8,6 @@ const { env } = require('process');
 
 const port = 8000 || env.port;
 
-const apiQuery = require('./queryManagers/api.js')
 const {Server} = require("socket.io");
 
 
