@@ -6,21 +6,15 @@
 </head>
 <body>
     TEST
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
-        const socket = io('http://127.0.0.1:3000', {transport : ['websocket']});
+        const socket = io();
 
         socket.on('connect', () => {
             console.log('Connected to server');
         });
 
-        socket.on('message', (message) => {
-            console.log(`Received message: ${message}`);
-        });
 
-        socket.on('disconnect', () => {
-            console.log('Disconnected from server');
-        });
     </script>
 </body>
 </html>

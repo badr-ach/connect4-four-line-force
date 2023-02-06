@@ -3,11 +3,12 @@ const http = require('http')
 // Let's import our logic.
 const fileQuery = require('./queryManagers/front.js')
 const apiQuery = require('./queryManagers/api.js')
+const {Server} = require("socket.io");
 
 /* The http module contains a createServer function, which takes one argument, which is the function that
 ** will be called whenever a new request arrives to the server.
  */
-http.createServer(function (request, response) {
+let server = http.createServer(function (request, response) {
     // First, let's check the URL to see if it's a REST request or a file request.
     // We will remove all cases of "../" in the url for security purposes.
     let filePath = request.url.split("/").filter(function(elem) {
@@ -28,16 +29,10 @@ http.createServer(function (request, response) {
         response.end(`Something in your request (${request.url}) is strange...`);
     }
 // For the server to be listening to request, it needs a port, which is set thanks to the listen function.
-}).listen(8000);
+}).listen(3000);
 
 //create a socket server
-const server = require('http').createServer();
-const io = require('socket.io')(server,{
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-    }
-});
+const io = new Server(server);
 
 io.on('connection', socket => {
     console.log('Client connected');
@@ -45,14 +40,10 @@ io.on('connection', socket => {
     socket.on('message', message => {
         console.log(`Received message: ${message}`);
         socket.send(`Echo: ${message}`);
+
     });
 
     socket.on('disconnect', () => {
         console.log('Client disconnected');
     });
 });
-
-server.listen(3000, () => {
-    console.log('Server listening on port 3000');
-});
-
