@@ -1,49 +1,49 @@
 
-function getAiMove(gameState) {
+export default function getAiMove(gameState) {
     while(true) {
         // Get a random column (integer between 0 and 6)
         let i = Math.floor(Math.random() * 7);
-        for (let j=0 ; j<=5 ; j++) {
-            if (gameState.board[i][j] === 0) {
-                return [i, j];
+        for (let j=5 ; j>=0 ; j--) {
+            if (gameState.board[j][i] === 0) {
+                return [j, i];
             }
         }
     }
 }
 
 
-const game = io.of('/api/game');
+// const game = io.of('/api/game');
 
-game.on('connection', socket => {
-    console.log('A client connected to the game namespace');
-    let board = [
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0]
-    ];
-    // Setup a new game here
-    socket.emit('newGame', { board: 'A new game has started!' });
+// game.on('connection', socket => {
+//     console.log('A client connected to the game namespace');
+//     let board = [
+//         [0, 0, 0, 0, 0, 0],
+//         [0, 0, 0, 0, 0, 0],
+//         [0, 0, 0, 0, 0, 0],
+//         [0, 0, 0, 0, 0, 0],
+//         [0, 0, 0, 0, 0, 0],
+//         [0, 0, 0, 0, 0, 0],
+//         [0, 0, 0, 0, 0, 0]
+//     ];
+//     // Setup a new game here
+//     socket.emit('newGame', { board: 'A new game has started!' });
 
-    // Handle the updatedBoard event
-    socket.on('updatedBoard', data => {
-        console.log('Received updatedBoard event with data:', data);
+//     // Handle the updatedBoard event
+//     socket.on('updatedBoard', data => {
+//         console.log('Received updatedBoard event with data:', data);
 
-        // A new move has been made
-        let { column, player } = data;
-        for (let i = board.length - 1; i >= 0; i--) {
-            if (board[i][column] === 0) {
-                board[i][column] = player;
-                break;
-            }
-        }
+//         // A new move has been made
+//         let { column, player } = data;
+//         for (let i = board.length - 1; i >= 0; i--) {
+//             if (board[i][column] === 0) {
+//                 board[i][column] = player;
+//                 break;
+//             }
+//         }
 
-        game.emit('newMove', { board });
-    });
-});
+//         game.emit('newMove', { board });
+//     });
+// });
 
 
 

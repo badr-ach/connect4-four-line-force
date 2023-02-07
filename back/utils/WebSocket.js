@@ -1,9 +1,6 @@
 import { Server } from "socket.io";
 
 export class WebSocket{
-    constructor(){
-        this._socket
-    }
     
     static socket = null;
 

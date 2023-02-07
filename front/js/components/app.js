@@ -17,8 +17,6 @@ export class App extends HTMLElement {
     async connectedCallback() {
         this.appendChild(new IntroMenu(this));
         this.attachEventListeners();
-
-        WebSocket.connect("/api/game");
     }  
 
     
@@ -38,17 +36,13 @@ export class App extends HTMLElement {
 
     _handleVsComputerClick() {
         this.removeChild(this.firstChild);
-
-        // WebSocket.getSocket().on("gameCreated", (data) => {
-        //     console.log(data);
-        //     this.removeChild(this.firstChild);
-        //     // this.appendChild(new Connect4(this, data.player, data.type));
-        // });
-
-        
-        WebSocket.getSocketByNameSpace("/api/game").emit("connection", data => ({ type: "Computer", player: "Guest" }));
-
-        this.appendChild(new Connect4(this,"Human","Computer"));
+        const socket = WebSocket.getSocketByNameSpace("/api/game");
+        socket.emit("newGame", { type: "vsAI", player: "Guest" });
+        socket.on("newGame", (data) => {
+            console.log("data we got");
+            console.log(data)
+            this.appendChild(new Connect4({app : this,...data}));
+        });
     }
 
 };

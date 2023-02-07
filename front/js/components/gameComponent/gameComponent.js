@@ -1,11 +1,14 @@
 import { Animator } from "../../scripts/animator.js";
+import { WebSocket } from "../../utils/WebSocket.js";
 
 export class Connect4 extends HTMLElement {
-  constructor(app, playerRed, playerYellow, gameId) {
+  constructor({
+    app, gameId, playerOne, playerTwo, board, currPlayer, currColumns, gameOver, winner,
+  }) {
     super();
     this.attachShadow({ mode: "open" });
 
-     this.shadowRoot.innerHTML = `
+    this.shadowRoot.innerHTML = `
             <style>@import "./js/components/gameComponent/gameComponent.css"; </style>
             <h1 id="winner"></h1>
             <div id="wrapper">
@@ -83,48 +86,72 @@ export class Connect4 extends HTMLElement {
 
     this._app = app;
     this._animator = new Animator();
+    this._gameId = gameId;
 
+    this.playerRed = playerOne;
+    this.playerYellow = playerTwo;
+    this.currPlayer = currPlayer;
 
-    this.playerRed = playerRed;
-    this.playerYellow = playerYellow;
-
-    this.currPlayer = this.playerRed;
-
-    this.gameOver = false;
-    this.board = [];
+    this.currColumns = currColumns;
+    this.board = board;
 
     this.rows = 6;
     this.columns = 7;
-    this.currColumns = []; //keeps track of which row each column is at.
+
+    this.gameOver = gameOver;
+    this.winner = null;
+
+    this._socket = WebSocket.getSocketByNameSpace("/api/game");
+
+    WebSocket.getSocketByNameSpace("/api/game").on("updatedBoard", (data) => {
+      this.board = data.board;
+      this.currColumns = data.currColumns;
+
+
+      if (data.gameOver) {
+        this.gameOver = true;
+        this.winner = data.winner;
+      }
+
+      console.log(data.gameOver)
+      console.log(data.winner)
+
+      this.renderBoard();
+
+      // this.checkWin();
+      // this.changePlayer();
+    });
   }
 
   async connectedCallback() {
-
     // this.shadowRoot.innerHTML = await fetch(
     //   "./js/components/gameComponent/gameComponent.html"
     // )
     //   .then((r) => r.text())
     //   .then((html) => html);
 
-    for (let i = 0; i < this.rows; i++) {
-      this.board.push([]);
-      for (let j = 0; j < this.columns; j++) {
-        this.board[i].push(0);
-      }
-    }
+    // for (let i = 0; i < this.rows; i++) {
+    //   this.board.push([]);
+    //   for (let j = 0; j < this.columns; j++) {
+    //     this.board[i].push(0);
+    //   }
+    // }
 
-    for (let i = 0; i < this.columns; i++) {
-      this.currColumns.push(this.rows - 1);
-    }
+    // for (let i = 0; i < this.columns; i++) {
+    //   this.currColumns.push(this.rows - 1);
+    // }
 
     this.shadowRoot
       .querySelector("#board")
       .addEventListener("click", this.dropPiece.bind(this));
-    let arrows = this.shadowRoot.querySelectorAll(".arrow")
+    let arrows = this.shadowRoot.querySelectorAll(".arrow");
 
-    for( let i = 0 ; i < arrows.length ; i++){
+    for (let i = 0; i < arrows.length; i++) {
       arrows[i].addEventListener("click", this.dropPiece.bind(this));
-      arrows[i].addEventListener("mouseover", this._handleMouseHover.bind(this));
+      arrows[i].addEventListener(
+        "mouseover",
+        this._handleMouseHover.bind(this)
+      );
       arrows[i].addEventListener("mouseout", this._handleMouseOut.bind(this));
     }
 
@@ -137,7 +164,7 @@ export class Connect4 extends HTMLElement {
     }
     let column = e.target.getAttribute("column");
     let row = this.currColumns[column];
-    
+
     if (row < 0) {
       return;
     }
@@ -158,46 +185,15 @@ export class Connect4 extends HTMLElement {
     this.renderBoard();
   }
 
-  // createBoard() {
-  //   let columnSelector = document.createElement("div");
-  //   columnSelector.classList.add("column-selector");
-  //   for (let i = 0; i < this.columns; i++) {
-  //     let column = document.createElement("div");
-  //     let span = document.createElement("span");
-  //     column.classList.add("column");
-  //     span.setAttribute("column", i);
-  //     span.classList.add("arrow");
-  //     span.classList.add("hidden");
-  //     span.innerHTML = "&darr;";
-  //     column.appendChild(span);
-  //     columnSelector.appendChild(column);
-  //     span.addEventListener("click", this.dropPiece.bind(this));
-  //     span.addEventListener("mouseover", this._handleMouseHover.bind(this));
-  //     span.addEventListener("mouseout", this._handleMouseOut.bind(this));
-  //   }
-  //   this.shadowRoot.querySelector("#wrapper").prepend(columnSelector);
-
-  //   for (let i = 0; i < this.rows; i++) {
-  //     this.board.push([]);
-  //     for (let j = 0; j < this.columns; j++) {
-  //       this.board[i].push(null);
-  //       let tile = document.createElement("div");
-  //       tile.classList.add("tile");
-  //       tile.setAttribute("row", i);
-  //       tile.setAttribute("column", j);
-  //       this.shadowRoot.querySelector("#board").appendChild(tile);
-  //     }
-  //   }
-
-  //   for (let i = 0; i < this.columns; i++) {
-  //     this.currColumns.push(this.rows - 1);
-  //   }
-  // }
-
   dropPiece(e) {
     if (this.gameOver) {
       return;
     }
+
+    if (this.currPlayer !== this.playerRed) {
+      return;
+    }
+
     let column = e.target.getAttribute("column");
     if (column === 0) {
       return;
@@ -206,16 +202,24 @@ export class Connect4 extends HTMLElement {
     if (row < 0) {
       return;
     }
-    this.board[row][column] = this.currPlayer;
-    this.currColumns[column]--;
-    this.renderBoard();
-    this.checkWin();
-    this.changePlayer();
+
+    console.log(this.playerRed);
+
+    WebSocket.getSocketByNameSpace("/api/game").emit("newMove", {
+      gameId: this._gameId,
+      move: [row, column],
+      player: this.playerRed,
+    });
+
+    // this.board[row][column] = this.currPlayer;
+    // this.currColumns[column]--;
+    // this.renderBoard();
+    // this.checkWin();
+    // this.changePlayer();
   }
 
   renderBoard() {
     let tiles = this.shadowRoot.querySelectorAll(".tile");
-    console.log(this.board)
     for (let i = 0; i < tiles.length; i++) {
       let row = tiles[i].getAttribute("row");
       let column = tiles[i].getAttribute("column");
@@ -228,89 +232,9 @@ export class Connect4 extends HTMLElement {
         tiles[i].classList.remove("yellow-piece");
       }
     }
-  }
 
-  checkWin() {
-    //check horizontal
-    for (let i = 0; i < this.rows; i++) {
-      for (let j = 0; j < this.columns - 3; j++) {
-        if (
-          this.board[i][j] !== 0 &&
-          this.board[i][j] === this.board[i][j + 1] &&
-          this.board[i][j] === this.board[i][j + 2] &&
-          this.board[i][j] === this.board[i][j + 3]
-        ) {
-          this.gameOver = true;
-          this.shadowRoot.querySelector("#winner").innerHTML =
-            this.currPlayer + " wins!";
-          return;
-        }
-      }
-    }
-
-    //check vertical
-    for (let i = 0; i < this.rows - 3; i++) {
-      for (let j = 0; j < this.columns; j++) {
-        if (
-          this.board[i][j] !== 0 &&
-          this.board[i][j] === this.board[i + 1][j] &&
-          this.board[i][j] === this.board[i + 2][j] &&
-          this.board[i][j] === this.board[i + 3][j]
-        ) {
-          this.gameOver = true;
-          this.shadowRoot.querySelector("#winner").innerHTML =
-            this.currPlayer + " wins!";
-          return;
-        }
-      }
-    }
-
-    //check diagonal
-    for (let i = 0; i < this.rows - 3; i++) {
-      for (let j = 0; j < this.columns - 3; j++) {
-        if (
-          this.board[i][j] !== 0 &&
-          this.board[i][j] === this.board[i + 1][j + 1] &&
-          this.board[i][j] === this.board[i + 2][j + 2] &&
-          this.board[i][j] === this.board[i + 3][j + 3]
-        ) {
-          this.gameOver = true;
-          this.shadowRoot.querySelector("#winner").innerHTML =
-            this.currPlayer + " wins!";
-          return;
-        }
-      }
-    }
-
-    //check diagonal
-    for (let i = 0; i < this.rows - 3; i++) {
-      for (let j = 3; j < this.columns; j++) {
-        if (
-          this.board[i][j] !== 0 &&
-          this.board[i][j] === this.board[i + 1][j - 1] &&
-          this.board[i][j] === this.board[i + 2][j - 2] &&
-          this.board[i][j] === this.board[i + 3][j - 3]
-        ) {
-          this.gameOver = true;
-          this.shadowRoot.querySelector("#winner").innerHTML =
-            this.currPlayer + " wins!";
-          return;
-        }
-      }
-    }
-
-    //check tie
-    let tie = true;
-    for (let i = 0; i < this.rows; i++) {
-      for (let j = 0; j < this.columns; j++) {
-        if (this.board[i][j] === 0) {
-          tie = false;
-        }
-      }
-    }
-    if (tie) {
-      this.gameOver = true;
-      this.shadowRoot.querySelector("#winner").innerHTML = "Tie!";
+    if(this.winner !== null){
+        this.shadowRoot.querySelector("#winner").innerHTML = this.winner == "Tie" ? "Tie!" : this.winner + " wins!";
     }
   }
 

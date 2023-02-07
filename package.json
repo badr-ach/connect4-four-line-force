@@ -20,6 +20,10 @@
   "homepage": "https://github.com/benjaminvella/ps8#readme",
   "dependencies": {
     "nodemon": "^2.0.20",
-    "socket.io": "^4.5.4"
+    "socket.io": "^4.5.4",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/socket.io-client": "^3.0.0"
   }
 }
