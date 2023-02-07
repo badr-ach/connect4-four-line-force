@@ -1,21 +1,29 @@
 export class WebSocket{
-    constructor(){
-        this._socket
-    }
-    
-    static socket = null;
+ 
+    static sockets = new Map();
 
-    static connect(server){
-        WebSocket.socket = io();
-        WebSocket.socket.on('connect', () => {
+    static connect(){
+        WebSocket.sockets.set("/", io());
+        WebSocket.sockets.get("/").on('connect', () => {
             console.log('Connected to server');
         });
-    }
+    };
+
+    static connectToNameSapce(namespace){
+        WebSocket.sockets.set(namespace,io("localhost:3000"+namespace));
+    };
 
     static getSocket(){
-        if(WebSocket.socket === null){
+        if(!WebSocket.sockets.has("/")){
             WebSocket.connect()
-        }
-        return WebSocket.socket;
-    }
+        };
+        return WebSocket.sockets.get("/");
+    };
+
+    static getSocketByNameSpace(namespace){
+        if(!WebSocket.sockets.has(namespace)){
+            WebSocket.connectToNameSapce(namespace);
+        };
+        return WebSocket.sockets.get(namespace);
+    };
 }

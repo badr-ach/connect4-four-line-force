@@ -12,9 +12,6 @@ export class WebSocket{
     }
 
     static getSocket(){
-        if(WebSocket.socket === null){
-            WebSocket.connect()
-        }
         return WebSocket.socket;
     }
 

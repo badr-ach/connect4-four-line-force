@@ -6,7 +6,7 @@ import fileQuery from './queryManagers/front.js';
 import apiQuery from './queryManagers/api.js';
 import { env } from 'process';
 import { WebSocket } from './utils/WebSocket.js';
-
+import initSocket from './utils/initSocket.js';
 // Let's import our logic.
 // const fileQuery = require('./queryManagers/front.js');
 // const apiQuery = require('./queryManagers/api.js');
@@ -46,20 +46,6 @@ let server = http.createServer(function (request, response) {
 
 }).listen(port);
 
+initSocket(server);
 
-//create a socket server
-WebSocket.connect(server);
 
-//attach an event listener to the socket server
-WebSocket.attachEventListener("connection", (socket) => {
-    console.log("client connected to the socket server");
-    socket.on('message', message => {
-        console.log(`Received message: ${message}`);
-        socket.send(`Echo: ${message}`);
-
-    });
-
-    socket.on('disconnect', () => {
-        console.log('Client disconnected');
-    });
-});

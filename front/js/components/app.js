@@ -12,13 +12,13 @@ export class App extends HTMLElement {
         super();
         // this.attachShadow({ mode: "open" });
         this._animator = new Animator();
-    
-        WebSocket.connect();
     }
     
     async connectedCallback() {
         this.appendChild(new IntroMenu(this));
         this.attachEventListeners();
+
+        WebSocket.connect("/api/game");
     }  
 
     
@@ -38,6 +38,16 @@ export class App extends HTMLElement {
 
     _handleVsComputerClick() {
         this.removeChild(this.firstChild);
+
+        // WebSocket.getSocket().on("gameCreated", (data) => {
+        //     console.log(data);
+        //     this.removeChild(this.firstChild);
+        //     // this.appendChild(new Connect4(this, data.player, data.type));
+        // });
+
+        
+        WebSocket.getSocketByNameSpace("/api/game").emit("connection", data => ({ type: "Computer", player: "Guest" }));
+
         this.appendChild(new Connect4(this,"Human","Computer"));
     }
 
