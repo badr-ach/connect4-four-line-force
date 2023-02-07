@@ -106,41 +106,21 @@ export class Connect4 extends HTMLElement {
     WebSocket.getSocketByNameSpace("/api/game").on("updatedBoard", (data) => {
       this.board = data.board;
       this.currColumns = data.currColumns;
-
-
+      if(data.currPlayer !== this.currPlayer){
+        console.log("here")
+        this.currPlayer = data.currPlayer;
+        this.changePlayer();
+      }
       if (data.gameOver) {
         this.gameOver = true;
         this.winner = data.winner;
       }
-
-      console.log(data.gameOver)
-      console.log(data.winner)
-
+      
       this.renderBoard();
-
-      // this.checkWin();
-      // this.changePlayer();
     });
   }
 
   async connectedCallback() {
-    // this.shadowRoot.innerHTML = await fetch(
-    //   "./js/components/gameComponent/gameComponent.html"
-    // )
-    //   .then((r) => r.text())
-    //   .then((html) => html);
-
-    // for (let i = 0; i < this.rows; i++) {
-    //   this.board.push([]);
-    //   for (let j = 0; j < this.columns; j++) {
-    //     this.board[i].push(0);
-    //   }
-    // }
-
-    // for (let i = 0; i < this.columns; i++) {
-    //   this.currColumns.push(this.rows - 1);
-    // }
-
     this.shadowRoot
       .querySelector("#board")
       .addEventListener("click", this.dropPiece.bind(this));
@@ -154,8 +134,6 @@ export class Connect4 extends HTMLElement {
       );
       arrows[i].addEventListener("mouseout", this._handleMouseOut.bind(this));
     }
-
-    //this.createBoard();
   }
 
   _handleMouseHover(e) {
@@ -210,12 +188,6 @@ export class Connect4 extends HTMLElement {
       move: [row, column],
       player: this.playerRed,
     });
-
-    // this.board[row][column] = this.currPlayer;
-    // this.currColumns[column]--;
-    // this.renderBoard();
-    // this.checkWin();
-    // this.changePlayer();
   }
 
   renderBoard() {

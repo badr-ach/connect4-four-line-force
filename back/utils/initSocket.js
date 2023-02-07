@@ -63,15 +63,19 @@ export default function (server) {
         game.board[move[0]][move[1]] = player;
         game.currColumns[move[1]]--;
 
-        let { gameOver, winner } = checkWin({...game,rows:6,columns:7});
+        let gameStatus = checkWin({...game,rows:6,columns:7});
 
-        if ( !gameOver ) {
-            let aiMove = getAiMove({ board });
-            board[aiMove[0]][aiMove[1]] = "AI";
-            currColumns[aiMove[1]]--;
-        }else{
-            game.gameOver = gameOver;
-            game.winner = winner;
+        if ( !gameStatus.gameOver ) {
+            let aiMove = getAiMove({ board: game.board });
+            game.board[aiMove[0]][aiMove[1]] = "AI";
+            game.currColumns[aiMove[1]]--;
+        }
+        
+        gameStatus = checkWin({...game,rows:6,columns:7});
+
+        if(gameStatus.gameOver){
+            game.gameOver = gameStatus.gameOver;
+            game.winner = gameStatus.winner;
             activeGames.set(data.gameId, game);
         }
 
