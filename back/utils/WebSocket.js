@@ -9,6 +9,8 @@ export class WebSocket{
     }
 
     static getSocket(){
+        // this is probably a bad idea
+        // to be fixed asap.
         return WebSocket.socket;
     }
 

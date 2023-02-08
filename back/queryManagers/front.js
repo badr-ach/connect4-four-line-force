@@ -36,7 +36,7 @@ const mimeTypes = {
 };
 
 // Main method, exported at the end of the file. It's the one that will be called when a file is requested.
-function manageRequest(request, response) {
+export function manageRequest(request, response) {
     // First let's parse the URL, extract the path, and parse it into an easy-to-use object.
     // We add the baseFrontPath at the beginning to limit the places to search for files.
     const parsedUrl = url.parse(baseFrontPath + request.url);
@@ -73,10 +73,8 @@ function manageRequest(request, response) {
     });
 }
 
-function send404(path, response) {
+export function send404(path, response) {
     // Note that you can create a beautiful html page and return that page instead of the simple message below.
     response.statusCode = 404;
     response.end(`File ${path} not found!`);
 }
-
-export default manageRequest;
