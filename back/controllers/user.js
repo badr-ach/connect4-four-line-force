@@ -1,6 +1,7 @@
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import UserModal from "../models/user.js";
+import {UserModal} from "../models/user.js";
 
 const secret = 'jwtS124';
 
@@ -29,7 +30,7 @@ export const login = async (req, res) => {
 };
 
 export const signin = async (req, res) => {
-    const { email, password, give_name, family_name } = req.body;
+    const { email, password, username } = req.body;
 
     try {
         const oldUser = await UserModal.findOne({ email });
@@ -38,7 +39,7 @@ export const signin = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const result = await UserModal.create({ email, password: hashedPassword, name: `${give_name} ${family_name}`,family_name:family_name,given_name:given_name });
+        const result = await UserModal.create({ email, password: hashedPassword, username });
 
         const data = result;
 

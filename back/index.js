@@ -6,6 +6,7 @@ import { env } from 'process';
 
 import { Router } from './utils/server/server.js';
 import initSocket from './utils/initSocket.js';
+import router from './routes/user.js';
 
 
 const port = 3000 || env.port;
@@ -14,6 +15,8 @@ const port = 3000 || env.port;
 const app = Router();
 
 app.get("/", frontManageRequest);
+
+app.use("/api", router);
 
 app.listen(port, () => {
   console.log("Server started on port " + port);

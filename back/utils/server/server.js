@@ -8,6 +8,10 @@ function createResponse(res) {
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify(data));
   };
+  res.status = (code) => {
+    res.statusCode = code;
+    return res;
+  };
   return res;
 }
 
@@ -63,8 +67,6 @@ export function Router() {
     for(var i =0; i < routes.length; i++) {
        const route = routes[i];
        const parsedRoute = parse(route);
-       console.log("req url",req.url)
-       console.log("parsed route",parsedRoute, "Route", route)
        if (
          new RegExp(parsedRoute).test(req.url) &&
          routeTable[route][req.method.toLowerCase()]
@@ -161,7 +163,6 @@ export function Router() {
                 if(!middleware) {
                     registerPath(path + route, cb, method, middleware);
                 } else {
-                    console.log("um not")
                     registerPath(path + route, cb, method);
                 }
             }

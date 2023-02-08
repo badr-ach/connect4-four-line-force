@@ -1,6 +1,6 @@
-import { Router } from "../utils/server/server";
+import { Router } from "../utils/server/server.js";
 
-import { signin, login } from "../controllers/users.js";
+import { signin, login } from "../controllers/user.js"
 
 const router = Router();
 
