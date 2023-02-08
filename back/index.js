@@ -54,3 +54,27 @@ io.on('connection', socket => {
         console.log('Client disconnected');
     });
 });
+
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+
+// Connection URL
+const url = 'mongodb://localhost:27017';
+
+// Database Name
+const dbName = 'myproject';
+
+// Create a new MongoClient
+const client = new MongoClient(url);
+console.log("Connected successfully to server");
+// Use connect method to connect to the Server
+client.connect(function(err) {
+    console.log("Connect function called");
+    if (err) {
+        console.error(`Error connecting to MongoDB: ${err}`);
+    } else {
+        console.log("Connected successfully to server");
+        const db = client.db(dbName);
+        client.close();
+    }
+});
