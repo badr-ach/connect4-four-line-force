@@ -59,8 +59,6 @@ export default function (server) {
         let move = data.move;
         let player = data.player;
 
-        console.log(data.gameId, "getting this");
-        console.log(currColumns);
 
         let game = activeGames.get(data.gameId);
         game.board[move[0]][move[1]] = player;

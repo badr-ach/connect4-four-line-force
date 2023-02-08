@@ -6,10 +6,19 @@ import {UserModal} from "../models/user.js";
 const secret = 'jwtS124';
 
 export const login = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, username, password } = req.body;
 
     try {
-        const oldUser = await UserModal.findOne({ email });
+        
+        let oldUser = null;    
+        
+        if(email){
+            oldUser = await UserModal.findOne({ email });
+        }else if(username){
+            oldUser = await UserModal.findOne({ username });
+        }else{
+            return res.status(404).json({ message: "Missing fields" });
+        }
 
         if (!oldUser) return res.status(404).json({ message: "User doesn't exist" });
 

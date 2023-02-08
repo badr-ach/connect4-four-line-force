@@ -9,7 +9,8 @@ export function manageRequest(request, response) {
 ** (for instance, some of your api urls may accept GET and POST request whereas some others will only accept PUT).
 ** Access-Control-Allow-Headers is an example of how to authorize some headers, the ones given in this example
 ** are probably not the ones you will need. */
-export function addCors(response) {
+export function addCors(request,response,next) {
+
     // Website you wish to allow to connect to your server.
     response.setHeader('Access-Control-Allow-Origin', '*');
     // Request methods you wish to allow.
@@ -18,4 +19,6 @@ export function addCors(response) {
     response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     // Set to true if you need the website to include cookies in the requests sent to the API.
     response.setHeader('Access-Control-Allow-Credentials', true);
+
+    next();
 }

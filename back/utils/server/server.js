@@ -72,7 +72,6 @@ export function Router() {
          routeTable[route][req.method.toLowerCase()]
        ) {
 
-         console.log("matched", route);
          let cb = routeTable[route][req.method.toLowerCase()];
          let middleware = routeTable[route][`${req.method.toLowerCase()}-middleware`]; 
          const m = req.url.match(new RegExp(parsedRoute));
@@ -144,7 +143,7 @@ export function Router() {
     listen: (port, cb) => {
       server.listen(port, cb);
     },
-    use: (middleware) => {
+    global: (middleware) => {
         globalMiddleware = [...globalMiddleware, middleware];
     },
     use: (path, router) => {
