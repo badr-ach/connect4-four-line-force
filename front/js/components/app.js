@@ -16,7 +16,7 @@ export class App extends HTMLElement {
         this._animator = new Animator();
         this._token = localStorage.getItem("token");
 
-        signup({ username: "Guest", password: "Guest" })(this.dispatchEvent);
+        signup({ username: "Guesttwo", password: "Guest" })(this.dispatchEvent);
     }
     
     async connectedCallback() {

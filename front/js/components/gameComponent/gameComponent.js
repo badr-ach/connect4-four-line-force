@@ -3,7 +3,15 @@ import { WebSocket } from "../../utils/WebSocket.js";
 
 export class Connect4 extends HTMLElement {
   constructor({
-    app, gameId, playerOne, playerTwo, board, currPlayer, currColumns, gameOver, winner,
+    app,
+    gameId,
+    playerOne,
+    playerTwo,
+    board,
+    currPlayer,
+    currColumns,
+    gameOver,
+    winner,
   }) {
     super();
     this.attachShadow({ mode: "open" });
@@ -106,8 +114,8 @@ export class Connect4 extends HTMLElement {
     WebSocket.getSocketByNameSpace("/api/game").on("updatedBoard", (data) => {
       this.board = data.board;
       this.currColumns = data.currColumns;
-      if(data.currPlayer !== this.currPlayer){
-        console.log("here")
+      if (data.currPlayer !== this.currPlayer) {
+        console.log("here");
         this.currPlayer = data.currPlayer;
         this.changePlayer();
       }
@@ -115,7 +123,7 @@ export class Connect4 extends HTMLElement {
         this.gameOver = true;
         this.winner = data.winner;
       }
-      
+
       this.renderBoard();
     });
   }
@@ -205,17 +213,18 @@ export class Connect4 extends HTMLElement {
       }
     }
 
-    if(this.winner !== null){
+    if (this.winner !== null) {
       let winner_name = this.winner === 1 ? "Red" : "Yellow";
-        this.shadowRoot.querySelector("#winner").innerHTML = this.winner == "Tie" ? "Tie!" : winner_name + " wins!";
+      this.shadowRoot.querySelector("#winner").innerHTML =
+        this.winner == "Tie" ? "Tie!" : winner_name + " wins!";
     }
   }
 
   changePlayer() {
     if (this.currPlayer === 1) {
-      this.currPlayer = 2
+      this.currPlayer = 2;
     } else {
-      this.currPlayer = 1
+      this.currPlayer = 1;
     }
   }
 
@@ -223,7 +232,7 @@ export class Connect4 extends HTMLElement {
     this.board = [];
     this.currColumns = [];
     this.gameOver = false;
-    this.currPlayer = 1
+    this.currPlayer = 1;
     this.shadowRoot.querySelector("#winner").innerHTML = "";
     this.shadowRoot.querySelector("#board").innerHTML = "";
     this.createBoard();

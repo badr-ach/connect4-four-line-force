@@ -11,53 +11,42 @@ export function fetcher(){
     };
 
     return{
-    use,
-    get,
-    post,
-    put,
-    delete: _delete
+    use:  (header) => {
+        appendToHeader(header)
+    },
+    get: async (url) => {
+        const requestOptions = {
+            method: 'GET'
+        };
+        return fetch(url, requestOptions).then(handleResponse);
+    },
+    post : async (url, body) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(body)
+        };
+        return fetch(url, requestOptions).then(handleResponse);
+    },
+    put : async (url, body) => {
+        const requestOptions = {
+            method: 'PUT',
+            headers: headers,
+            body: JSON.stringify(body)
+        };
+        return fetch(url, requestOptions).then(handleResponse);    
+    },
+    delete: async (url) => {
+        const requestOptions = {
+            method: 'DELETE'
+        };
+        return fetch(url, requestOptions).then(handleResponse);
+    }
     }
 };
 
 
-async function use(header) {
-    appendToHeader(header)
-};
 
-
-async function get(url) {
-    const requestOptions = {
-        method: 'GET'
-    };
-    return fetch(url, requestOptions).then(handleResponse);
-};
-
-async function post(url, body) {
-    const requestOptions = {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(body)
-    };
-    return fetch(url, requestOptions).then(handleResponse);
-};
-
-
-async function put(url, body) {
-    const requestOptions = {
-        method: 'PUT',
-        headers: headers,
-        body: JSON.stringify(body)
-    };
-    return fetch(url, requestOptions).then(handleResponse);    
-};
-
-
-async function _delete(url) {
-    const requestOptions = {
-        method: 'DELETE'
-    };
-    return fetch(url, requestOptions).then(handleResponse);
-};
 
 
 async function handleResponse(response) {
