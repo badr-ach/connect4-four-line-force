@@ -1,3 +1,4 @@
+import { signup } from "../api/user.js";
 import { events } from "../events/events.js";
 import { Animator } from "../scripts/animator.js";
 import { WebSocket } from "../utils/WebSocket.js";
@@ -14,6 +15,8 @@ export class App extends HTMLElement {
         super();
         this._animator = new Animator();
         this._token = localStorage.getItem("token");
+
+        signup({ username: "Guest", password: "Guest" })(this.dispatchEvent);
     }
     
     async connectedCallback() {
@@ -25,7 +28,9 @@ export class App extends HTMLElement {
         this.addEventListener(events.signUpClicked, () => this._handleSignUpClick());
         this.addEventListener(events.loginClicked, () => this._handleLoginClick());
         this.addEventListener(events.guestClicked, () => this._handleGuestClick());
+
         this.addEventListener(events.vsComputerClicked, () => this._handleVsComputerClick());
+
     }
 
 
