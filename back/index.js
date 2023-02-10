@@ -38,3 +38,12 @@ MongoClient.connect(uri, { useNewUrlParser: true }, function(err, client) {
     console.log(db);
     client.close();
 });
+
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb://localhost:27017";
+
+MongoClient.connect(uri, { useNewUrlParser: true }, function(err, client) {
+    console.log("Connected successfully to server");
+    const db = client.db("test");
+    client.close();
+});
