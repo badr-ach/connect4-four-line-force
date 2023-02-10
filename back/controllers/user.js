@@ -6,14 +6,14 @@ import {UserModal} from "../models/user.js";
 export const secret = 'jwtS124';
 
 export const login = async (req, res) => {
-    const { email, username, password } = req.body;
+    const { mail, username, password } = req.body;
 
     try {
         
         let oldUser = null;    
         
-        if(email){
-            oldUser = await UserModal.findOne({ email });
+        if(mail){
+            oldUser = await UserModal.findOne({ mail });
         }else if(username){
             oldUser = await UserModal.findOne({ username });
         }else{
@@ -30,7 +30,7 @@ export const login = async (req, res) => {
 
         delete data.password;
 
-        const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, { expiresIn: "1h" });
+        const token = jwt.sign({ mail: oldUser.mail, id: oldUser._id }, secret, { expiresIn: "1h" });
 
         res.status(200).json({ user: data, token: token });
     } catch (err) {
@@ -39,22 +39,22 @@ export const login = async (req, res) => {
 };
 
 export const signin = async (req, res) => {
-    const { email, password, username } = req.body;
+    const { mail, password, username } = req.body;
 
     try {
-        const oldUser = await UserModal.findOne({ email });
+        const oldUser = await UserModal.findOne({ mail });
 
         if (oldUser) return res.status(400).json({ message: "User already exists" });
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const result = await UserModal.create({ email, password: hashedPassword, username });
+        const result = await UserModal.create({ mail, password: hashedPassword, username });
 
         const data = result;
 
         delete data.password;
 
-        const token = jwt.sign({ email: result.email, id: result._id }, secret, { expiresIn: "1h" });
+        const token = jwt.sign({ mail: result.mail, id: result._id }, secret, { expiresIn: "1h" });
 
         res.status(201).json({ user: data, token: token });
     } catch (error) {

@@ -52,7 +52,7 @@ export class App extends HTMLElement {
     _handleVsComputerClick() {
         this.removeChild(this.firstChild);
         const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._token } });
-        socket.emit("setup", { type: "vsAI", player: "Guest" });
+        socket.emit("setup", { AIplays:1, type: "vsAI", player: "Guest" });
         socket.on("setup", (data) => {
             console.log("data we got");
             console.log(data)

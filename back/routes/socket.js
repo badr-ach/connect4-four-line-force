@@ -41,6 +41,10 @@ export default function (socket) {
       });
 
       socket.on("newMove", (data) => {
+
+        if( move[0] < 0 || move[0] > 5 || move[1] < 0 || move[1] > 6 || game.board[move[0]][move[1]] != 0)
+          return;
+
         let move = data.move;
         console.log(move);
         let game = activeGames.get(data.gameId);
