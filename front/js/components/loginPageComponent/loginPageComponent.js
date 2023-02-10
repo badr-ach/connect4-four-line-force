@@ -1,4 +1,4 @@
-import { Animator } from "../../scripts/animator.js";
+/*import { Animator } from "../../scripts/animator.js";
 import { events } from "../../events/events.js";
 
 export class Login extends HTMLElement{
@@ -19,8 +19,31 @@ export class Login extends HTMLElement{
 
     _attachEventListeners(){
     }
+    // x x
+
+
+
 
 
 }
 
-customElements.define("login-component", Login);
+customElements.define("login-component", Login);*/
+
+const form = document.getElementById("loginForm");
+
+function login() {
+    console.log("je subm2");
+
+    const request = new Request('http://localhost:8000/api/login.js', {
+        method: 'POST',
+        body: JSON.stringify({"mail": form.mail.value, "password": form.pwd.value}),
+        headers: {
+            'Content-Type': 'text/plain'
+        }
+    });
+
+    fetch(request)
+        .then(res => res.text())
+        .then(text => console.log(text))
+        .catch(error => console.error(error));
+}
