@@ -1,78 +1,61 @@
 import getAiMove from "../logic/ai.js";
-import { WebSocket } from "./webSocket.js";
 import { v4 as uuid } from "uuid";
 import { checkWin } from "../logic/checkWin.js";
+import auth from "../middlewares/socket.js";
 
-const board = [
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-];
+export default function (socket) {
+  
+  const activeGames = new Map();
 
-const currColumns = [5, 5, 5, 5, 5, 5, 5];
+  socket.of("/api/game").use(auth);
 
-const activeGames = new Map();
+  socket.of("/api/game").on("connection", (socket) => {
 
-export default function (server) {
-  //create a socket server
-  WebSocket.connect(server);
-
-  WebSocket.attachEventListener("connection", (socket) => {
-    console.log("client connected to the socket server");
-
-    socket.on("disconnect", () => {
-      console.log("Client disconnected");
-    });
-  });
-
-  WebSocket.attachEventListenerToNamespace(
-    "/api/game",
-    "connection",
-    (socket) => {
       console.log("A client connected to the game namespace");
 
       // probably shared and should be stored with sockets playing the game
-      socket.on("newGame", (data) => {
+      socket.on("setup", (data) => {
         let playerOne = data.player;
         let playerTwo = "AI";
-
         let gameId = uuid();
-        console.log(gameId);
-        activeGames.set(gameId, {
+
+        let game = {
           gameId,
           board: JSON.parse(JSON.stringify(board)),
           currColumns: JSON.parse(JSON.stringify(currColumns)),
           playerOne,
           playerTwo,
-          currPlayer: playerOne,
+          currPlayer: 1,
           gameOver: false,
           winner: null,
-        });
+        };
 
-        socket.emit("newGame", activeGames.get(gameId));
+        if(data.id == 1){
+          let aiMove = getAiMove({ board: game.board });
+          game.board[aiMove[0]][aiMove[1]] = "AI";
+          game.currColumns[aiMove[1]]--;
+        }
+
+        activeGames.set(gameId, game);
+        socket.emit("setup", activeGames.get(gameId));
       });
 
       socket.on("newMove", (data) => {
         let move = data.move;
-        let player = data.player;
-
-
+        console.log(move);
         let game = activeGames.get(data.gameId);
-        game.board[move[0]][move[1]] = player;
+        game.board[move[0]][move[1]] = 1
         game.currColumns[move[1]]--;
 
         let gameStatus = checkWin({ ...game, rows: 6, columns: 7 });
 
         if (!gameStatus.gameOver) {
           let aiMove = getAiMove({ board: game.board });
-          game.board[aiMove[0]][aiMove[1]] = "AI";
+          game.board[aiMove[0]][aiMove[1]] = 2;
           game.currColumns[aiMove[1]]--;
+          gameStatus = checkWin({ ...game, currPlayer:2, rows: 6, columns: 7 });
         }
 
-        gameStatus = checkWin({ ...game, currPlayer:"AI", rows: 6, columns: 7 });
 
         if (gameStatus.gameOver) {
           game.gameOver = gameStatus.gameOver;
@@ -87,3 +70,15 @@ export default function (server) {
 
   console.log("Socket server listening on port 3000");
 }
+
+
+const board = [
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+];
+
+const currColumns = [5, 5, 5, 5, 5, 5, 5];

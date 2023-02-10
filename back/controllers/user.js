@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 import {UserModal} from "../models/user.js";
 
-const secret = 'jwtS124';
+export const secret = 'jwtS124';
 
 export const login = async (req, res) => {
     const { email, username, password } = req.body;

@@ -1,11 +1,11 @@
 // The http module contains methods to handle http queries.
 import http from 'http';
-import { manageRequest as frontManageRequest} from './utils/front.js';
-import { addCors, manageRequest as apiManageRequest } from './utils/api.js';
+import { manageRequest as frontManageRequest} from './controllers/front.js';
+import { addCors } from "./middlewares/cors.js";
 import { env } from 'process';
-
-import { Router } from './utils/server/server.js';
-import initSocket from './utils/initSocket.js';
+import { Server } from "socket.io";
+import { Router } from './utils/server.js';
+import initSocket from './routes/socket.js';
 import router from './routes/user.js';
 
 
@@ -24,6 +24,9 @@ app.listen(port, () => {
   console.log("Server started on port " + port);
 });
 
-initSocket(app._server);
+
+const socket = new Server(app._server);
+
+initSocket(socket);
 
 

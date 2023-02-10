@@ -2,15 +2,8 @@ export class WebSocket{
  
     static sockets = new Map();
 
-    // static connect(){
-    //     WebSocket.sockets.set("/", io());
-    //     WebSocket.sockets.get("/").on('connect', () => {
-    //         console.log('Connected to server');
-    //     });
-    // };
-
-    static connectToNameSapce(namespace){
-        const socket = io("localhost:3000"+namespace);
+    static connectToNameSapce(namespace,config){
+        const socket = io(namespace,config);
         WebSocket.sockets.set(namespace,socket);
         return socket;
     };
@@ -22,10 +15,9 @@ export class WebSocket{
         return WebSocket.sockets.get("/");
     };
 
-    static getSocketByNameSpace(namespace){
-        console.log(WebSocket.sockets.keys(),WebSocket.sockets.values());
+    static getSocketByNameSpace(namespace,config){
         if(!WebSocket.sockets.has(namespace)){
-            WebSocket.connectToNameSapce(namespace);
+            WebSocket.connectToNameSapce(namespace,config);
         };
         return WebSocket.sockets.get(namespace);
     };

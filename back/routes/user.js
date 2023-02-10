@@ -1,4 +1,4 @@
-import { Router } from "../utils/server/server.js";
+import { Router } from "../utils/server.js";
 
 import { signin, login } from "../controllers/user.js"
 

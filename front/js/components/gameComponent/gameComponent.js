@@ -168,7 +168,7 @@ export class Connect4 extends HTMLElement {
       return;
     }
 
-    if (this.currPlayer !== this.playerRed) {
+    if (this.currPlayer !== 1) {
       return;
     }
 
@@ -195,9 +195,9 @@ export class Connect4 extends HTMLElement {
     for (let i = 0; i < tiles.length; i++) {
       let row = tiles[i].getAttribute("row");
       let column = tiles[i].getAttribute("column");
-      if (this.board[row][column] === this.playerRed) {
+      if (this.board[row][column] === 1) {
         tiles[i].classList.add("red-piece");
-      } else if (this.board[row][column] === this.playerYellow) {
+      } else if (this.board[row][column] === 2) {
         tiles[i].classList.add("yellow-piece");
       } else {
         tiles[i].classList.remove("red-piece");
@@ -206,15 +206,16 @@ export class Connect4 extends HTMLElement {
     }
 
     if(this.winner !== null){
-        this.shadowRoot.querySelector("#winner").innerHTML = this.winner == "Tie" ? "Tie!" : this.winner + " wins!";
+      let winner_name = this.winner === 1 ? "Red" : "Yellow";
+        this.shadowRoot.querySelector("#winner").innerHTML = this.winner == "Tie" ? "Tie!" : winner_name + " wins!";
     }
   }
 
   changePlayer() {
-    if (this.currPlayer === this.playerRed) {
-      this.currPlayer = this.playerYellow;
+    if (this.currPlayer === 1) {
+      this.currPlayer = 2
     } else {
-      this.currPlayer = this.playerRed;
+      this.currPlayer = 1
     }
   }
 
@@ -222,7 +223,7 @@ export class Connect4 extends HTMLElement {
     this.board = [];
     this.currColumns = [];
     this.gameOver = false;
-    this.currPlayer = this.playerRed;
+    this.currPlayer = 1
     this.shadowRoot.querySelector("#winner").innerHTML = "";
     this.shadowRoot.querySelector("#board").innerHTML = "";
     this.createBoard();
