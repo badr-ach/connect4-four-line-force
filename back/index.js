@@ -24,9 +24,17 @@ app.listen(port, () => {
   console.log("Server started on port " + port);
 });
 
-
 const socket = new Server(app._server);
 
 initSocket(socket);
 
 
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb://db:27017/";
+
+MongoClient.connect(uri, { useNewUrlParser: true }, function(err, client) {
+    console.log("Connected successfully to server");
+    const db = client.db("test");
+    console.log(db);
+    client.close();
+});
