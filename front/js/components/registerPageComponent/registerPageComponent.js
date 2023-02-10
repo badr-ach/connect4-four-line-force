@@ -18,18 +18,8 @@ export class Register extends HTMLElement{
     }
 
     _attachEventListeners(){
-        this.shadowRoot.getElementById("vsComputer").addEventListener("click", () => this._handleVsComputerClick());
-        this.shadowRoot.getElementById("vsPlayer").addEventListener("click", () => this._handleVsPlayerClick());
     }
 
-    _handleVsComputerClick(){
-        this._animator.beginAnimation("slide-left", this, () => {});
-        this._app.dispatchEvent(new CustomEvent(events.signUpClicked));
-    }
-
-    _handleVsPlayerClick(){
-        this._app.dispatchEvent(new CustomEvent(events.vsPlayerClicked));
-    }
 }
 
 customElements.define("register-component", Register);
