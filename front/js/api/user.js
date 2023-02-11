@@ -36,6 +36,6 @@ export const login = (body) => async (dispatch) => {
     console.log(res);
   } catch (err) {
     console.log(err);
-    dispatch(events.error, err);
+    //dispatch(events.error, err);
   }
 };
