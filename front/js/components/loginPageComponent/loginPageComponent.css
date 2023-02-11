@@ -20,7 +20,7 @@ form {
 }
 
 /* Style the input fields */
-input[type="text"],
+input[type="mail"],
 input[type="password"] {
     border: none;
     border-radius: 10px;

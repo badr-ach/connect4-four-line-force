@@ -12,14 +12,21 @@ export class Login extends HTMLElement{
 
     async connectedCallback(){
         this.shadowRoot.innerHTML = await fetch("./js/components/loginPageComponent/loginPageComponent.html")
-        .then((r) => r.text())
-        .then((html) => html);
+            .then((r) => r.text())
+            .then((html) => html);
 
         this._attachEventListeners();
     }
 
     _attachEventListeners(){
-        
+        console.log("login");
+        const form = this.shadowRoot.getElementById("loginForm");
+        const body = JSON.stringify({
+            "mail": form.mail.value,
+            "password": form.pwd.value
+        });
+        login(body);
+        console.log(form.mail.value);
     }
 
 
