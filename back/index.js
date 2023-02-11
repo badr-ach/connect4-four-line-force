@@ -24,15 +24,20 @@ app.get("/", frontManageRequest);
 app.listen(port, () => {
   console.log("Server started on port " + port);
 });
+
 /*
 const uri = "mongodb://localhost:27017";
 
 MongoClient.connect(uri, { useNewUrlParser: true }, function(err, client) {
-    console.log("Connected successfully to server");
+    console.log("Connected successfully to database");
     const db = client.db("test");
     client.close();
+    if(err){
+        console.log("erreur dbbbb ",err);
+    }
 });
 */
+
 const socket = new Server(app._server);
 
 initSocket(socket);

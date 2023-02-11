@@ -25,11 +25,11 @@ export class Login extends HTMLElement{
         btn.addEventListener("submit", (e) => {
             e.preventDefault();
             console.log(form.mail.value);
-            const body = JSON.stringify({
+            /*const body = JSON.stringify({
                 "mail": form.mail.value,
                 "password": form.pwd.value
-            });
-            login(body)();
+            });*/
+            login({ mail:form.mail.value, password: form.pwd.value })();
         });
     }
 
