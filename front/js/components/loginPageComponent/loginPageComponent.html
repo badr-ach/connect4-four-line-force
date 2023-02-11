@@ -2,10 +2,10 @@
     @import url("./js/components/loginPageComponent/loginPageComponent.css");
 </style>
 <div class="container">
-    <form>
-        <h1>Login</h1>
+    <form id="loginForm" action="#" onsubmit="login(); return false;">
         <input type="text" placeholder="Username" required />
         <input type="password" placeholder="Password" required />
         <input type="submit" value="Submit">
     </form>
 </div>
+<script src="loginPageComponent.js"></script>

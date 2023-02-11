@@ -19,7 +19,7 @@ form {
     box-shadow: 0 0 10px #BBBBBB;
 }
 
-input[type="text"], input[type="email"], input[type="password"] {
+input[type="text"], input[type="mail"], input[type="password"] {
     width: 100%;
     padding: 16px;
     margin-bottom: 20px;

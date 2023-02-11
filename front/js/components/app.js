@@ -16,14 +16,14 @@ export class App extends HTMLElement {
         this._animator = new Animator();
         this._token = localStorage.getItem("token");
 
-        signup({ username: "Guesttwo", password: "Guest" })(this.dispatchEvent);
+        //signup({ username: "Guesttwo", password: "Guest" })(this.dispatchEvent);
     }
-    
+
     async connectedCallback() {
         this.appendChild(new IntroMenu(this));
         this.attachEventListeners();
-    }  
-    
+    }
+
     attachEventListeners() {
         this.addEventListener(events.signUpClicked, () => this._handleSignUpClick());
         this.addEventListener(events.loginClicked, () => this._handleLoginClick());

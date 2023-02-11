@@ -4,12 +4,12 @@
 
 <body>
 <h1>Register</h1>
-<form>
-    <input type="email" placeholder="Email" required>
-    <input type="text" placeholder="Username" required>
-    <input type="password" placeholder="Password" required>
-    <input type="password" placeholder="Confirm Password" required>
-    <input type="submit" value="Submit">
+<form id="signupForm" action="#" onsubmit="signin(); return false;">
+    <input type="mail" name="mail" id="mail" placeholder="Email" required>
+    <input type="text" name="username" id="username" placeholder="Username" required>
+    <input type="password" name="password" id="pwd" placeholder="Password" required>
+    <!--<input type="submit" value="Submit">-->
+    <button class="sub" type="submit">Sign up</button>
 </form>
 </body>
 

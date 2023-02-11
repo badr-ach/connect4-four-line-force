@@ -7,6 +7,7 @@ import { Server } from "socket.io";
 import { Router } from './utils/server.js';
 import initSocket from './routes/socket.js';
 import router from './routes/user.js';
+import {MongoClient} from 'mongodb';
 
 
 const port = 3000 || env.port;
@@ -24,7 +25,6 @@ app.listen(port, () => {
   console.log("Server started on port " + port);
 });
 
-const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb://localhost:27017";
 
 MongoClient.connect(uri, { useNewUrlParser: true }, function(err, client) {

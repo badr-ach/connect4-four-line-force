@@ -1,5 +1,7 @@
 import { Animator } from "../../scripts/animator.js";
 import { events } from "../../events/events.js";
+import {login, signup} from "../../api/user.js";
+
 
 export class Register extends HTMLElement{
     constructor(app){
@@ -18,6 +20,15 @@ export class Register extends HTMLElement{
     }
 
     _attachEventListeners(){
+        console.log("signup");
+        const form = this.shadowRoot.getElementById("signupForm");
+        const body = JSON.stringify({
+            "mail": form.mail.value,
+            "username": form.username.value,
+            "password": form.pwd.value
+        });
+        signup(body);
+        console.log(form.mail.value);
     }
 
 }

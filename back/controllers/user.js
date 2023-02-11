@@ -9,9 +9,9 @@ export const login = async (req, res) => {
     const { mail, username, password } = req.body;
 
     try {
-        
-        let oldUser = null;    
-        
+
+        let oldUser = null;
+
         if(mail){
             oldUser = await UserModal.findOne({ mail });
         }else if(username){
@@ -33,6 +33,7 @@ export const login = async (req, res) => {
         const token = jwt.sign({ mail: oldUser.mail, id: oldUser._id }, secret, { expiresIn: "1h" });
 
         res.status(200).json({ user: data, token: token });
+        console.log("login successfully");
     } catch (err) {
         res.status(500).json({ message: "Something went wrong" });
     }
@@ -57,6 +58,9 @@ export const signin = async (req, res) => {
         const token = jwt.sign({ mail: result.mail, id: result._id }, secret, { expiresIn: "1h" });
 
         res.status(201).json({ user: data, token: token });
+        console.log("registered successfully");
+
+
     } catch (error) {
         res.status(500).json({ message: "Something went wrong" });
 
