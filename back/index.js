@@ -7,7 +7,10 @@ import { Server } from "socket.io";
 import { Router } from './utils/server.js';
 import initSocket from './routes/socket.js';
 import router from './routes/user.js';
-import {MongoClient} from 'mongodb';
+//import { Db } from './models/db.js';
+import { MongoClient} from "mongodb";
+import { UserModal } from './models/user.js';
+import User from "./routes/user.js";
 
 
 const port = 3000 || env.port;
@@ -25,6 +28,32 @@ app.listen(port, () => {
   console.log("Server started on port " + port);
 });
 
+
+
+
+/*
+UserModal.connectDB();
+UserModal.db = UserModal.getClient().db("test");
+UserModal.collection = UserModal.db.collection("users");*/
+/*
+const url = 'mongodb://admin:admin@mongodb:27017/admin?directConnection=true';
+const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+async function createDatabaseAndUser() {
+  try {
+    await client.connect();
+    console.log('Connected to MongoDB');
+    const db = client.db("test");
+    const usersCollection = db.collection("test");
+    const values = { message: "Hello, world!" };
+    const result = await usersCollection.insertOne(values);
+    console.log('Document inserted', result.insertedId);
+  } catch (err) {
+    console.error('Failed to create database or user', err);
+  } finally {
+    await client.close();
+  }
+}
+createDatabaseAndUser();*/
 /*
 const uri = "mongodb://localhost:27017";
 
