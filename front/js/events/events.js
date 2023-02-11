@@ -2,6 +2,7 @@ export const events = {
     loginClicked: "login-clicked",
     signUpClicked: "sign-up-clicked",
     loadUser: "load-user",
+    error: "error",
     guestClicked: "guest-clicked",
     gameChatClicked: "game-chat-clicked",
     gameChatClosed: "game-chat-closed",

@@ -13,6 +13,7 @@ export const loadUser = () => async (dispatch) => {
     }
   } catch (err) {
     console.log(err);
+    dispatch(events.error, err);
   }
 };
 
@@ -24,6 +25,7 @@ export const signup = (body) => async (dispatch) => {
 
   } catch (err) {
     console.log(err);
+    dispatch(events.error, err);
   }
 };
 
@@ -34,5 +36,6 @@ export const login = (body) => async (dispatch) => {
     console.log(res);
   } catch (err) {
     console.log(err);
+    dispatch(events.error, err);
   }
 };
