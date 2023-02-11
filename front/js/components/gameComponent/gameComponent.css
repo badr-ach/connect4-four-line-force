@@ -90,3 +90,10 @@
 .yellow-piece {
   background-color: rgb(248, 249, 136);
 }
+
+
+#winner{
+  text-align: center;
+  font-size: 30px;
+  color: white;
+}

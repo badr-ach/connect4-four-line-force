@@ -1,15 +1,14 @@
 import { events } from "../../events/events.js";
 import { Animator } from "../../scripts/animator.js";
 
-
 export class IntroMenu extends HTMLElement {
   constructor(app) {
     super();
     this.attachShadow({ mode: "open" });
 
     this._app = app;
-    this._animator = new Animator();
     this.toggle = false;
+    this._animator = new Animator();
   }
 
   async connectedCallback() {
@@ -28,22 +27,24 @@ export class IntroMenu extends HTMLElement {
     this.circle.addEventListener("click", () => this._handleCircleClick());
     this.lilCards[0].addEventListener("click", () => this._handleLoginClick());
     this.lilCards[1].addEventListener("click", () => this._handleSignUpClick());
-
-    console.log(this.lilCards[2])
     this.lilCards[2].addEventListener("click", () => this._handleGuestClick());
   }
 
   _handleLoginClick() {
-    this._app.dispatchEvent(new CustomEvent(events.loginClicked));
+    this._animator.beginAnimation("slide-left", this, () => {
+      this._app.dispatchEvent(new CustomEvent(events.loginClicked));
+    });
   }
 
   _handleSignUpClick() {
-    this._app.dispatchEvent(new CustomEvent(events.signUpClicked));
+    this._animator.beginAnimation("slide-left", this, () => {
+      this._app.dispatchEvent(new CustomEvent(events.signUpClicked));
+    });
   }
 
   _handleGuestClick() {
     this._handleCircleClick();
-    this._animator.beginAnimation("slide-left",this, () => {
+    this._animator.beginAnimation("slide-left", this, () => {
       this._app.dispatchEvent(new CustomEvent(events.guestClicked));
     });
   }

@@ -30,18 +30,6 @@ export class PlayMode extends HTMLElement{
     _handleVsPlayerClick(){
         this._app.dispatchEvent(new CustomEvent(events.vsPlayerClicked));
     }
-
-    // const vsComputer = document.getElementById("vsComputer");
-    // const vsPlayer = document.getElementById("vsPlayer");
-
-    // vsComputer.addEventListener("click", function() {
-    //     alert("You have selected vs computer!");
-    // });
-
-    // vsPlayer.addEventListener("click", function() {
-    //     alert("You have selected vs player!");
-    // });
-
 }
 
 customElements.define("play-mode-component", PlayMode);

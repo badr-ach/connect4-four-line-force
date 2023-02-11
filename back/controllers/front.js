@@ -1,9 +1,12 @@
 // url will be used to parse the url (captain obvious at your service).
-const url = require('url');
+// const url = require('url');
+import url from 'url';
 // fs stands for FileSystem, it's the module to use to manipulate files on the disk.
-const fs = require('fs');
+// const fs = require('fs');
+import fs from 'fs';
 // path is used only for its parse method, which creates an object containing useful information about the path.
-const path = require('path');
+// const path = require('path');
+import path from 'path';
 
 // We will limit the search of files in the front folder (../../front from here).
 // Note that fs methods consider the current folder to be the one where the app is run, that's why we don't need the "../.." before front.
@@ -33,7 +36,7 @@ const mimeTypes = {
 };
 
 // Main method, exported at the end of the file. It's the one that will be called when a file is requested.
-function manageRequest(request, response) {
+export function manageRequest(request, response) {
     // First let's parse the URL, extract the path, and parse it into an easy-to-use object.
     // We add the baseFrontPath at the beginning to limit the places to search for files.
     const parsedUrl = url.parse(baseFrontPath + request.url);
@@ -70,10 +73,8 @@ function manageRequest(request, response) {
     });
 }
 
-function send404(path, response) {
+export function send404(path, response) {
     // Note that you can create a beautiful html page and return that page instead of the simple message below.
     response.statusCode = 404;
     response.end(`File ${path} not found!`);
 }
-
-exports.manage = manageRequest;

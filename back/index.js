@@ -1,58 +1,27 @@
 // The http module contains methods to handle http queries.
-const http = require('http')
-// Let's import our logic.
-const fileQuery = require('./queryManagers/front.js')
-
-const apiQuery = require('./queryManagers/api.js');
-const { env } = require('process');
-
-const port = 8000 || env.port;
-
-const {Server} = require("socket.io");
+import http from 'http';
+import { manageRequest as frontManageRequest} from './controllers/front.js';
+import { addCors } from "./middlewares/cors.js";
+import { env } from 'process';
+import { Server } from "socket.io";
+import { Router } from './utils/server.js';
+import initSocket from './routes/socket.js';
+import router from './routes/user.js';
 
 
-/* The http module contains a createServer function, which takes one argument, which is the function that
-** will be called whenever a new request arrives to the server.
- */
-let server = http.createServer(function (request, response) {
-    // First, let's check the URL to see if it's a REST request or a file request.
-    // We will remove all cases of "../" in the url for security purposes.
-    let filePath = request.url.split("/").filter(function(elem) {
-        return elem !== "..";
-    });
+const port = 3000 || env.port;
 
-    try {
-        // If the URL starts by /api, then it's a REST request (you can change that if you want).
-        if (filePath[1] === "api") {
-            apiQuery.manage(request, response);
-            // If it doesn't start by /api, then it's a request for a file.
-        } else {
-            fileQuery.manage(request, response);
-        }
-    } catch(error) {
-        console.log(`error while processing ${request.url}: ${error}`)
-        response.statusCode = 400;
-        response.end(`Something in your request (${request.url}) is strange...`);
-    }
-// For the server to be listening to request, it needs a port, which is set thanks to the listen function.
 
-}).listen(3000);
+const app = Router();
 
-//create a socket server
-const io = new Server(server);
+app.global(addCors);
 
-io.on('connection', socket => {
-    console.log('Client connected');
+app.use("/api", router);
 
-    socket.on('message', message => {
-        console.log(`Received message: ${message}`);
-        socket.send(`Echo: ${message}`);
+app.get("/", frontManageRequest);
 
-    });
-
-    socket.on('disconnect', () => {
-        console.log('Client disconnected');
-    });
+app.listen(port, () => {
+  console.log("Server started on port " + port);
 });
 
 const MongoClient = require('mongodb').MongoClient;
@@ -63,3 +32,10 @@ MongoClient.connect(uri, { useNewUrlParser: true }, function(err, client) {
     const db = client.db("test");
     client.close();
 });
+
+const socket = new Server(app._server);
+
+initSocket(socket);
+
+
+

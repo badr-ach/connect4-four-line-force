@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "back/index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./back/index.js"
+    "start": "nodemon ./back/index.js"
   },
   "repository": {
     "type": "git",
@@ -20,5 +21,14 @@
   "dependencies": {
     "mongodb": "5.0",
     "socket.io": "^4.5.4"
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "5.0",
+    "nodemon": "^2.0.20",
+    "socket.io": "^4.5.4",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/socket.io-client": "^3.0.0"
   }
 }
