@@ -22,14 +22,29 @@ export class Register extends HTMLElement{
     _attachEventListeners(){
         console.log("signup");
         const form = this.shadowRoot.getElementById("signupForm");
-        const body = JSON.stringify({
-            "mail": form.mail.value,
-            "username": form.username.value,
-            "password": form.pwd.value
+        const btn = this.shadowRoot.getElementById("signup-btn");
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            console.log(form.mail.value);
+            const body = JSON.stringify({
+                "mail": form.mail.value,
+                "username": form.username.value,
+                "password": form.pwd.value
+            });
+            signup(body)();
         });
-        signup(body);
-        console.log(form.mail.value);
+        /*form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const body = JSON.stringify({
+                "mail": form.mail.value,
+                "username": form.username.value,
+                "password": form.pwd.value
+            });
+            signup(body);
+        });*/
     }
+
+
 
 }
 

@@ -21,12 +21,16 @@ export class Login extends HTMLElement{
     _attachEventListeners(){
         console.log("login");
         const form = this.shadowRoot.getElementById("loginForm");
-        const body = JSON.stringify({
-            "mail": form.mail.value,
-            "password": form.pwd.value
+        const btn = this.shadowRoot.getElementById("login-btn");
+        btn.addEventListener("submit", (e) => {
+            e.preventDefault();
+            console.log(form.mail.value);
+            const body = JSON.stringify({
+                "mail": form.mail.value,
+                "password": form.pwd.value
+            });
+            login(body)();
         });
-        login(body);
-        console.log(form.mail.value);
     }
 
 
