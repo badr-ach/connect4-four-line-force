@@ -2,7 +2,7 @@ import { fetcher } from "../utils/requester.js";
 import { events } from "../events/events.js";
 
 const api = fetcher();
-const rootPath = "http://localhost:3000";
+const rootPath = "http://localhost:8000";
 
 // Load User
 export const loadUser = () => async (dispatch) => {
@@ -63,6 +63,6 @@ export const logout = () => async (dispatch) => {
   } catch (err) {
     console.log(err);
     dispatch(new CustomEvent(events.error, {detail: err}));
-    
+
   }
 }

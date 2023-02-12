@@ -12,7 +12,7 @@ import { UserModal } from './models/user.js';
 import User from "./routes/user.js";
 
 
-const port = 3000 || env.port;
+const port = 8000 || env.port;
 
 
 const app = Router();
