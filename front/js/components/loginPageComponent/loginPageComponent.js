@@ -24,7 +24,7 @@ export class Login extends HTMLElement{
         const btn = this.shadowRoot.getElementById("login-btn");
         form.addEventListener("submit", (e) => {
             e.preventDefault();
-            login({ mail:form.mail.value, password: form.pwd.value })(this._app.dispatchEvent.bind(this._app));
+            login({ mail:form.mail.value, username:form.mail.value ,password: form.pwd.value })(this._app.dispatchEvent.bind(this._app));
         });
     }
 

@@ -46,7 +46,7 @@ export default function (socket) {
             gameOver: false,
         });
         game = res ? res[0] : {};
-        gameId = res ? res[0].gameId : null;
+        gameId = res ? res[0]?res[0].gameId: null: null;
       }
 
       activeGames.set(gameId, game);
