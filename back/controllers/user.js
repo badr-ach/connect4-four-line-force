@@ -12,9 +12,10 @@ export const login = async (req, res) => {
 
         let oldUser = null;
 
+
         if(mail){
             oldUser = await UserModal.findOne({ mail });
-        }else if(username){
+        }else if(!oldUser && username){
             oldUser = await UserModal.findOne({ username });
         }else{
             return res.status(404).json({ message: "Missing fields" });

@@ -15,7 +15,7 @@ export class App extends HTMLElement {
     constructor() {
         super();
         this._animator = new Animator();
-        this._token = "guest";
+        this._token = localStorage.getItem("token");
         this._connected = false;
 
     }
@@ -57,7 +57,7 @@ export class App extends HTMLElement {
 
     _handleVsComputerClick() {
         this.removeChild(this.firstChild);
-        const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._token } });
+        const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._token ? this._token : "guest" } });
         socket.emit("setup", { AIplays:1, type: "vsAI", player: this._player, resume: false });
         socket.on("setup", (data) => {
             this.appendChild(new Connect4({app : this,...data}));
@@ -67,6 +67,7 @@ export class App extends HTMLElement {
     _handleUserLoaded({detail}) {
         this._connected = true;
         this._player = detail.username;
+        this._token = localStorage.getItem("token");
         this.removeChild(this.firstChild);
         this.appendChild(new LoggedIntroMenu(this));
     }
@@ -80,7 +81,7 @@ export class App extends HTMLElement {
 
     _handleResumeGameClick() {
         this.removeChild(this.firstChild);
-        const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._token } });
+        const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._token  } });
         socket.emit("setup", { AIplays:1, type: "vsAI", player: this._player, resume: true });
         socket.on("setup", (data) => {
             console.log("game",data);

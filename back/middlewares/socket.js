@@ -5,8 +5,7 @@ const auth = async (socket, next) => {
 
   try {
     const token = socket.handshake.auth.token;
-    const isCustomAuth = token.length < 500;
-
+    console.log(token, "token")
     if(token === "guest"){
       socket.handshake.auth.id = "guest";
       return next();
@@ -14,7 +13,7 @@ const auth = async (socket, next) => {
 
     let decodedData;
     
-    if (token && isCustomAuth) {      
+    if (token) {      
       decodedData = jwt.verify(token, secret);
       socket.handshake.auth.id = decodedData?.id;
     }    

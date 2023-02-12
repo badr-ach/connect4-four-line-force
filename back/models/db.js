@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 import { ObjectId } from "mongodb";
 
-const uri =
+const uri = 
 "mongodb://admin:admin@mongodb:27017/admin?directConnection=true";
 
 export class Db{
