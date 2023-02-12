@@ -1,0 +1,16 @@
+export const events = {
+    loginClicked: "login-clicked",
+    signUpClicked: "sign-up-clicked",
+    loadUser: "load-user",
+    userLoaded: "user-loaded",
+    signedOut: "signed-out",
+    resumeGameClicked: "resume-game-clicked",
+    error: "error",
+    guestClicked: "guest-clicked",
+    gameChatClicked: "game-chat-clicked",
+    gameChatClosed: "game-chat-closed",
+    gameChatMessageSent: "game-chat-message-sent",
+    gameChatMessageReceived: "game-chat-message-received",
+    vsComputerClicked: "vs-computer-clicked",
+    vsPlayerClicked: "vs-player-clicked",
+}

@@ -1,31 +1,75 @@
 // The http module contains methods to handle http queries.
-const http = require('http')
-// Let's import our logic.
-const fileQuery = require('./queryManagers/front.js')
-const apiQuery = require('./queryManagers/api.js')
+import http from 'http';
+import { manageRequest as frontManageRequest} from './controllers/front.js';
+import { addCors } from "./middlewares/cors.js";
+import { env } from 'process';
+import { Server } from "socket.io";
+import { Router } from './utils/server.js';
+import initSocket from './routes/socket.js';
+import router from './routes/user.js';
+import { MongoClient} from "mongodb";
+import { UserModal } from './models/user.js';
+import User from "./routes/user.js";
 
-/* The http module contains a createServer function, which takes one argument, which is the function that
-** will be called whenever a new request arrives to the server.
- */
-http.createServer(function (request, response) {
-    // First, let's check the URL to see if it's a REST request or a file request.
-    // We will remove all cases of "../" in the url for security purposes.
-    let filePath = request.url.split("/").filter(function(elem) {
-        return elem !== "..";
-    });
 
-    try {
-        // If the URL starts by /api, then it's a REST request (you can change that if you want).
-        if (filePath[1] === "api") {
-            apiQuery.manage(request, response);
-            // If it doesn't start by /api, then it's a request for a file.
-        } else {
-            fileQuery.manage(request, response);
-        }
-    } catch(error) {
-        console.log(`error while processing ${request.url}: ${error}`)
-        response.statusCode = 400;
-        response.end(`Something in your request (${request.url}) is strange...`);
+const port = 3000 || env.port;
+
+
+const app = Router();
+
+app.global(addCors);
+
+app.use("/api", router);
+
+app.get("/", frontManageRequest);
+
+app.listen(port, () => {
+  console.log("Server started on port " + port);
+});
+
+
+
+
+/*
+UserModal.connectDB();
+UserModal.db = UserModal.getClient().db("test");
+UserModal.collection = UserModal.db.collection("users");*/
+/*
+const url = 'mongodb://admin:admin@mongodb:27017/admin?directConnection=true';
+const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+async function createDatabaseAndUser() {
+  try {
+    await client.connect();
+    console.log('Connected to MongoDB');
+    const db = client.db("test");
+    const usersCollection = db.collection("test");
+    const values = { message: "Hello, world!" };
+    const result = await usersCollection.insertOne(values);
+    console.log('Document inserted', result.insertedId);
+  } catch (err) {
+    console.error('Failed to create database or user', err);
+  } finally {
+    await client.close();
+  }
+}
+createDatabaseAndUser();*/
+/*
+const uri = "mongodb://localhost:27017";
+
+MongoClient.connect(uri, { useNewUrlParser: true }, function(err, client) {
+    console.log("Connected successfully to database");
+    const db = client.db("test");
+    client.close();
+    if(err){
+        console.log("erreur dbbbb ",err);
     }
-// For the server to be listening to request, it needs a port, which is set thanks to the listen function.
-}).listen(8000);
+});
+*/
+
+
+const socket = new Server(app._server);
+
+initSocket(socket);
+
+
+
