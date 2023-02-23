@@ -1,4 +1,5 @@
-import getAiMove from "../logic/ai.js";
+//import getAiMove from "../logic/ai.js";
+import { nextMove } from "../logic/ai.js";
 import { v4 as uuid } from "uuid";
 import { checkWin } from "../logic/checkWin.js";
 
@@ -36,7 +37,8 @@ export default function (socket) {
         };
 
         if (data.id == 1) {
-          let aiMove = getAiMove({ board: game.board });
+          //let aiMove = getAiMove({ board: game.board });
+          let aiMove = nextMove({ board: game.board });
           game.board[aiMove[0]][aiMove[1]] = "AI";
           game.currColumns[aiMove[1]]--;
         }
@@ -74,7 +76,9 @@ export default function (socket) {
       let gameStatus = checkWin({ ...game, rows: 6, columns: 7 });
 
       if (!gameStatus.gameOver) {
-        let aiMove = getAiMove({ board: game.board });
+        //let aiMove = getAiMove({ board: game.board });
+        console.log("game.board from sockkk", game.board[0])
+        let aiMove = nextMove({ board: game.board });
         game.board[aiMove[0]][aiMove[1]] = 2;
         game.currColumns[aiMove[1]]--;
         gameStatus = checkWin({ ...game, currPlayer: 2, rows: 6, columns: 7 });
