@@ -84,8 +84,13 @@ export class App extends HTMLElement {
         const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._token  } });
         socket.emit("setup", { AIplays:1, type: "vsAI", player: this._player, resume: true });
         socket.on("setup", (data) => {
-            console.log("game",data);
-            this.appendChild(new Connect4({app : this,...data}));
+            if(data === null) {
+                alert("No game to resume");
+                this.appendChild(new LoggedIntroMenu(this));
+                return;
+            }else{
+                this.appendChild(new Connect4({app : this,...data}));
+            }
         });
     }
 
