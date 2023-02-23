@@ -23,21 +23,19 @@ function setup(AIplays) {
     return true;
 }
 
-export function nextMove(lastMove) {
-    // Convert lastMove into a board object
-    let board = lastMove;
+export function nextMove({board}) {
+    return new Promise(function(resolve, reject) {
+        let bestMove = minimax(board, maxDepth, -Infinity, Infinity, aiPlays).move;
 
-    // Find the best move using minimax algorithm
-    let bestMove = minimax(board, maxDepth, -Infinity, Infinity, aiPlays).move;
-
-    // Convert the best move into an array format
-    let col = bestMove % 7;
-    let row = Math.floor(bestMove / 7);
-
-    // Return the best move
-    return [col, row];
+        // Convert the best move into an array format
+        let col = bestMove % 7;
+        let row = Math.floor(bestMove / 7);
+        let move = [row, col];
+        resolve(move);
+    });
 }
 function minimax(board, depth, alpha, beta, maximizingPlayer) {
+    console.log("board minimax", board[0])
     if (depth === 0 || isTerminalNode(board)) {
         return { move: null, score: evaluate(board) };
     }
