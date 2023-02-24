@@ -1,18 +1,3 @@
-/*
-export default function getAiMove(gameState) {
-    while(true) {
-        // Get a random column (integer between 0 and 6)
-        let i = Math.floor(Math.random() * 7);
-        for (let j=5 ; j>=0 ; j--) {
-            if (gameState.board[j][i] === 0) {
-                return [j, i];
-            }
-        }
-    }
-}*/
-
-
-// ia first code
 import { checkWin } from "../logic/checkWin.js";
 
 let aiPlays = false;
@@ -24,22 +9,24 @@ function setup(AIplays) {
 }
 
 export function nextMove({board}) {
-    return new Promise(function(resolve, reject) {
+    setup(2);
+    /*return new Promise(function(resolve, reject) {
         setTimeout(() => {
-            let bestMove = minimax(board, maxDepth, -Infinity, Infinity, aiPlays);
 
-            // Convert the best move into an array format
-            let col = bestMove.move % 7;
-            let row = Math.floor(bestMove.move / 7);
-            let move = [row, col];
-
-            resolve(move);
         }, 100);
-    });
+    });*/
+    let bestMove = minimax(board, maxDepth, -Infinity, Infinity, aiPlays);
+
+    // Convert the best move into an array format
+    let col = bestMove.move % 7;
+    let row = Math.floor(bestMove.move / 7);
+    let move = [row, col];
+
+    return move;
 }
 
 function minimax(board, depth, alpha, beta, maximizingPlayer) {
-    console.log("board minimax", board[0])
+    //console.log("board minimax", board[0])
     if (depth === 0 || isTerminalNode(board)) {
         return { move: null, score: evaluate(board) };
     }
@@ -106,7 +93,6 @@ function makeMove(board, move, player) {
 function getValidMoves(board) {
     let moves = [];
     for (let col = 0; col < 7; col++) {
-        console.log("boaaaaaard ",board[0])
         if (board[0][col] === 0) {
             moves.push(col);
         }

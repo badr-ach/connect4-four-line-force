@@ -77,10 +77,10 @@ export default function (socket) {
 
       if (!gameStatus.gameOver) {
         //let aiMove = getAiMove({ board: game.board });
-        console.log("game.board from sockkk", game.board[0])
         let aiMove = nextMove({ board: game.board });
         game.board[aiMove[0]][aiMove[1]] = 2;
         game.currColumns[aiMove[1]]--;
+        console.log("game.board from sockkk", game.board)
         gameStatus = checkWin({ ...game, currPlayer: 2, rows: 6, columns: 7 });
       }
 
