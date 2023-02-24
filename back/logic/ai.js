@@ -25,15 +25,19 @@ function setup(AIplays) {
 
 export function nextMove({board}) {
     return new Promise(function(resolve, reject) {
-        let bestMove = minimax(board, maxDepth, -Infinity, Infinity, aiPlays).move;
+        setTimeout(() => {
+            let bestMove = minimax(board, maxDepth, -Infinity, Infinity, aiPlays);
 
-        // Convert the best move into an array format
-        let col = bestMove % 7;
-        let row = Math.floor(bestMove / 7);
-        let move = [row, col];
-        resolve(move);
+            // Convert the best move into an array format
+            let col = bestMove.move % 7;
+            let row = Math.floor(bestMove.move / 7);
+            let move = [row, col];
+
+            resolve(move);
+        }, 100);
     });
 }
+
 function minimax(board, depth, alpha, beta, maximizingPlayer) {
     console.log("board minimax", board[0])
     if (depth === 0 || isTerminalNode(board)) {
