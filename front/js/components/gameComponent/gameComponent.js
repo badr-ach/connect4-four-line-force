@@ -192,6 +192,11 @@ export class Connect4 extends HTMLElement {
       return;
     }
 
+    if(e.target.getAttribute("column") === null ||
+      e.target.getAttribute("row") === null ||
+      e.target.tagName !== "TD")
+      return;
+    
     let column = e.target.getAttribute("column");
     if (column === 0) {
       return;

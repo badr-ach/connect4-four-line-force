@@ -12,11 +12,8 @@ export const login = async (req, res) => {
 
         let oldUser = null;
 
-
-        if(mail){
-            oldUser = await UserModal.findOne({ mail });
-        }else if(!oldUser && username){
-            oldUser = await UserModal.findOne({ username });
+        if(mail || username){
+            oldUser = await UserModal.findOne({ $or: [{ mail }, { username }] });
         }else{
             return res.status(404).json({ message: "Missing fields" });
         }
@@ -46,7 +43,7 @@ export const signin = async (req, res) => {
     try {
         const oldUser = await UserModal.findOne({ mail });
 
-        if (oldUser) return res.status(400).json({ message: "User already exists in the users list" });
+        if (oldUser) return res.status(400).json({ message: "Email already exists in the users list" });
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
