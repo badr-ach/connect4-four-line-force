@@ -1,15 +1,17 @@
 import { checkWin } from "../logic/checkWin.js";
 
-let aiPlays = false;
+let aiPlays = true;
 let maxDepth = 4;
-
+const ROWS = 6;
+const COLS = 7;
+const OPPONENT_PLAYER = 2;
 function setup(AIplays) {
     aiPlays = (AIplays === 1);
     return true;
 }
 
 export function nextMove({board}) {
-    setup(2);
+
     /*return new Promise(function(resolve, reject) {
         setTimeout(() => {
 
@@ -18,14 +20,16 @@ export function nextMove({board}) {
     let bestMove = minimax(board, maxDepth, -Infinity, Infinity, aiPlays);
 
     // Convert the best move into an array format
-    let col = bestMove.move % 7;
-    let row = Math.floor(bestMove.move / 7);
+    let col = bestMove.move.col;
+    let row = bestMove.move.row;
     let move = [row, col];
+    console.log("move", bestMove)
+    console.log("best move", board)
 
     return move;
 }
-
-function minimax(board, depth, alpha, beta, maximizingPlayer) {
+/*
+function minimax1(board, depth, alpha, beta, maximizingPlayer) {
     //console.log("board minimax", board[0])
     if (depth === 0 || isTerminalNode(board)) {
         return { move: null, score: evaluate(board) };
@@ -57,6 +61,8 @@ function minimax(board, depth, alpha, beta, maximizingPlayer) {
 
     return { move: bestMove, score: bestScore };
 }
+
+ */
 function isTerminalNode(board) {
     // Check if the board is full
     if (getValidMoves(board).length === 0) {
@@ -90,81 +96,160 @@ function makeMove(board, move, player) {
     return newBoard;
 }
 
-function getValidMoves(board) {
-    let moves = [];
-    for (let col = 0; col < 7; col++) {
-        if (board[0][col] === 0) {
-            moves.push(col);
+
+function minimax(board, depth, alpha, beta, maximizingPlayer) {
+    // base case: leaf node or maximum depth reached
+    if (depth === 0 || isTerminalNode(boardCopy)) {
+        return { score: evaluate(boardCopy) };
+    }
+
+    let boardCopy = JSON.parse(JSON.stringify(board));
+    let bestMove;
+    let bestScore;
+    if (maximizingPlayer) {
+        bestScore = -Infinity;
+        const moves = getMoves(boardCopy, AI_PLAYER);
+        for (let i = 0; i < moves.length; i++) {
+            const move = moves[i];
+            boardCopy[move.row][move.col] = move.player;
+            const { score } = minimax(boardCopy, depth - 1, alpha, beta, false);
+            boardCopy[move.row][move.col] = EMPTY;
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = move;
+            }
+            alpha = Math.max(alpha, bestScore);
+            if (beta <= alpha) {
+                break;
+            }
+        }
+    } else {
+        bestScore = Infinity;
+        const moves = getMoves(boardCopy, HUMAN_PLAYER);
+        for (let i = 0; i < moves.length; i++) {
+            const move = moves[i];
+            boardCopy[move.row][move.col] = move.player;
+            const { score } = minimax(boardCopy, depth - 1, alpha, beta, true);
+            boardCopy[move.row][move.col] = EMPTY;
+            if (score < bestScore) {
+                bestScore = score;
+                bestMove = move;
+            }
+            beta = Math.min(beta, bestScore);
+            if (beta <= alpha) {
+                break;
+            }
+
+            // check for opponent's potential winning moves and block them
+            const opponentMoves = getMoves(boardCopy, AI_PLAYER);
+            for (let j = 0; j < opponentMoves.length; j++) {
+                const opponentMove = opponentMoves[j];
+                boardCopy[opponentMove.row][opponentMove.col] = opponentMove.player;
+                const { score } = evaluate(boardCopy);
+                boardCopy[opponentMove.row][opponentMove.col] = EMPTY;
+                if (score === WINNING_SCORE) {
+                    // if opponent has a potential winning move, block it
+                    boardCopy[opponentMove.row][opponentMove.col] = HUMAN_PLAYER;
+                    const { score } = minimax(boardCopy, depth - 1, alpha, beta, true);
+                    boardCopy[opponentMove.row][opponentMove.col] = EMPTY;
+                    if (score < bestScore) {
+                        bestScore = score;
+                        bestMove = opponentMove;
+                    }
+                    beta = Math.min(beta, bestScore);
+                    if (beta <= alpha) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return { move: bestMove, score: bestScore };
+}
+
+function copy_board(board) {
+    let copy = [];
+    for (let row of board) {
+        let row_copy = row.slice();
+        copy.push(row_copy);
+    }
+    return copy;
+}
+// define constants
+const EMPTY = 0;
+const AI_PLAYER = 2;
+const HUMAN_PLAYER = 1;
+const WINNING_SCORE = 1000;
+const MAX_DEPTH = 5;
+
+// evaluate the score of the current state
+function evaluate(board) {
+    let score = 0;
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+            if (board[i][j] === AI_PLAYER) {
+                // count AI's chips in a row
+                let count = 1;
+                for (let k = 1; k < 4 && j + k < board[i].length && board[i][j + k] === AI_PLAYER; k++) {
+                    count++;
+                }
+                score += Math.pow(10, count);
+            } else if (board[i][j] === HUMAN_PLAYER) {
+                // count human's chips in a row
+                let count = 1;
+                for (let k = 1; k < 4 && j + k < board[i].length && board[i][j + k] === HUMAN_PLAYER; k++) {
+                    count++;
+                }
+                score -= Math.pow(10, count);
+            }
+        }
+    }
+    return score;
+}
+
+// check if the board is full
+function isBoardFull(board) {
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+            if (board[i][j] === EMPTY) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+// get all possible moves for the current player
+function getMoves(board, player) {
+    const moves = [];
+    for (let j = 0; j < board[0].length; j++) {
+        if (board[0][j] === EMPTY) {
+            for (let i = board.length - 1; i >= 0; i--) {
+                if (board[i][j] === EMPTY) {
+                    moves.push({ row: i, col: j, player: player });
+                    break;
+                }
+            }
         }
     }
     return moves;
 }
+function getValidMoves(board) {
+    const validMoves = [];
+    const columns = board[0].length;
 
-function evaluate(board) {
-    let score = 0;
-
-    // Check for vertical wins
-    for (let col = 0; col < 7; col++) {
-        for (let row = 0; row < 3; row++) {
-            let window = [board[row][col], board[row+1][col], board[row+2][col], board[row+3][col]];
-            score += evaluateWindow(window);
+    for (let col = 0; col < columns; col++) {
+        // Check if the top row of the column is empty
+        if (board[0][col] === 0) {
+            // Add the move to the valid moves list
+            validMoves.push({ col, player: AI_PLAYER });
         }
     }
 
-    // Check for horizontal wins
-    for (let row = 0; row < 6; row++) {
-        for (let col = 0; col < 4; col++) {
-            let window = [board[row][col], board[row][col+1], board[row][col+2], board[row][col+3]];
-            score += evaluateWindow(window);
-        }
-    }
-
-    // Check for diagonal wins (positive slope)
-    for (let row = 0; row < 3; row++) {
-        for (let col = 0; col < 4; col++) {
-            let window = [board[row][col], board[row+1][col+1], board[row+2][col+2], board[row+3][col+3]];
-            score += evaluateWindow(window);
-        }
-    }
-
-    // Check for diagonal wins (negative slope)
-    for (let row = 0; row < 3; row++) {
-        for (let col = 3; col < 7; col++) {
-            let window = [board[row][col], board[row+1][col-1], board[row+2][col-2], board[row+3][col-3]];
-            score += evaluateWindow(window);
-        }
-    }
-
-    return score;
+    return validMoves;
 }
-function evaluateWindow(window) {
-    let score = 0;
 
-    // Count the number of pieces belonging to the AI player and the opponent
-    let aiCount = window.filter(p => p === 1).length;
-    let oppCount = window.filter(p => p === 2).length;
-
-    // Add to the score based on the number of pieces in the window
-    if (aiCount === 4) {
-        score += 100000;
-    } else if (aiCount === 3 && oppCount === 0) {
-        score += 100;
-    } else if (aiCount === 2 && oppCount === 0) {
-        score += 10;
-    } else if (aiCount === 1 && oppCount === 0) {
-        score += 1;
-    } else if (oppCount === 4) {
-        score -= 100000;
-    } else if (oppCount === 3 && aiCount === 0) {
-        score -= 100;
-    } else if (oppCount === 2 && aiCount === 0) {
-        score -= 10;
-    } else if (oppCount === 1 && aiCount === 0) {
-        score -= 1;
-    }
-
-    return score;
-}
 
 
 
