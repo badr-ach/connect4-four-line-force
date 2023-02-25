@@ -38,7 +38,9 @@ export default function (socket) {
 
         if (data.id == 1) {
           //let aiMove = getAiMove({ board: game.board });
-          let aiMove = nextMove({ board: game.board });
+          let aiMove = await nextMove({ board: game.board }).then((res) => { console.log("res", res)
+            return res;
+          }).catch((err) => { console.log(err) });
           game.board[aiMove[0]][aiMove[1]] = "AI";
           game.currColumns[aiMove[1]]--;
         }
@@ -55,33 +57,39 @@ export default function (socket) {
       socket.emit("setup", activeGames.get(gameId));
     });
 
-    socket.on("newMove", (data) => {
+    socket.on("newMove", async (data) => {
       let move = data.move;
       let game = activeGames.get(data.gameId);
       if (
-        move[0] < 0 ||
-        move[0] > 5 ||
-        move[1] < 0 ||
-        move[1] > 6
+          move[0] < 0 ||
+          move[0] > 5 ||
+          move[1] < 0 ||
+          move[1] > 6
 
       )
         return;
       if (game.board[move[0]][move[1]] != 0) return;
 
-      console.log(move);
+      //console.log(move);
 
       game.board[move[0]][move[1]] = 1;
       game.currColumns[move[1]]--;
 
-      let gameStatus = checkWin({ ...game, rows: 6, columns: 7 });
+      let gameStatus = checkWin({...game, rows: 6, columns: 7});
 
       if (!gameStatus.gameOver) {
         //let aiMove = getAiMove({ board: game.board });
-        let aiMove = nextMove({ board: game.board });
+        let aiMove = await nextMove({board: game.board}).then((res) => {
+          console.log("res", res)
+          return res;
+        }).catch((err) => {
+          console.log(err)
+        });
+        console.log("aiMove", aiMove);
         game.board[aiMove[0]][aiMove[1]] = 2;
         game.currColumns[aiMove[1]]--;
         //console.log("game.board from sockkk", game.board)
-        gameStatus = checkWin({ ...game, currPlayer: 2, rows: 6, columns: 7 });
+        gameStatus = checkWin({...game, currPlayer: 2, rows: 6, columns: 7});
       }
 
       if (gameStatus.gameOver) {
