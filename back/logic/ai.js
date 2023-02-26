@@ -27,7 +27,10 @@ export function nextMove({board}) {
                 resolve([row, col]);
                 reject("error : Time is out");
             } else {
+                let start = performance.now();
                 let bestMove = monteCarlo(board, 2);
+                let end = performance.now();
+                console.log("time taken for move :", end - start);
                 console.log("bessssssssssssssssssst", bestMove);
 
                 // Convert the best move into an array format
