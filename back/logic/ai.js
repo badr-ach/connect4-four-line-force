@@ -18,15 +18,6 @@ export function nextMove({board}) {
 
     return new Promise(function (resolve, reject) {
         setTimeout(() => {
-            let newBoard = convertBoard(board);
-            console.log("newBoard", newBoard);
-            if (newBoard.length <= 3) {
-                let col = optimnal.filter((x) => x[0] == newBoard.toString())[0][1];
-                let row = getRow(board, col);
-                console.log("hard coded moves ", col, row);
-                resolve([row, col]);
-                reject("error : Time is out");
-            } else {
                 let start = performance.now();
                 let bestMove = monteCarlo(board, 2);
                 let end = performance.now();
@@ -37,7 +28,7 @@ export function nextMove({board}) {
 
                 resolve(bestMove);
                 reject("error : Time is out");
-            }
+
         }, 100);
     });
 }
