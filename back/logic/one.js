@@ -10,14 +10,7 @@ export function setUpLocal(board,pl){
 
 
 export function setUp(starter){
-    return Promise.race([ 
-        new Promise(function (resolve, reject) {
-            setTimeout(() => {
-                resolve([0,0]);
-            }, 10);
-        })
-        , 
-        new Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         setTimeout(() => {
             reject("error : Time is out");
         }, 1000);
@@ -37,33 +30,28 @@ export function setUp(starter){
             player = 2;
         }
         resolve(true);
-    })]);
+    });
 }
 
 export function nextMove(lastMove) {
     return new Promise(function (resolve, reject) {
-        setTimeout(() => {
+            if(lastMove.length === 0){
+                //i play first
+                localboard = makeMove(localboard, firstcol, player);
+                resolve([firstcol,firstrow]);
+                return;
+            }
+
+            //i play second
             
-            reject("error : Time is out");
-        }, 100);
+            //what he played
+            let [col,row] = lastMove;
+            localboard = makeMove(localboard, col, 3 - player);
 
-        if(lastMove.length === 0){
-            //i play first
-            localboard = makeMove(localboard, firstcol, player);
-            resolve([firstcol,firstrow]);
-            return;
-        }
-
-        //i play second
-        
-        //what he played
-        let [col,row] = lastMove;
-        localboard = makeMove(localboard, col, 3 - player);
-
-        // what i play
-        let [myrow,mycol] = monteCarlo(localboard, player);
-        localboard = makeMove(localboard, mycol, player);
-        resolve([mycol,myrow]);
+            // what i play
+            let [myrow,mycol] = monteCarlo(localboard, player);
+            localboard = makeMove(localboard, mycol, player);
+            resolve([mycol,myrow]);
     });
 }
 
@@ -71,7 +59,7 @@ export function nextMove(lastMove) {
 // // This function runs the Monte Carlo simulation and returns the best move///////////////
 // Define the Monte Carlo function
 function monteCarlo(board, player) {
-    const SIMULATION_COUNT = 1400; // Number of simulations to run
+    const SIMULATION_COUNT = 1000; // Number of simulations to run
     const scores = new Array(7).fill(0); // Initialize scores for each column to 0
 
     // Loop through each column

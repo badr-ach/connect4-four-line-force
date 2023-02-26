@@ -29,7 +29,7 @@ export const loadUser = () => async (dispatch) => {
 //Signup user
 export const signup = (body) => async (dispatch) => {
   try {
-    const res = await api.post(rootPath+"/api/signin", body);
+    const res = await api.post(rootPath+"/api/signup", body);
     localStorage.setItem("token", res.token);
     dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
     alert("You have been registered successfully");
