@@ -17,6 +17,7 @@ export class App extends HTMLElement {
         this._animator = new Animator();
         this._token = localStorage.getItem("token");
         this._connected = false;
+        this._player = "guest";
 
     }
 
@@ -58,8 +59,9 @@ export class App extends HTMLElement {
     _handleVsComputerClick() {
         this.removeChild(this.firstChild);
         const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._token ? this._token : "guest" } });
-        socket.emit("setup", { AIplays:1, type: "vsAI", player: this._player, resume: false });
+        socket.emit("setup", { AIplays:2, type: "vsAI", player: this._player, resume: false });
         socket.on("setup", (data) => {
+            console.log(data);
             this.appendChild(new Connect4({app : this,...data}));
         });
     }
@@ -82,7 +84,7 @@ export class App extends HTMLElement {
     _handleResumeGameClick() {
         this.removeChild(this.firstChild);
         const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._token  } });
-        socket.emit("setup", { AIplays:1, type: "vsAI", player: this._player, resume: true });
+        socket.emit("setup", { player: this._player, resume: true });
         socket.on("setup", (data) => {
             if(data === null) {
                 alert("No game to resume");

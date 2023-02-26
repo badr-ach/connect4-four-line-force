@@ -2,15 +2,22 @@ let localboard;
 let player;
 let [firstrow,firstcol] = [null,null];
 
+
+export function setUpLocal(board,pl){
+    localboard = board;
+    player = pl;
+}
+
+
 export function setUp(starter){
     return Promise.race([ 
         new Promise(function (resolve, reject) {
             setTimeout(() => {
-                reject("error : Time is out");
+                resolve([0,0]);
             }, 10);
         })
-        , new Promise(function (resolve, reject) {
-
+        , 
+        new Promise(function (resolve, reject) {
         setTimeout(() => {
             reject("error : Time is out");
         }, 1000);
@@ -215,6 +222,7 @@ function checkWin1(board) {
     // No winner
     return 0;
 }
+
 function copyBoard(board) {
     const newBoard = [];
     for (let row = 0; row < 6; row++) {

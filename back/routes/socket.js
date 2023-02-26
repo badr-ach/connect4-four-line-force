@@ -1,6 +1,6 @@
 //import getAiMove from "../logic/ai.js";
 // import { nextMove } from "../logic/ai.js";
-import { nextMove, setup } from "../logic/one.js";
+import { nextMove, setUp, setUpLocal } from "../logic/one.js";
 import { v4 as uuid } from "uuid";
 import { checkWin } from "../logic/checkWin.js";
 
@@ -24,7 +24,7 @@ export default function (socket) {
       let game = {};
       let gameId;
 
-      let aiReady = await setup(whoPlays).then((res) => {return res;});
+      let aiReady = await setUp(whoPlays).then((res) => {return res;});
       
       if (!data.resume) {
         gameId = uuid();
@@ -52,12 +52,10 @@ export default function (socket) {
         });
         game = res ? res[0] : {};
         gameId = res ? (res[0] ? res[0].gameId : null) : null;
+        setUpLocal(JSON.parse(JSON.stringify(game.board)), 1);
       }
 
       activeGames.set(gameId, game);
-      
-      console.log("game", game.board);
-
       socket.emit("setup", activeGames.get(gameId));
     });
 
@@ -67,22 +65,18 @@ export default function (socket) {
       if (move[0] < 0 || move[0] > 5 || move[1] < 0 || move[1] > 6) return;
       if (game.board[move[0]][move[1]] != 0) return;
 
-      //console.log(move);
-
       game.board[move[0]][move[1]] = 1;
       game.currColumns[move[1]]--;
 
       let gameStatus = checkWin({ ...game, rows: 6, columns: 7 });
 
+
+
       if (!gameStatus.gameOver) {
-        //let aiMove = getAiMove({ board: game.board });
         let startTime = performance.now();
         let aiMove = await nextMove([move[1],move[0]]).then((res) => {console.log("ai", res); return res;})
         let endTime = performance.now();
-        console.log("time", endTime - startTime);
-        console.log("lastMove", [move[1],move[0]])
-        console.log("aiMove", aiMove);
-
+        console.log("ai move time", endTime - startTime);
 
         game.board[aiMove[1]][aiMove[0]] = 2;
         game.currColumns[aiMove[0]]--;
