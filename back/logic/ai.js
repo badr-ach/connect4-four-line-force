@@ -15,33 +15,28 @@ const OPPONENT_PLAYER = 2;
 
 export function nextMove({board}) {
 
-    return new Promise(function(resolve, reject) {
+
+    return new Promise(function (resolve, reject) {
         setTimeout(() => {
             let newBoard = convertBoard(board);
             console.log("newBoard", newBoard);
-            if(newBoard.length <= 3){
+            if (newBoard.length <= 3) {
                 let col = optimnal.filter((x) => x[0] == newBoard.toString())[0][1];
                 let row = getRow(board, col);
                 console.log("hard coded moves ", col, row);
-                resolve( [row, col]);
+                resolve([row, col]);
                 reject("error : Time is out");
             } else {
-                let bestMove = minimax(board, maxDepth, -Infinity, Infinity, aiPlays);
+                let bestMove = monteCarlo(board, 2);
+                console.log("bessssssssssssssssssst", bestMove);
 
                 // Convert the best move into an array format
-                let col = bestMove.move.col;
-                let row = bestMove.move.row;
-                let move = [row, col];
-                console.log("move", move)
-                console.log("best move", board)
 
-                resolve(move);
+                resolve(bestMove);
                 reject("error : Time is out");
             }
         }, 100);
     });
-
-
 }
 
 function convertBoard(board) {
@@ -97,157 +92,6 @@ export function nextMove({board}) {
 
     return move;
 }*/
-
-function isTerminalNode(board) {
-    // Check if the board is full
-    if (getValidMoves(board).length === 0) {
-        return true;
-    }
-
-    // Check for a win
-    //let win = checkForWin(board);
-    let win = checkWin({...board} )
-    if (win.winner === true) {
-        return true;
-    }
-
-    // Otherwise, the game is not over
-    return false;
-}
-
-function makeMove(board, move, player) {
-    let newBoard = [];
-    for (let i = 0; i < board.length; i++) {
-        newBoard[i] = board[i].slice();
-    }
-
-    for (let row = 5; row >= 0; row--) {
-        if (newBoard[row][move] === 0) {
-            newBoard[row][move] = player;
-            break;
-        }
-    }
-
-    return newBoard;
-}
-
-function minimax(board, depth, alpha, beta, maximizingPlayer) {
-    // base case: leaf node or maximum depth reached
-    if (depth === 0 || isTerminalNode(board)) {
-        return { score: evaluate(board) };
-    }
-
-    let bestMove;
-    let bestScore;
-    if (maximizingPlayer) {
-        bestScore = -Infinity;
-        const moves = getMoves(board, AI_PLAYER);
-        for (let i = 0; i < moves.length; i++) {
-            const move = moves[i];
-            const boardCopy = makeMove(board, move, AI_PLAYER);
-            const { score } = minimax(boardCopy, depth - 1, alpha, beta, false);
-            if (score > bestScore) {
-                bestScore = score;
-                bestMove = move;
-            }
-            alpha = Math.max(alpha, bestScore);
-            if (beta <= alpha) {
-                break;
-            }
-        }
-    } else {
-        bestScore = Infinity;
-        const moves = getMoves(board, HUMAN_PLAYER);
-        for (let i = 0; i < moves.length; i++) {
-            const move = moves[i];
-            const boardCopy = makeMove(board, move, HUMAN_PLAYER);
-            let { score } = evaluate(boardCopy);
-            if (score === WINNING_SCORE) {
-                // if human player has a potential winning move, block it
-                boardCopy[move.row][move.col] = AI_PLAYER;
-                score = -WINNING_SCORE;
-                return { move, score };
-            }
-            const { score: newScore } = minimax(boardCopy, depth - 1, alpha, beta, true);
-            if (newScore < bestScore) {
-                bestScore = newScore;
-                bestMove = move;
-            }
-            beta = Math.min(beta, bestScore);
-            if (beta <= alpha) {
-                break;
-            }
-        }
-    }
-
-    return { move: bestMove, score: bestScore };
-}
-
-
-// evaluate the score of the current state
-function evaluate(board) {
-    let score = 0;
-    for (let i = 0; i < board.length; i++) {
-        for (let j = 0; j < board[i].length; j++) {
-            if (board[i][j] === AI_PLAYER) {
-                // count AI's chips in a row
-                let count = 1;
-                for (let k = 1; k < 4 && j + k < board[i].length && board[i][j + k] === AI_PLAYER; k++) {
-                    count++;
-                }
-                score += Math.pow(10, count);
-            } else if (board[i][j] === HUMAN_PLAYER) {
-                // count human's chips in a row
-                let count = 1;
-                for (let k = 1; k < 4 && j + k < board[i].length && board[i][j + k] === HUMAN_PLAYER; k++) {
-                    count++;
-                }
-                score -= Math.pow(10, count);
-                // check for opponent's consecutive pieces
-                count = 1;
-                for (let k = 1; k < 4 && j + k < board[i].length && board[i][j + k] === OPPONENT_PLAYER; k++) {
-                    count++;
-                }
-                if (count === 3) {
-                    score -= 1000; // add penalty for opponent having three consecutive pieces
-                }
-            }
-        }
-    }
-    return score;
-}
-
-
-// get all possible moves for the current player
-function getMoves(board, player) {
-    const moves = [];
-    for (let j = 0; j < board[0].length; j++) {
-        if (board[0][j] === EMPTY) {
-            for (let i = board.length - 1; i >= 0; i--) {
-                if (board[i][j] === EMPTY) {
-                    moves.push({ row: i, col: j, player: player });
-                    break;
-                }
-            }
-        }
-    }
-    return moves;
-}
-
-function getValidMoves(board) {
-    const validMoves = [];
-    const columns = board[0].length;
-
-    for (let col = 0; col < columns; col++) {
-        // Check if the top row of the column is empty
-        if (board[0][col] === 0) {
-            // Add the move to the valid moves list
-            validMoves.push({ col, player: AI_PLAYER });
-        }
-    }
-
-    return validMoves;
-}
 
 // optimal moves for the 3 first moves
 let optimnal =[
@@ -652,3 +496,350 @@ let optimnal =[
     ["502",3],
     ["156",4],
 ]
+
+
+
+
+/*
+let aiPlays = true;
+let maxDepth = 4;
+const ROWS = 6;
+const COLS = 7;
+const OPPONENT_PLAYER = 2;
+function setup(AIplays) {
+    aiPlays = (AIplays === 1);
+    return true;
+}
+
+export function nextMove({board}) {
+
+    /*return new Promise(function(resolve, reject) {
+        setTimeout(() => {
+
+        }, 100);
+    });
+    let bestMove = minimax(board, maxDepth, -Infinity, Infinity, aiPlays);
+
+    // Convert the best move into an array format
+    let col = bestMove.move.col;
+    let row = bestMove.move.row;
+    let move = [row, col];
+    console.log("move", bestMove)
+    console.log("best move", board)
+
+    return move;
+}
+
+function isTerminalNode(board) {
+    // Check if the board is full
+    if (getValidMoves(board).length === 0) {
+        return true;
+    }
+
+    // Check for a win
+    //let win = checkForWin(board);
+    let win = checkWin({...board} )
+    if (win.winner === true) {
+        return true;
+    }
+
+    // Otherwise, the game is not over
+    return false;
+}
+
+function makeMove(board, move, player) {
+    let newBoard = [];
+    for (let i = 0; i < board.length; i++) {
+        newBoard[i] = board[i].slice();
+    }
+
+    for (let row = 5; row >= 0; row--) {
+        if (newBoard[row][move] === 0) {
+            newBoard[row][move] = player;
+            break;
+        }
+    }
+
+    return newBoard;
+}
+
+function minimax(board, depth, alpha, beta, maximizingPlayer) {
+    // base case: leaf node or maximum depth reached
+    if (depth === 0 || isTerminalNode(board)) {
+        return { score: evaluate(board) };
+    }
+
+    let bestMove;
+    let bestScore;
+    if (maximizingPlayer) {
+        bestScore = -Infinity;
+        const moves = getMoves(board, AI_PLAYER);
+        for (let i = 0; i < moves.length; i++) {
+            const move = moves[i];
+            const boardCopy = makeMove(board, move, AI_PLAYER);
+            const { score } = minimax(boardCopy, depth - 1, alpha, beta, false);
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = move;
+            }
+            alpha = Math.max(alpha, bestScore);
+            if (beta <= alpha) {
+                break;
+            }
+        }
+    } else {
+        bestScore = Infinity;
+        const moves = getMoves(board, HUMAN_PLAYER);
+        for (let i = 0; i < moves.length; i++) {
+            const move = moves[i];
+            const boardCopy = makeMove(board, move, HUMAN_PLAYER);
+            let { score } = evaluate(boardCopy);
+            if (score === WINNING_SCORE) {
+                // if human player has a potential winning move, block it
+                boardCopy[move.row][move.col] = AI_PLAYER;
+                score = -WINNING_SCORE;
+                return { move, score };
+            }
+            const { score: newScore } = minimax(boardCopy, depth - 1, alpha, beta, true);
+            if (newScore < bestScore) {
+                bestScore = newScore;
+                bestMove = move;
+            }
+            beta = Math.min(beta, bestScore);
+            if (beta <= alpha) {
+                break;
+            }
+        }
+    }
+
+    return { move: bestMove, score: bestScore };
+}
+
+
+
+
+// define constants
+const EMPTY = 0;
+const AI_PLAYER = 2;
+const HUMAN_PLAYER = 1;
+const WINNING_SCORE = 1000;
+const MAX_DEPTH = 5;
+
+// evaluate the score of the current state
+function evaluate(board) {
+    let score = 0;
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+            if (board[i][j] === AI_PLAYER) {
+                // count AI's chips in a row
+                let count = 1;
+                for (let k = 1; k < 4 && j + k < board[i].length && board[i][j + k] === AI_PLAYER; k++) {
+                    count++;
+                }
+                score += Math.pow(10, count);
+            } else if (board[i][j] === HUMAN_PLAYER) {
+                // count human's chips in a row
+                let count = 1;
+                for (let k = 1; k < 4 && j + k < board[i].length && board[i][j + k] === HUMAN_PLAYER; k++) {
+                    count++;
+                }
+                score -= Math.pow(10, count);
+                // check for opponent's consecutive pieces
+                count = 1;
+                for (let k = 1; k < 4 && j + k < board[i].length && board[i][j + k] === OPPONENT_PLAYER; k++) {
+                    count++;
+                }
+                if (count === 3) {
+                    score -= 1000; // add penalty for opponent having three consecutive pieces
+                }
+            }
+        }
+    }
+    return score;
+}
+
+
+// get all possible moves for the current player
+function getMoves(board, player) {
+    const moves = [];
+    for (let j = 0; j < board[0].length; j++) {
+        if (board[0][j] === EMPTY) {
+            for (let i = board.length - 1; i >= 0; i--) {
+                if (board[i][j] === EMPTY) {
+                    moves.push({ row: i, col: j, player: player });
+                    break;
+                }
+            }
+        }
+    }
+    return moves;
+}
+
+function getValidMoves(board) {
+    const validMoves = [];
+    const columns = board[0].length;
+
+    for (let col = 0; col < columns; col++) {
+        // Check if the top row of the column is empty
+        if (board[0][col] === 0) {
+            // Add the move to the valid moves list
+            validMoves.push({ col, player: AI_PLAYER });
+        }
+    }
+
+    return validMoves;
+}
+
+ */
+///////////////////////////////////////////////////////////////////////////////////////////
+// This function runs the Monte Carlo simulation and returns the best move
+// Define the Monte Carlo function
+function monteCarlo(board, player) {
+    const SIMULATION_COUNT = 1000; // Number of simulations to run
+    const scores = new Array(7).fill(0); // Initialize scores for each column to 0
+
+    // Loop through each column
+    for (let column = 0; column < 7; column++) {
+        // If column is already full, skip it
+        if (board[0][column] !== 0) {
+            continue;
+        }
+
+        // Simulate games for this column
+        for (let i = 0; i < SIMULATION_COUNT; i++) {
+            const simulationBoard = copyBoard(board); // Create copy of board to use for simulation
+            const simulationBoard1 = makeMove(simulationBoard, column, player); // Make a move for the current player
+
+            // Randomly simulate the rest of the game
+            let winner = simulateGame(simulationBoard1, 3 - player); // Opponent is always the other player
+
+            // Update scores for this column
+            if (winner === player) {
+                // If the current player wins, add a point to this column's score
+                scores[column]++;
+            } else if (winner === 0) {
+                // If it's a tie, add half a point to this column's score
+                scores[column] += 0.5;
+            }
+        }
+    }
+
+    // Find the column with the highest score
+    let bestColumn = 0;
+    let bestScore = -1;
+    for (let column = 0; column < 7; column++) {
+        if (scores[column] > bestScore) {
+            bestColumn = column;
+            bestScore = scores[column];
+        }
+    }
+
+    // Return the row and column of the best move
+    return [getAvailableRow(board, bestColumn), bestColumn];
+}
+
+// Makes a move for the specified player in the specified column
+function makeMove(board, column, player) {
+    const row = getAvailableRow(board, column);
+    board[row][column] = player;
+    return board;
+}
+
+// Returns the row of the first available slot in the specified column
+function getAvailableRow(board, column) {
+    for (let row = 5; row >= 0; row--) {
+        if (board[row][column] === 0) {
+            return row;
+        }
+    }
+    return -1; // Column is full
+}
+
+// Randomly simulates the rest of the game and returns the winner (1, 2, or 0 for tie)
+function simulateGame(board, currentPlayer) {
+    while (true) {
+        const availableColumns = getAvailableColumns(board);
+        if (availableColumns.length === 0) {
+            // Game is a tie
+            return 0;
+        }
+        const randomColumn = availableColumns[Math.floor(Math.random() * availableColumns.length)];
+        board = makeMove(board, randomColumn, currentPlayer);
+        const winner = checkWin1(board);
+        if (winner !== 0) {
+            // Game is over
+            return winner;
+        }
+        currentPlayer = 3 - currentPlayer; // Switch to other player
+    }
+}
+
+// Returns an array of columns that have at least one available slot
+function getAvailableColumns(board) {
+    const columns = [];
+    for (let column = 0; column < 7; column++) {
+        if (board[0][column] === 0) {
+            columns.push(column);
+        }
+    }
+    return columns;
+}
+
+// Checks if the specified player has won the game
+function checkWin1(board) {
+// Check for horizontal wins
+    for (let row = 0; row < 6; row++) {
+        for (let column = 0; column < 4; column++) {
+            if (board[row][column] !== 0 &&
+                board[row][column] === board[row][column + 1] &&
+                board[row][column] === board[row][column + 2] &&
+                board[row][column] === board[row][column + 3]) {
+                return board[row][column];
+            }
+        }
+    }
+
+    // Check for vertical wins
+    for (let row = 0; row < 3; row++) {
+        for (let column = 0; column < 7; column++) {
+            if (board[row][column] !== 0 &&
+                board[row][column] === board[row + 1][column] &&
+                board[row][column] === board[row + 2][column] &&
+                board[row][column] === board[row + 3][column]) {
+                return board[row][column];
+            }
+        }
+    }
+
+    // Check for diagonal wins
+    for (let row = 0; row < 3; row++) {
+        for (let column = 0; column < 4; column++) {
+            if (board[row][column] !== 0 &&
+                board[row][column] === board[row + 1][column + 1] &&
+                board[row][column] === board[row + 2][column + 2] &&
+                board[row][column] === board[row + 3][column + 3]) {
+                return board[row][column];
+            }
+        }
+    }
+    for (let row = 0; row < 3; row++) {
+        for (let column = 3; column < 7; column++) {
+            if (board[row][column] !== 0 &&
+                board[row][column] === board[row + 1][column - 1] &&
+                board[row][column] === board[row + 2][column - 2] &&
+                board[row][column] === board[row + 3][column - 3]) {
+                return board[row][column];
+            }
+        }
+    }
+
+    // No winner
+    return 0;
+}
+function copyBoard(board) {
+    const newBoard = [];
+    for (let row = 0; row < 6; row++) {
+        newBoard.push(board[row].slice());
+    }
+    return newBoard;
+}
