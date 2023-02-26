@@ -13,14 +13,12 @@ export default function (socket) {
   socket.of("/api/game").use(auth);
 
   socket.of("/api/game").on("connection", (socket) => {
+
     console.log("A client connected to the game namespace");
 
     // probably shared and should be stored with sockets playing the game
     socket.on("setup", async (data) => {
       let whoPlays = data.AIplays;
-
-      console.log("whoPlays", whoPlays);
-
       let playerOne = data.player;
       let playerTwo = "AI";
       let game = {};
@@ -41,10 +39,9 @@ export default function (socket) {
           winner: null,
         };
 
-        if (data.whoPlays === 1 && aiReady) {
-          console.log("aiReady", aiReady);
+        if (whoPlays === 1 && aiReady) {
           let aiMove = await nextMove([]).then((res) => {return res;})
-          game.board[aiMove[1]][aiMove[0]] = "AI";
+          game.board[aiMove[1]][aiMove[0]] = 2;
           game.currColumns[aiMove[0]]--;
         }
 
@@ -79,8 +76,10 @@ export default function (socket) {
 
       if (!gameStatus.gameOver) {
         //let aiMove = getAiMove({ board: game.board });
-        let aiMove = await nextMove([move[1],move[0]]).then((res) => {console.log("res", res); return res;})
-
+        let startTime = performance.now();
+        let aiMove = await nextMove([move[1],move[0]]).then((res) => {console.log("ai", res); return res;})
+        let endTime = performance.now();
+        console.log("time", endTime - startTime);
         console.log("lastMove", [move[1],move[0]])
         console.log("aiMove", aiMove);
 

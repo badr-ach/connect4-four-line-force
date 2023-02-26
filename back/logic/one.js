@@ -33,6 +33,11 @@ export function nextMove(lastMove) {
 
         if(lastMove.length === 0){
             //i play first
+            console.log("==================================");
+            console.log("col: "+firstcol+" row: "+firstrow);
+            console.log("player: "+player);
+            console.log("board: "+board);
+            console.log("==================================");
             board = makeMove(board, firstcol, player);
             resolve([firstcol,firstrow]);
             return;
@@ -42,17 +47,16 @@ export function nextMove(lastMove) {
         
         //what he played
         let [col,row] = lastMove;
+        console.log("==================================");
+        console.log("col: "+col+" row: "+row);
+        console.log("player: "+player);
+        console.log("board: "+board);
+        console.log("==================================");
         board = makeMove(board, col, 3 - player);
 
         // what i play
-        let start = performance.now();
         let [myrow,mycol] = monteCarlo(board, player);
-
         board = makeMove(board, mycol, player);
-
-        let end = performance.now();
-        
-        console.log("time taken for move :", end - start);
         resolve([mycol,myrow]);
     });
 }
@@ -183,9 +187,9 @@ function checkWin1(board) {
 }
 
 function copyBoard(board) {
-    const newBoard = [];
-    for (let row = 0; row < 6; row++) {
-        newBoard.push(board[row].slice());
-    }
+    const newBoard = JSON.parse(JSON.stringify(board));
+    // for (let row = 0; row < 6; row++) {
+    //     newBoard.push(board[row].slice());
+    // }
     return newBoard;
 }
