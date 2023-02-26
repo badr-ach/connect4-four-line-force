@@ -10,13 +10,13 @@ export function setUpLocal(board,pl){
 
 
 export function setUp(starter){
-    return Promise.race([ 
+    return Promise.race([
         new Promise(function (resolve, reject) {
             setTimeout(() => {
                 resolve([0,0]);
             }, 10);
         })
-        , 
+        ,
         new Promise(function (resolve, reject) {
         setTimeout(() => {
             reject("error : Time is out");
@@ -39,31 +39,75 @@ export function setUp(starter){
         resolve(true);
     })]);
 }
+/*
+export function nextMove({board}) {
+
+
+    return new Promise(function (resolve, reject) {
+        const startTime = performance.now();
+
+        let bestMove = monteCarlo(board, 2);
+        const elapsedTime = performance.now() - startTime;
+        console.log("time taken for move :", elapsedTime);
+        if (bestMove && elapsedTime < 40) {
+            resolve(bestMove);
+        } else {
+            console.log("No move found in time");
+            const randmove = randomMove(board);
+            console.log("random move", randmove)
+            resolve(randmove);
+        }
+    });
+}*/
+function randomMove(board) {
+    let columnPriority = [3, 2, 4, 1, 5, 0, 6];
+    let randomMove;
+    for(let i = 0; i < 7; i++){
+        if(board[0][columnPriority[i]] === 0){
+            randomMove = columnPriority[i];
+            break;
+        }
+    }
+    return  [randomMove,getAvailableRow(board, randomMove)];
+}
 
 export function nextMove(lastMove) {
     return new Promise(function (resolve, reject) {
-        setTimeout(() => {
-            
+        /*setTimeout(() => {
+
             reject("error : Time is out");
-        }, 100);
+        }, 100);*/
+        const startTime = performance.now();
 
         if(lastMove.length === 0){
             //i play first
             localboard = makeMove(localboard, firstcol, player);
+            const elapsedTime = performance.now() - startTime;
+            console.log("time taken for move 1:", elapsedTime);
             resolve([firstcol,firstrow]);
             return;
         }
 
         //i play second
-        
+
         //what he played
         let [col,row] = lastMove;
         localboard = makeMove(localboard, col, 3 - player);
 
+        const startTime2 = performance.now();
         // what i play
         let [myrow,mycol] = monteCarlo(localboard, player);
         localboard = makeMove(localboard, mycol, player);
-        resolve([mycol,myrow]);
+        const elapsedTime2 = performance.now() - startTime2;
+        console.log("time taken for move :", elapsedTime2);
+        if ([myrow,mycol] && elapsedTime2 < 40) {
+            resolve([mycol,myrow]);
+        } else {
+            console.log("No move found in time");
+            const randmove = randomMove(localboard);
+            console.log("random move", randmove)
+            resolve(randmove);
+        }
     });
 }
 
