@@ -33,25 +33,38 @@ export function setUp(starter){
     });
 }
 
+
+function randomMove(board) {
+    let columnPriority = [3, 2, 4, 1, 5, 0, 6];
+    let randomMove;
+    for(let i = 0; i < 7; i++){
+        if(board[0][columnPriority[i]] === 0){
+            randomMove = columnPriority[i];
+            break;
+        }
+    }
+    return  [randomMove,getAvailableRow(board, randomMove)];
+}
+
 export function nextMove(lastMove) {
+
     return new Promise(function (resolve, reject) {
-            if(lastMove.length === 0){
-                //i play first
-                localboard = makeMove(localboard, firstcol, player);
-                resolve([firstcol,firstrow]);
-                return;
-            }
+        if(lastMove.length === 0){
+            //i play first
+            localboard = makeMove(localboard, firstcol, player);
+            resolve([firstcol,firstrow]);
+            return;
+        }
 
-            //i play second
-            
-            //what he played
-            let [col,row] = lastMove;
-            localboard = makeMove(localboard, col, 3 - player);
+        //i play second
 
-            // what i play
-            let [myrow,mycol] = monteCarlo(localboard, player);
-            localboard = makeMove(localboard, mycol, player);
-            resolve([mycol,myrow]);
+        //what he played
+        let [col,row] = lastMove;
+        localboard = makeMove(localboard, col, 3 - player);
+        // what i play
+        let [myrow,mycol] = monteCarlo(localboard, player);
+        localboard = makeMove(localboard, mycol, player);
+        resolve([mycol,myrow]);
     });
 }
 
@@ -59,7 +72,7 @@ export function nextMove(lastMove) {
 // // This function runs the Monte Carlo simulation and returns the best move///////////////
 // Define the Monte Carlo function
 function monteCarlo(board, player) {
-    const SIMULATION_COUNT = 1000; // Number of simulations to run
+    const SIMULATION_COUNT = 1200; // Number of simulations to run
     const scores = new Array(7).fill(0); // Initialize scores for each column to 0
 
     // Loop through each column

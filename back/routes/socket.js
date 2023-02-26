@@ -74,7 +74,7 @@ export default function (socket) {
 
       if (!gameStatus.gameOver) {
         let startTime = performance.now();
-        let aiMove = await nextMove([move[1],move[0]]).then((res) => {console.log("ai", res); return res;})
+        let aiMove = await nextMove([move[1],move[0]]).then((res) => { return res;})
         let endTime = performance.now();
         console.log("ai move time", endTime - startTime);
 
