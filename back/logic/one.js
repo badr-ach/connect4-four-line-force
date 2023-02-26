@@ -72,15 +72,16 @@ function randomMove(board) {
 }
 
 export function nextMove(lastMove) {
+
     return new Promise(function (resolve, reject) {
         /*setTimeout(() => {
 
             reject("error : Time is out");
         }, 100);*/
-        const startTime = performance.now();
 
         if(lastMove.length === 0){
             //i play first
+            const startTime = performance.now();
             localboard = makeMove(localboard, firstcol, player);
             const elapsedTime = performance.now() - startTime;
             console.log("time taken for move 1:", elapsedTime);
@@ -97,17 +98,11 @@ export function nextMove(lastMove) {
         const startTime2 = performance.now();
         // what i play
         let [myrow,mycol] = monteCarlo(localboard, player);
-        localboard = makeMove(localboard, mycol, player);
         const elapsedTime2 = performance.now() - startTime2;
+        localboard = makeMove(localboard, mycol, player);
         console.log("time taken for move :", elapsedTime2);
-        if ([myrow,mycol] && elapsedTime2 < 40) {
-            resolve([mycol,myrow]);
-        } else {
-            console.log("No move found in time");
-            const randmove = randomMove(localboard);
-            console.log("random move", randmove)
-            resolve(randmove);
-        }
+        resolve([mycol,myrow]);
+
     });
 }
 
@@ -115,7 +110,7 @@ export function nextMove(lastMove) {
 // // This function runs the Monte Carlo simulation and returns the best move///////////////
 // Define the Monte Carlo function
 function monteCarlo(board, player) {
-    const SIMULATION_COUNT = 1400; // Number of simulations to run
+    const SIMULATION_COUNT = 1200; // Number of simulations to run
     const scores = new Array(7).fill(0); // Initialize scores for each column to 0
 
     // Loop through each column
