@@ -10,6 +10,7 @@ export class Connect4 extends HTMLElement {
     board,
     currPlayer,
     currColumns,
+    lastPlayer,
     gameOver,
     winner,
   }) {
@@ -107,6 +108,7 @@ export class Connect4 extends HTMLElement {
     this.rows = 6;
     this.columns = 7;
 
+    this._lastPlayer = lastPlayer;
     this.gameOver = gameOver;
     this.winner = null;
 

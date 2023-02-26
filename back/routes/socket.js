@@ -1,8 +1,8 @@
-import getAiMove from "../logic/ai.js";
+//import getAiMove from "../logic/ai.js";
+// import { nextMove } from "../logic/ai.js";
+import { nextMove, setUp, setUpLocal } from "../logic/one.js";
 import { v4 as uuid } from "uuid";
 import { checkWin } from "../logic/checkWin.js";
-
-import { ObjectId } from "mongodb";
 
 import auth from "../middlewares/socket.js";
 import { GameModal } from "../models/game.js";
@@ -13,15 +13,19 @@ export default function (socket) {
   socket.of("/api/game").use(auth);
 
   socket.of("/api/game").on("connection", (socket) => {
+
     console.log("A client connected to the game namespace");
 
     // probably shared and should be stored with sockets playing the game
     socket.on("setup", async (data) => {
+      let whoPlays = data.AIplays;
       let playerOne = data.player;
       let playerTwo = "AI";
       let game = {};
       let gameId;
 
+      let aiReady = await setUp(whoPlays).then((res) => {return res;});
+      
       if (!data.resume) {
         gameId = uuid();
         game = {
@@ -35,48 +39,47 @@ export default function (socket) {
           winner: null,
         };
 
-        if (data.id == 1) {
-          let aiMove = getAiMove({ board: game.board });
-          game.board[aiMove[0]][aiMove[1]] = "AI";
-          game.currColumns[aiMove[1]]--;
+        if (whoPlays === 1 && aiReady) {
+          let aiMove = await nextMove([]).then((res) => {return res;})
+          game.board[aiMove[1]][aiMove[0]] = 2;
+          game.currColumns[aiMove[0]]--;
         }
+
       } else {
         const res = await GameModal.last({
-            playerOne : playerOne,
-            gameOver: false,
+          playerOne: playerOne,
+          gameOver: false,
         });
         game = res ? res[0] : {};
-        gameId = res ? res[0]?res[0].gameId: null: null;
+        gameId = res ? (res[0] ? res[0].gameId : null) : null;
+        setUpLocal(JSON.parse(JSON.stringify(game.board)), 1);
       }
 
       activeGames.set(gameId, game);
       socket.emit("setup", activeGames.get(gameId));
     });
 
-    socket.on("newMove", (data) => {
+    socket.on("newMove", async (data) => {
       let move = data.move;
       let game = activeGames.get(data.gameId);
-      if (
-        move[0] < 0 ||
-        move[0] > 5 ||
-        move[1] < 0 ||
-        move[1] > 6
-
-      )
-        return;
+      if (move[0] < 0 || move[0] > 5 || move[1] < 0 || move[1] > 6) return;
       if (game.board[move[0]][move[1]] != 0) return;
-
-      console.log(move);
 
       game.board[move[0]][move[1]] = 1;
       game.currColumns[move[1]]--;
 
       let gameStatus = checkWin({ ...game, rows: 6, columns: 7 });
 
+
+
       if (!gameStatus.gameOver) {
-        let aiMove = getAiMove({ board: game.board });
-        game.board[aiMove[0]][aiMove[1]] = 2;
-        game.currColumns[aiMove[1]]--;
+        let startTime = performance.now();
+        let aiMove = await nextMove([move[1],move[0]]).then((res) => { return res;})
+        let endTime = performance.now();
+        console.log("ai move time", endTime - startTime);
+
+        game.board[aiMove[1]][aiMove[0]] = 2;
+        game.currColumns[aiMove[0]]--;
         gameStatus = checkWin({ ...game, currPlayer: 2, rows: 6, columns: 7 });
       }
 
@@ -91,8 +94,8 @@ export default function (socket) {
 
     socket.on("saveGame", (data) => {
       let game = activeGames.get(data.gameId);
-      if(socket.handshake.auth.id === "guest") {
-        socket.emit("savedGame", {message: "Guests cannot save games"});
+      if (socket.handshake.auth.id === "guest") {
+        socket.emit("savedGame", { message: "Guests cannot save games" });
         return;
       }
       GameModal.create({
@@ -104,11 +107,13 @@ export default function (socket) {
         currPlayer: game.currPlayer,
         gameOver: game.gameOver,
         winner: game.winner,
-      }).then((res) => {
-      socket.emit("savedGame", {message: "Game saved successfully"});
-      }).catch((err) => {
-        socket.emit("savedGame", {message: "Game could not be saved"});
-      });
+      })
+        .then((res) => {
+          socket.emit("savedGame", { message: "Game saved successfully" });
+        })
+        .catch((err) => {
+          socket.emit("savedGame", { message: "Game could not be saved" });
+        });
     });
   });
 
