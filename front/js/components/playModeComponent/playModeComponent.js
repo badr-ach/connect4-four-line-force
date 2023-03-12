@@ -20,6 +20,7 @@ export class PlayMode extends HTMLElement{
     _attachEventListeners(){
         this.shadowRoot.getElementById("vsComputer").addEventListener("click", () => this._handleVsComputerClick());
         this.shadowRoot.getElementById("vsPlayer").addEventListener("click", () => this._handleVsPlayerClick());
+        this.shadowRoot.getElementById("playOnline").addEventListener("click", () => this._handleOnlineGameClick());
     }
 
     _handleVsComputerClick(){
@@ -29,6 +30,10 @@ export class PlayMode extends HTMLElement{
 
     _handleVsPlayerClick(){
         this._app.dispatchEvent(new CustomEvent(events.vsPlayerClicked));
+    }
+
+    _handleOnlineGameClick(){
+        this._app.dispatchEvent(new CustomEvent(events.onlineGameClicked));
     }
 }
 

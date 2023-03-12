@@ -37,6 +37,7 @@ export class App extends HTMLElement {
         this.addEventListener(events.signedOut, () => this._handleSignOut());
         this.addEventListener(events.resumeGameClicked, () => this._handleResumeGameClick());
         this.addEventListener(events.vsComputerClicked, () => this._handleVsComputerClick());
+        this.addEventListener(events.onlineGameClicked, () => this._handleOnlineGameClick());
         this.addEventListener(events.error, (data) => this._handleError(data));
     }
 
@@ -59,6 +60,16 @@ export class App extends HTMLElement {
     _handleVsComputerClick() {
         this.removeChild(this.firstChild);
         const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._token ? this._token : "guest" } });
+        socket.emit("setup", { AIplays:2, type: "vsAI", player: this._player, resume: false });
+        socket.on("setup", (data) => {
+            console.log(data);
+            this.appendChild(new Connect4({app : this,...data}));
+        });
+    }
+
+    _handleOnlineGameClick() {
+        this.removeChild(this.firstChild);
+        const socket = WebSocket.getSocketByNameSpace("/api/onlineGame", { auth: { token: this._token ? this._token : "guest" } });
         socket.emit("setup", { AIplays:2, type: "vsAI", player: this._player, resume: false });
         socket.on("setup", (data) => {
             console.log(data);

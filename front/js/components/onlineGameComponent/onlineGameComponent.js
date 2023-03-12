@@ -19,7 +19,7 @@ export class Connect4 extends HTMLElement {
     this.attachShadow({ mode: "open" });
 
     this.shadowRoot.innerHTML = `
-            <style>@import "./js/components/gameComponent/gameComponent.css"; </style>
+            <style>@import "./js/components/onlineGameComponent/onlineGameComponent.css"; </style>
             <h1 id="winner"></h1>
             <div id="wrapper">
               <button id="home-btn"> Home </button>
@@ -114,9 +114,9 @@ export class Connect4 extends HTMLElement {
     this.gameOver = gameOver;
     this.winner = null;
 
-    this._socket = WebSocket.getSocketByNameSpace("/api/game");
+    this._socket = WebSocket.getSocketByNameSpace("/api/onlineGame");
 
-    WebSocket.getSocketByNameSpace("/api/game").on("updatedBoard", (data) => {
+    WebSocket.getSocketByNameSpace("/api/onlineGame").on("updatedBoard", (data) => {
       this.board = data.board;
       this.currColumns = data.currColumns;
       if (data.currPlayer !== this.currPlayer) {
@@ -216,7 +216,7 @@ export class Connect4 extends HTMLElement {
 
     console.log(this.playerRed);
 
-    WebSocket.getSocketByNameSpace("/api/game").emit("newMove", {
+    WebSocket.getSocketByNameSpace("/api/onlineGame").emit("newMove", {
       gameId: this._gameId,
       move: [row, column],
       player: this.playerRed,

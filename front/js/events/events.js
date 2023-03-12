@@ -13,4 +13,5 @@ export const events = {
     gameChatMessageReceived: "game-chat-message-received",
     vsComputerClicked: "vs-computer-clicked",
     vsPlayerClicked: "vs-player-clicked",
+    onlineGameClicked: "online-game-clicked",
 }
