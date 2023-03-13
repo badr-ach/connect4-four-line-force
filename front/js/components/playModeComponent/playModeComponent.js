@@ -20,20 +20,26 @@ export class PlayMode extends HTMLElement{
     _attachEventListeners(){
         this.shadowRoot.getElementById("vsComputer").addEventListener("click", () => this._handleVsComputerClick());
         this.shadowRoot.getElementById("vsPlayer").addEventListener("click", () => this._handleVsPlayerClick());
-        this.shadowRoot.getElementById("playOnline").addEventListener("click", () => this._handleOnlineGameClick());
     }
 
-    _handleVsComputerClick(){
-        this._animator.beginAnimation("slide-left", this, () => {});
-        this._app.dispatchEvent(new CustomEvent(events.vsComputerClicked));
+
+    _handleVsComputerClick() {
+        this._app.removeChild(this);
+        const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app._token ? this._app._token : "guest" } });
+        socket.emit("setup", { AIplays : Math.round(Math.random()) + 1});
+        socket.on("setup", (data) => {
+            this._app.appendChild(new Connect4({app : this._app,...data}));
+        });
     }
 
-    _handleVsPlayerClick(){
-        this._app.dispatchEvent(new CustomEvent(events.vsPlayerClicked));
-    }
-
-    _handleOnlineGameClick(){
-        this._app.dispatchEvent(new CustomEvent(events.onlineGameClicked));
+    _handleVsPlayerClick() {
+        this._app.removeChild(this);
+        const socket = WebSocket.getSocketByNameSpace("/api/onlineGame", { auth: { token: this._app._token ? this._app._token : "guest" } });
+        socket.emit("setup", { AIplays:-1});
+        socket.on("setup", (data) => {
+            console.log(data);
+            this._app.appendChild(new Connect4({app : this._app,...data}));
+        });
     }
 }
 

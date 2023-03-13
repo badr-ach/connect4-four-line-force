@@ -1,4 +1,4 @@
-import {checkWin} from "./checkWin.js";
+import {checkWin} from "../checkWin.js";
 import {nextMove} from "./one.js";
 
 export async function newMove(data, socket, activeGames) {
@@ -18,7 +18,6 @@ export async function newMove(data, socket, activeGames) {
         let startTime = performance.now();
         let aiMove = await nextMove([move[1],move[0]]).then((res) => { return res;})
         let endTime = performance.now();
-        console.log("ai move time", endTime - startTime);
 
         game.board[aiMove[1]][aiMove[0]] = 2;
         game.currColumns[aiMove[0]]--;

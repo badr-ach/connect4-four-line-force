@@ -113,9 +113,8 @@ export class Connect4 extends HTMLElement {
     this._lastPlayer = lastPlayer;
     this.gameOver = gameOver;
     this.winner = null;
-
     this._socket = WebSocket.getSocketByNameSpace("/api/game");
-
+    
     WebSocket.getSocketByNameSpace("/api/game").on("updatedBoard", (data) => {
       this.board = data.board;
       this.currColumns = data.currColumns;
@@ -128,15 +127,12 @@ export class Connect4 extends HTMLElement {
         this.gameOver = true;
         this.winner = data.winner;
       }
-
       this.renderBoard();
     });
   }
 
   async connectedCallback() {
-    this.shadowRoot
-      .querySelector("#board")
-      .addEventListener("click", this.dropPiece.bind(this));
+    this.shadowRoot.querySelector("#board").addEventListener("click", this.dropPiece.bind(this));
     let arrows = this.shadowRoot.querySelectorAll(".arrow");
 
     for (let i = 0; i < arrows.length; i++) {

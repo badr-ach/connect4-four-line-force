@@ -35,9 +35,6 @@ export class App extends HTMLElement {
         this.addEventListener(events.guestClicked, () => this._handleGuestClick());
         this.addEventListener(events.userLoaded, (data) => this._handleUserLoaded(data));
         this.addEventListener(events.signedOut, () => this._handleSignOut());
-        this.addEventListener(events.resumeGameClicked, () => this._handleResumeGameClick());
-        this.addEventListener(events.vsComputerClicked, () => this._handleVsComputerClick());
-        this.addEventListener(events.onlineGameClicked, () => this._handleOnlineGameClick());
         this.addEventListener(events.error, (data) => this._handleError(data));
     }
 
@@ -57,26 +54,6 @@ export class App extends HTMLElement {
         this.appendChild(new PlayMode(this));
     }
 
-    _handleVsComputerClick() {
-        this.removeChild(this.firstChild);
-        const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._token ? this._token : "guest" } });
-        socket.emit("setup", { AIplays:2, type: "vsAI", player: this._player, resume: false });
-        socket.on("setup", (data) => {
-            console.log(data);
-            this.appendChild(new Connect4({app : this,...data}));
-        });
-    }
-
-    _handleOnlineGameClick() {
-        this.removeChild(this.firstChild);
-        const socket = WebSocket.getSocketByNameSpace("/api/onlineGame", { auth: { token: this._token ? this._token : "guest" } });
-        socket.emit("setup", { AIplays:2, type: "vsAI", player: this._player, resume: false });
-        socket.on("setup", (data) => {
-            console.log(data);
-            this.appendChild(new Connect4({app : this,...data}));
-        });
-    }
-
     _handleUserLoaded({detail}) {
         this._connected = true;
         this._player = detail.username;
@@ -90,21 +67,6 @@ export class App extends HTMLElement {
         this._token = null;
         this.removeChild(this.firstChild);
         this.appendChild(new IntroMenu(this));
-    }
-
-    _handleResumeGameClick() {
-        this.removeChild(this.firstChild);
-        const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._token  } });
-        socket.emit("setup", { player: this._player, resume: true });
-        socket.on("setup", (data) => {
-            if(data === null) {
-                alert("No game to resume");
-                this.appendChild(new LoggedIntroMenu(this));
-                return;
-            }else{
-                this.appendChild(new Connect4({app : this,...data}));
-            }
-        });
     }
 
     _handleError({detail}) {
