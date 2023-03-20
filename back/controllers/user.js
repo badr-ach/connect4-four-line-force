@@ -33,6 +33,7 @@ export const login = async (req, res) => {
         res.status(200).json({ user: data, token: token });
         
     } catch (err) {
+
         res.status(500).json({ message: "Something went wrong" });
     }
 };
@@ -47,7 +48,8 @@ export const signin = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const result = await UserModal.create({ mail, password: hashedPassword, username, rating: 1000 });
+        const result = await UserModal.create({ mail, password: hashedPassword, username, rating: 1000, friends: [], 
+        outgoingFriendRequests: [], incomnigFriendRequests: [] });
 
         const data = result;
 
@@ -56,13 +58,11 @@ export const signin = async (req, res) => {
         const token = jwt.sign({ mail: result.mail, id: result._id }, secret, { expiresIn: "1h" });
 
         res.status(201).json({ user: data, token: token });
-        console.log("registered successfully");
-
 
     } catch (error) {
+
         res.status(500).json({ message: "Something went wrong" });
 
-        console.log(error);
     }
 };
 
@@ -85,9 +85,29 @@ export const loadUser = async (req,res) =>{
     }
 }
 
-export const addFriend = async (req,res) =>{
+
+export const befriend = async (req, res) => {
+    const {friendId} = req.body;
+    
     try{
-        
+
+        const user = await UserModal.findById(req.userId);
+
+        if (!user) return res.status(404).json({ message: "User doesn't exist" });
+
+        const friend = await UserModal.findById(friendId);
+
+        if (!friend) return res.status(404).json({ message: "User to befriend doesn't exist" });
+
+        if(user.friends.includes(friendId)) return res.status(400).json({ message: "User is already a friend" });
+
+        user.friends.push(friendId);
+
+        friend.friends.push(req.userId);
+
+        await user.save();
+
+        await friend.save();
 
     }catch(err){
         res.status(500).json({ message: "Something went wrong" });

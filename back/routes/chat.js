@@ -7,18 +7,39 @@ export const init_game_socket = (io) => {
     io.of("/api/chat").on("connection", (socket) => {
 
       const users = [];
-        for (let [id, socket] of io.of("/").sockets) {
+
+      for (let [id, socket] of io.of("/api/chat").sockets) {
+        //todo: check if user is friend with socket.username
             users.push({
             userID: id,
             username: socket.username,
             });
-        }
-        socket.emit("users", users);
+      }
+      
+      // send the users friend list to the client
+      socket.emit("connected friends", users);
 
-      socket.on("join" , (room) => { socket.join(room) });
-  
-      // probably shared and should be stored with sockets playing the game
-      socket.on("message", async (data) => setup(data, io));
+      // when a user connects, send the users friend list to all connected clients
+      socket.broadcast.emit("user connected", {
+        userID: socket.id,
+        username: socket.username,
+      });
+
+      socket.on("disconnect", () => {
+        socket.broadcast.emit("user disconnected", socket.id);
+      });
+
+      socket.on("user disconnected", (id) => {
+        users.splice(users.findIndex((user) => user.userID === id), 1);
+      });
+
+      socket.on("private message", ({ content, to }) => {
+        if(users.findIndex((user) => user.userID === to) === -1) return;
+        socket.to(to).emit("private message", {
+          content,
+          from: socket.id,
+        });
+      });
   
     });
 

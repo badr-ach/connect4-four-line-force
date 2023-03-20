@@ -5,10 +5,37 @@ import { getNewRating } from "../logic/elo.js";
 import { nextMove, setUp, setUpLocal } from "./ai.js";
 import { v4 as uuid } from "uuid";
 import { GameModal } from "../models/game.js";
+import { InGameMessages } from "../utils/constants/messages.js";
+
+const board = [
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0],
+];
+
+const currColumns = [5, 5, 5, 5, 5, 5, 5];
+
+
+async function updateRatings(winner, loser) {
+  let winnerUser = await UserModal.findOne({ username: winner });
+  let loserUser = await UserModal.findOne({ username: loser });
+
+  let newWinnerRating = getNewRating(winnerUser.rating, loserUser.rating, 1);
+  let newLoserRating = getNewRating(loserUser.rating, winnerUser.rating, 0);
+
+  await UserModal.updateOne({ username: winnerUser.username }, { rating: newWinnerRating });
+  await UserModal.updateOne({ username: loserUser.username }, { rating: newLoserRating });
+}
 
 export async function setup(data, io, socket, activeGames, queue) {
+
   let whoPlays = data.AIplays;
+
   let gameId = uuid();
+
   let game = {
     gameId,
     board: JSON.parse(JSON.stringify(board)),
@@ -94,17 +121,6 @@ export async function setup(data, io, socket, activeGames, queue) {
     socket.emit("setup", activeGames.get(gameId));
   }
 }
-
-const board = [
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0],
-];
-
-const currColumns = [5, 5, 5, 5, 5, 5, 5];
 
 export async function newMove(data, io, socket, activeGames) {
   let player = data.player;
@@ -192,17 +208,39 @@ export function saveGame(data, socket, activeGames) {
       .catch((err) => {
         socket.emit("savedGame", { message: "Game could not be saved" });
       });
+}
+
+export function newMessage(data, socket, activeGames) {
+  let roomId = data.roomId;
+  let player = data.player;
+  let game = activeGames.get(data.gameId);
+
+  if(socket.username !== player) return;
+  if(game.mute) return;
+
+  for(let message in InGameMessages){
+    if(message === data.message){
+      if (roomId) {
+        socket.to(roomId).emit("newMessage", {
+          message,
+          player,
+        });
+        return;
+      }
+    }
   }
-  
+}
 
+export function mute(data, socket, activeGames) {
+  let player = data.player;
+  let game = activeGames.get(data.gameId);
+  if(socket.username !== player) return;
+  game.mute = true;
+}
 
-async function updateRatings(winner, loser) {
-  let winnerUser = await UserModal.findOne({ username: winner });
-  let loserUser = await UserModal.findOne({ username: loser });
-
-  let newWinnerRating = getNewRating(winnerUser.rating, loserUser.rating, 1);
-  let newLoserRating = getNewRating(loserUser.rating, winnerUser.rating, 0);
-
-  await UserModal.updateOne({ username: winnerUser.username }, { rating: newWinnerRating });
-  await UserModal.updateOne({ username: loserUser.username }, { rating: newLoserRating });
+export function unmute(data, socket, activeGames) {
+  let player = data.player;
+  let game = activeGames.get(data.gameId);
+  if(socket.username !== player) return;
+  game.mute = false;
 }
