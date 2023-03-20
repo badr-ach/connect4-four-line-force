@@ -28,7 +28,7 @@ export const login = async (req, res) => {
 
         delete data.password;
 
-        const token = jwt.sign({ mail: oldUser.mail, id: oldUser._id }, secret, { expiresIn: "1h" });
+        const token = jwt.sign({ mail: oldUser.mail, username:oldUser.username, id: oldUser._id }, secret, { expiresIn: "1h" });
 
         res.status(200).json({ user: data, token: token });
         
@@ -47,7 +47,7 @@ export const signin = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const result = await UserModal.create({ mail, password: hashedPassword, username });
+        const result = await UserModal.create({ mail, password: hashedPassword, username, rating: 1000 });
 
         const data = result;
 
@@ -81,6 +81,15 @@ export const loadUser = async (req,res) =>{
 
         res.status(200).json({ user: data });
     }catch (err){
+        res.status(500).json({ message: "Something went wrong" });
+    }
+}
+
+export const addFriend = async (req,res) =>{
+    try{
+        
+
+    }catch(err){
         res.status(500).json({ message: "Something went wrong" });
     }
 }

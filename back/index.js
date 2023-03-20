@@ -3,8 +3,8 @@ import { manageRequest as frontManageRequest} from './controllers/front.js';
 import { addCors } from "./middlewares/cors.js";
 import { env } from 'process';
 import { Server } from "socket.io";
-import { Router } from './utils/server.js';
-import initSocket from './routes/socket.js';
+import { Router } from './utils/express/server.js';
+import initSocket from './socket.js';
 import router from './routes/user.js';
 
 

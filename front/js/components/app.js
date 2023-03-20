@@ -1,8 +1,6 @@
-import { loadUser, signup } from "../api/user.js";
+import { loadUser } from "../api/user.js";
 import { events } from "../events/events.js";
 import { Animator } from "../scripts/animator.js";
-import { WebSocket } from "../utils/WebSocket.js";
-import { Connect4 } from "./gameComponent/gameComponent.js";
 import { IntroMenu } from "./introMenuComponent/introMenuComponent.js";
 import { LoggedIntroMenu } from "./loggedInMenuComponent/loggedInMenuComponent.js";
 import { Login } from "./loginPageComponent/loginPageComponent.js";
@@ -17,8 +15,7 @@ export class App extends HTMLElement {
         this._animator = new Animator();
         this._token = localStorage.getItem("token");
         this._connected = false;
-        this._player = "guest";
-
+        this.player = "guest";
     }
 
     async connectedCallback() {
@@ -56,7 +53,7 @@ export class App extends HTMLElement {
 
     _handleUserLoaded({detail}) {
         this._connected = true;
-        this._player = detail.username;
+        this.player = detail.username;
         this._token = localStorage.getItem("token");
         this.removeChild(this.firstChild);
         this.appendChild(new LoggedIntroMenu(this));

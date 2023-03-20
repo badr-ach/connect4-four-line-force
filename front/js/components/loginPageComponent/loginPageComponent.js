@@ -1,5 +1,4 @@
 import { Animator } from "../../scripts/animator.js";
-import { events } from "../../events/events.js";
 import {login} from "../../api/user.js";
 
 export class Login extends HTMLElement{

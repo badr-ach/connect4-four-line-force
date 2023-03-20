@@ -1,5 +1,7 @@
 import { Animator } from "../../scripts/animator.js";
-import { events } from "../../events/events.js";
+import { WebSocket } from "../../utils/WebSocket.js";
+import { Connect4 } from "../gameComponent/gameComponent.js";
+
 
 export class PlayMode extends HTMLElement{
     constructor(app){
@@ -34,11 +36,14 @@ export class PlayMode extends HTMLElement{
 
     _handleVsPlayerClick() {
         this._app.removeChild(this);
-        const socket = WebSocket.getSocketByNameSpace("/api/onlineGame", { auth: { token: this._app._token ? this._app._token : "guest" } });
+        const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app._token ? this._app._token : "guest" } });
         socket.emit("setup", { AIplays:-1});
         socket.on("setup", (data) => {
             console.log(data);
             this._app.appendChild(new Connect4({app : this._app,...data}));
+        });
+        socket.on("waitingForOpponent" , (data) => {
+            alert("Waiting for opponent");
         });
     }
 }
