@@ -1,8 +1,10 @@
-<style>
-    @import url("./js/components/sidebarComponent/sidebarComponent.css");
-</style>
+
+
 <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
 
+<style>
+    @import url("sideBarComponent.css");
+</style>
 <nav class="wrapper sidebar close">
     <header>
         <div class="image-text">
@@ -18,12 +20,15 @@
     <div class="menu-bar">
         <div class="menu">
 
-            <li class="search-box">
-                <i class='bx bx-search icon'></i>
-                <input type="text" placeholder="Search...">
-            </li>
+
 
             <ul class="menu-links">
+                <li class="nav-link">
+                    <a href="#">
+                        <i class='bx bx-joystick icon'></i>
+                        <span class="text nav-text">username</span>
+                    </a>
+                </li>
                 <li class="nav-link">
                     <a href="#">
                         <i class='bx bx-home-alt icon' ></i>
@@ -36,7 +41,7 @@
                         <i class='bx bxs-user icon'></i>
                         <span class="text nav-text">Friends</span>
                     </a>
-                </li>
+
 
 
 
@@ -44,19 +49,18 @@
         </div>
 
         <div class="bottom-content">
+            <li class="search-box">
+                <a href="#"><i class='bx bx-plus icon'></i> </a>
+                <input id="searchFriend" type="text" placeholder="Add Friend ...">
+            </li>
+
             <li class="">
                 <a href="#">
                     <i class='bx bx-log-out icon' ></i>
-                    <span class="text nav-text">Logout</span>
+                    <span class="text nav-text" id="logout">Logout</span>
                 </a>
             </li>
 
-            <li class="mode">
-
-                <div class="toggle-switch">
-                    <span class="switch"></span>
-                </div>
-            </li>
 
         </div>
     </div>

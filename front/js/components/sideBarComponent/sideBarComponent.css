@@ -153,7 +153,8 @@ body.dark .sidebar header .toggle{
     margin-top: 40px;
 }
 
-.sidebar li.search-box{
+.sidebar li.
+search-box{
     border-radius: 6px;
     background-color: var(--primary-color-light);
     cursor: pointer;
@@ -209,17 +210,7 @@ body.dark .sidebar li a:hover .text{
 }
 
 
-.menu-bar .bottom-content .toggle-switch{
-    position: absolute;
-    right: 0;
-    height: 100%;
-    min-width: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    cursor: pointer;
-}
+
 
 
 .home{
@@ -244,4 +235,5 @@ body.dark .sidebar li a:hover .text{
     height: 100vh;
     width: calc(100% - 78px);
 }
+.
 
