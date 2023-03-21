@@ -3,7 +3,7 @@
 <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
 
 <style>
-    @import url("sideBarComponent.css");
+    @import url("test.css");
 </style>
 <nav class="wrapper sidebar close">
     <header>
@@ -38,11 +38,17 @@
 
                 <li class="nav-link">
                     <a href="#">
-                        <i class='bx bxs-user icon'></i>
+                        <i class='bx bxs-user icon'id ='friends'></i>
                         <span class="text nav-text">Friends</span>
+                        <i class='bx bxs-chevron-down arrow' ></i>
                     </a>
-
-
+                    <!-- List of friends -->
+                    <ul class="sub-menu hide">
+                        <li>Friend 1</li>
+                        <li>Friend 2</li>
+                        <li>Friend 3</li>
+                    </ul>
+                </li>
 
 
             </ul>
@@ -50,7 +56,7 @@
 
         <div class="bottom-content">
             <li class="search-box">
-                <a href="#"><i class='bx bx-plus icon'></i> </a>
+                <a class = "friend"id="friend" href="#"><i class='bx bx-plus icon'></i> </a>
                 <input id="searchFriend" type="text" placeholder="Add Friend ...">
             </li>
 
@@ -63,12 +69,20 @@
 
 
         </div>
+
     </div>
 
 </nav>
 
 
 <script>
+    let arrow = document.querySelector(".arrow");
+
+        arrow.addEventListener("click", (e)=>{
+            console.log("clicked arrow");
+            friendsList.classList.toggle('hide');
+        });
+
     const body = document.querySelector('body'),
         sidebar = body.querySelector('nav'),
         toggle = body.querySelector(".toggle"),
@@ -83,6 +97,15 @@
     searchBtn.addEventListener("click" , () =>{
         sidebar.classList.remove("close");
     })
+    const friendsBtn = document.querySelector('#friends');
+    const friendsList = document.querySelector('.sub-menu');
+
+    friendsBtn.addEventListener('click', () => {
+        console.log('clicked');
+        friendsList.classList.toggle('hide');
+        console.log('clicked Againn');
+
+    });
 
 </script>
 
