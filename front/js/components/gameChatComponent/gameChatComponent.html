@@ -1,15 +1,28 @@
 <style>
     @import url("gameChatComponent.css");
 </style>
-<div>
-    <div class="chat-container">
-        <div class="chat">
-            <div class="message"><b>username : </b> <span>message</span></div>
-        </div>
-        <div class="message-sender">
-            <input type="text" class="message-box">
-            <button class="send-button">&#x25BA;</button>
-        </div>
+<div class="chat-box">
+    <div class="chat-history">
+        <!-- chat messages go here -->
     </div>
-    <button class="chat-open-button" ><img class="chat-icon" src="https://w7.pngwing.com/pngs/237/433/png-transparent-computer-icons-online-chat-chat-icon-miscellaneous-text-conversation.png"></button>
+    <div class="chat-input">
+        <input type="text" placeholder="Type your message...">
+        <button>Send</button>
+    </div>
 </div>
+<script>
+    const chatHistory = document.querySelector('.chat-history');
+    const chatInput = document.querySelector('.chat-input input');
+    const chatSendButton = document.querySelector('.chat-input button');
+
+    chatSendButton.addEventListener('click', () => {
+        const message = chatInput.value;
+        if (message.trim() !== '') {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.innerText = message;
+            chatHistory.appendChild(messageElement);
+            chatInput.value = '';
+        }
+    });
+</script>

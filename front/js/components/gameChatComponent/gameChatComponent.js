@@ -1,25 +1,36 @@
 export class GameChat extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode: "open" });
+    constructor({ app, gameId, playerOne, playerTwo, board, currPlayer, currColumns, lastPlayer, gameOver, winner }) {
+        super();
+        this.attachShadow({ mode: "open" });
+        this._app = app;
+        this._gameId = gameId;
+        this._playerOne = playerOne;
+        this._playerTwo = playerTwo;
+        this._board = board;
+        this._currPlayer = currPlayer;
+        this._currColumns = currColumns;
+        this._lastPlayer = lastPlayer;
+        this._gameOver = gameOver;
+        this._winner = winner;
+        this._animator = new Animator();
+        this._message = "";
+        this._messageList = [];
+    }
 
-      this.shadowRoot.innerHTML = `
-        <style>
-            @import url("../gameChatComponent/gameChatComponent.css");
-        </style>
-        <div>
-            <div class="chat-container">
-                <div class="chat">
-                    <div class="message"><b>username : </b> <span>message</span></div>
-                </div>
-                <div class="message-sender">
-                    <input type="text" class="message-box">
-                    <button class="send-button"><img src="https://icons-for-free.com/iconfiles/png/512/part+1+message-1320568353446515556.png"></button>
-                </div>
-            </div>
-            <button class="chat-open-button" ><img class="chat-icon" src="https://icons-for-free.com/iconfiles/png/512/part+1+message-1320568353446515556.png"></button>
-        </div>
-      `;
+    async connectedCallback() {
+        this.shadowRoot.innerHTML = await fetch("./js/components/gameChatComponent/gameChatComponent.html")
+        .then((r) => r.text())
+        .then((html) => html);
+        this._messageInput = this.shadowRoot.querySelector(".message-input");
+        this._messageList = this.shadowRoot.querySelector(".message-list");
+        this._messageSubmit = this.shadowRoot.querySelector(".message-submit");
+        this._messageSubmit.addEventListener("click", () => this._handleMessageSubmit());
+    }
+
+    _handleMessageSubmit() {
+        this._message = this._messageInput.value;
+        this._messageList.innerHTML += `<li class="message">${this._message}</li>`;
+        this._messageInput.value = "";
     }
 }
 
