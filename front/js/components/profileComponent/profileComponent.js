@@ -1,17 +1,27 @@
-const user = {
+
+import { Animator } from "../../scripts/animator.js";
+import { events } from "../../events/events.js";
+import {logout} from "../../api/user.js";
+import {SideBar} from "../test/sideBarComponent.js";
+
+
+
+this.user = {
     name: "John Smith",
     email: "john.smith@example.com",
 };
+this.friends = ["Jane Doe", "Mark Johnson", "Emily Lee"];
 
-const friends = ["Jane Doe", "Mark Johnson", "Emily Lee"];
+this.invitations = ["David Kim", "Amy Chen", "Tom Brown"];
 
-const invitations = ["David Kim", "Amy Chen", "Tom Brown"];
 
-document.getElementById("name").innerText = user.name;
-document.getElementById("email").innerText = user.email;
 
-const friendList = document.getElementById("friends");
-friends.forEach(friend => {
+
+    document.getElementById("name").innerText = user.name;
+    document.getElementById("email").innerText = user.email;
+
+    const friendList = document.getElementById("friends");
+    friends.forEach(friend => {
     const li = document.createElement("li");
     li.innerText = friend;
     friendList.appendChild(li);
@@ -49,3 +59,6 @@ invitations.forEach(invitation => {
 
     invitationList.appendChild(li);
 });
+
+
+

@@ -1,15 +1,14 @@
-<html>
-<head>
-    <title>User Profile</title>
-    <link rel="stylesheet" type="text/css" href="profileComponent.css">
-</head>
+<style>
+    @import url("profileComponent.css");
+</style>
+
 <body>
 
     <div class="wrapper">
         <div class="left">
             <h2>User Info</h2>
             <br>
-            <img src="" alt="user" width="50" height="50">
+            <!--<img src="" alt="user" width="50" height="50">-->
             <h4>Name: <span id="name"></span></h4>
             <p>Email: <span id="email"></span></p>
         </div>
@@ -19,7 +18,6 @@
                 <div class="info_data">
                     <div class="friend-list">
                         <ul id="friends">
-                            <!-- Friend list will be dynamically generated here -->
                         </ul>
                     </div>
                 </div>
@@ -29,16 +27,12 @@
                 <h3>Pending invitations</h3>
                 <div class="invitation-list">
                     <ul id="invitations">
-                        <!-- Pending invitations will be dynamically generated here -->
                     </ul>
                 </div>
             </div>
 
-            <div class="social_media">
 
-            </div>
         </div>
     </div>
 </body>
 <script src="profileComponent.js"></script>
-</html>
