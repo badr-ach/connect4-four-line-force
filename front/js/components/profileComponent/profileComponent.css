@@ -9,7 +9,7 @@
 }
 
 body{
-    background-color: #f3f3f3;
+    background-color: #606060;
 }
 
 .wrapper{
@@ -17,15 +17,35 @@ body{
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    width: 60%;
-    height: 60%;
+    width: 100%;
+    height: 100%;
     display: flex;
     box-shadow: 0 10px 20px 0 rgba(69,90,100,.08);
+}
+.wrapper .middle .info h3{
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e0e0e0;
+    color: #353c4e;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+
+}
+
+.wrapper .middle{
+    width: 50%;
+    background: #fff;
+    padding: 30px 25px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.wrapper .middle  p {
+    font-size: 12px;
 }
 
 .wrapper .left{
     width: 35%;
-    background: linear-gradient(to right,#01a9ac,#01dbdf);
+    background: linear-gradient(to right,#454545,#151515);
     padding: 30px 25px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -73,6 +93,7 @@ body{
 .wrapper .right .projects_data{
     display: flex;
     justify-content: space-between;
+
 }
 
 .wrapper .right .info_data .data,
@@ -112,3 +133,80 @@ body{
     display: block;
     font-size: 18px;
 }
+
+.accept-button .reject-button {
+    background-color: #909090
+}
+
+
+.projects{
+    margin-top: 50px;
+}
+.invitation-list {
+    height:300px;
+    overflow-y: scroll;
+}
+
+.info_data {
+    height:200px;
+    overflow-y: scroll;
+}
+
+.profile {
+    padding-top: 40px;
+    margin: auto ;
+    width: 50%;
+    align-content: center;
+}
+
+/* CSS styling for accept and reject buttons */
+.accept-button, .reject-button {
+    padding: 7px;
+    background-color: #4CAF50;
+    margin-left: 10px;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.reject-button {
+    background-color: #f44336; /* Red */
+}
+
+/* CSS styling to align buttons to the right */
+li {
+    padding: 5px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* Apply styles to the accept and reject buttons */
+li button {
+    margin-left: 10px;
+
+}
+li button:last-child {
+    margin-left: 30px;
+}
+
+li button:first-child {
+    margin-left: 50px;
+}
+
+.friend{
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.friend-invitation{
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+
