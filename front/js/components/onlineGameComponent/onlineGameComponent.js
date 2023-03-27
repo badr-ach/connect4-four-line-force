@@ -6,7 +6,6 @@ export class Connect4 extends HTMLElement {
   constructor({
     app,
     gameId,
-    roomId,
     playerOne,
     playerTwo,
     board,
@@ -20,7 +19,7 @@ export class Connect4 extends HTMLElement {
     this.attachShadow({ mode: "open" });
 
     this.shadowRoot.innerHTML = `
-            <style>@import "./js/components/gameComponent/gameComponent.css"; </style>
+            <style>@import "./js/components/onlineGameComponent/onlineGameComponent.css"; </style>
             <h1 id="winner"></h1>
             <div id="wrapper">
               <button id="home-btn"> Home </button>
@@ -101,8 +100,6 @@ export class Connect4 extends HTMLElement {
     this._animator = new Animator();
     this._gameId = gameId;
 
-    
-    this.roomId = roomId;
     this.playerRed = playerOne;
     this.playerYellow = playerTwo;
     this.currPlayer = currPlayer;
@@ -112,23 +109,34 @@ export class Connect4 extends HTMLElement {
 
     this.rows = 6;
     this.columns = 7;
-    
+
     this._lastPlayer = lastPlayer;
     this.gameOver = gameOver;
-    this.winner = winner;
+    this.winner = null;
+
+    this._socket = WebSocket.getSocketByNameSpace("/api/onlineGame");
+
+    WebSocket.getSocketByNameSpace("/api/onlineGame").on("updatedBoard", (data) => {
+      this.board = data.board;
+      this.currColumns = data.currColumns;
+      if (data.currPlayer !== this.currPlayer) {
+        console.log("here");
+        this.currPlayer = data.currPlayer;
+        this.changePlayer();
+      }
+      if (data.gameOver) {
+        this.gameOver = true;
+        this.winner = data.winner;
+      }
+
+      this.renderBoard();
+    });
   }
-
-
 
   async connectedCallback() {
-    this._setUpSocket();
-    this._attachEventListeners();
-    this.renderBoard();
-  }
-
-
-  _attachEventListeners() {
-    this.shadowRoot.querySelector("#board").addEventListener("click", this.dropPiece.bind(this));
+    this.shadowRoot
+      .querySelector("#board")
+      .addEventListener("click", this.dropPiece.bind(this));
     let arrows = this.shadowRoot.querySelectorAll(".arrow");
 
     for (let i = 0; i < arrows.length; i++) {
@@ -142,25 +150,7 @@ export class Connect4 extends HTMLElement {
 
     this.shadowRoot.querySelector("#save-btn").addEventListener("click", this._handleSaveGame.bind(this));
     this.shadowRoot.querySelector("#home-btn").addEventListener("click", this._handleHome.bind(this));
-  }
-
-  _setUpSocket(){
-    this._socket = WebSocket.getSocketByNameSpace("/api/game");
-    
-    this._socket.on("updatedBoard", (data) => {
-      this.board = data.board;
-      this.currColumns = data.currColumns;
-      this.currPlayer = data.currPlayer;
-      if (data.gameOver) {
-        this.gameOver = true;
-        this.winner = data.winner;
-      }
-      this.renderBoard();
-    });
-
-    this._socket.on("game-error", (data) => {
-      alert(data.message);
-    });
+    this.renderBoard();
   }
 
   _handleHome(){
@@ -184,7 +174,7 @@ export class Connect4 extends HTMLElement {
     if (row < 0) {
       return;
     }
-    this.board[row][column] = this._app.player === this.playerRed ? 1 : 2;
+    this.board[row][column] = this.currPlayer;
     this.renderBoard();
   }
 
@@ -206,10 +196,7 @@ export class Connect4 extends HTMLElement {
       return;
     }
 
-    console.log("currPlayer: " + this.currPlayer);
-    console.log("app.player: " + this._app.player);
-
-    if (this.currPlayer !== this._app.player) {
+    if (this.currPlayer !== 1) {
       return;
     }
 
@@ -227,11 +214,12 @@ export class Connect4 extends HTMLElement {
       return;
     }
 
-    WebSocket.getSocketByNameSpace("/api/game").emit("newMove", {
+    console.log(this.playerRed);
+
+    WebSocket.getSocketByNameSpace("/api/onlineGame").emit("newMove", {
       gameId: this._gameId,
-      roomId: this.roomId,
       move: [row, column],
-      player: this._app.player,
+      player: this.playerRed,
     });
   }
 
@@ -251,8 +239,17 @@ export class Connect4 extends HTMLElement {
     }
 
     if (this.winner !== null) {
+      let winner_name = this.winner === 1 ? "Red" : "Yellow";
       this.shadowRoot.querySelector("#winner").innerHTML =
-        this.winner == "Tie" ? "Tie!" : this.winner + " wins!";
+        this.winner == "Tie" ? "Tie!" : winner_name + " wins!";
+    }
+  }
+
+  changePlayer() {
+    if (this.currPlayer === 1) {
+      this.currPlayer = 2;
+    } else {
+      this.currPlayer = 1;
     }
   }
 

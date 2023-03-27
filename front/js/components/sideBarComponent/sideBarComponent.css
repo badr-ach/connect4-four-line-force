@@ -12,9 +12,10 @@
     left: 0;
     height: 100%;
     width: 260px;
-    background: #11101d;
+    background: #151515;
     z-index: 100;
     transition: all 0.5s ease;
+    border-right: 0.5px solid #393939;
 }
 .sidebar.close{
     width: 78px;
@@ -68,6 +69,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin: 10px 0;
 }
 .sidebar.close .nav-links li .iocn-link{
     display: block
@@ -144,6 +146,11 @@
 .sidebar .nav-links li .sub-menu .link_name{
     display: none;
 }
+
+.sidebar .nav-links li .sub-menu li{
+    margin: 15px 0;
+}
+
 .sidebar.close .nav-links li .sub-menu .link_name{
     font-size: 18px;
     opacity: 1;

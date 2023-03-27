@@ -1,5 +1,4 @@
 import { Animator } from "../../scripts/animator.js";
-import { events } from "../../events/events.js";
 import {login} from "../../api/user.js";
 
 export class Login extends HTMLElement{
@@ -19,9 +18,7 @@ export class Login extends HTMLElement{
     }
 
     _attachEventListeners(){
-        console.log("login outside");
         const form = this.shadowRoot.getElementById("loginForm");
-        const btn = this.shadowRoot.getElementById("login-btn");
         form.addEventListener("submit", (e) => {
             e.preventDefault();
             login({ mail:form.mail.value, username:form.mail.value ,password: form.pwd.value })(this._app.dispatchEvent.bind(this._app));

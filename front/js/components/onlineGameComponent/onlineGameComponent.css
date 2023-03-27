@@ -1,0 +1,99 @@
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+#wrapper table{
+  margin: 0;
+  padding: 0;
+}
+
+#board {
+  height: 540px;
+  width: 570px;
+  background-color: rgb(134, 200, 188);
+  /* border: 1px solid navy; */
+
+  margin: 0;
+  padding-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+
+  border: 6px solid rgb(10, 100, 73);
+  border-radius: 25px;
+}
+
+.column-selector {
+  height: 70px;
+  /* width: 630px; */
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+.column {
+  width: 70px;
+  margin: 6px;
+}
+
+.column:hover .hidden {
+  display: inline-block;
+}
+
+.hidden {
+  display: none;
+}
+
+.arrow {
+  cursor: pointer;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 30px;
+  width: 100%;
+  color: red;
+
+  animation: arrow 1.5s infinite;
+}
+
+@keyframes arrow {
+  0% {
+    font-size: 30px;
+  }
+
+  50% {
+    font-size: 35px;
+  }
+
+  100% {
+    font-size: 30px;
+  }
+}
+
+.tile {
+  height: 70px;
+  width: 80px;
+  margin: 5px;
+
+  /* Circle */
+  background-color: white;
+  border-radius: 50%;
+  border: 3px solid rgb(10, 100, 73);
+}
+
+.red-piece {
+  background-color: rgb(255, 158, 158);
+}
+
+.yellow-piece {
+  background-color: rgb(248, 249, 136);
+}
+
+
+#winner{
+  text-align: center;
+  font-size: 30px;
+  color: white;
+}

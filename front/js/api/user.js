@@ -16,7 +16,7 @@ export const loadUser = () => async (dispatch) => {
     const token = localStorage.getItem("token");
     api.use({Authorization: "Bearer " + token});
     const res = await api.post(rootPath+"/api/loadUser",{});
-    console.log("res",res);
+    console.log(res)
     dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
 
   } catch (err) {
@@ -31,8 +31,8 @@ export const signup = (body) => async (dispatch) => {
   try {
     const res = await api.post(rootPath+"/api/signup", body);
     localStorage.setItem("token", res.token);
-    dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
     alert("You have been registered successfully");
+    dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
   } catch (err) {
     localStorage.removeItem('token');
     console.log(err);
@@ -45,8 +45,8 @@ export const login = (body) => async (dispatch) => {
   try {
     const res = await api.post(rootPath+"/api/login", body);
     localStorage.setItem("token", res.token);
-    dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
     alert("You have been logged in");
+    dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
   } catch (err) {
     localStorage.removeItem('token');
     console.log(err);
