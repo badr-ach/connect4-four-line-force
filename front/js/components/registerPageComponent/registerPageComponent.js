@@ -20,12 +20,11 @@ export class Register extends HTMLElement{
     }
 
     _attachEventListeners(){
-        console.log("signup");
         const form = this.shadowRoot.getElementById("signupForm");
-        const btn = this.shadowRoot.getElementById("signup-btn");
         form.addEventListener("submit", (e) => {
             e.preventDefault();
-            signup({ username: form.username.value, mail:form.mail.value, password: form.pwd.value })(this._app.dispatchEvent.bind(this._app));
+            signup({ username: form.username.value, mail:form.mail.value, password: form.pwd.value })
+            (this._app.dispatchEvent.bind(this._app));
         });
     }
 

@@ -1,6 +1,7 @@
 import auth from "../middlewares/socket.js";
+import { sendRequest, acceptRequest } from "../controllers/friends.js";
 
-export const init_game_socket = (io) => {
+export const init_friends_socket = (io) => {
 
     io.of("/api/friends").use(auth);
 

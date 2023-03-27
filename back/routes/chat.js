@@ -1,6 +1,6 @@
 import auth from "../middlewares/socket.js";
 
-export const init_game_socket = (io) => {
+export const init_chat_socket = (io) => {
 
     io.of("/api/chat").use(auth);
 

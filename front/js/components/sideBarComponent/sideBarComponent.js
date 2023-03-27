@@ -1,8 +1,9 @@
 import { Animator } from "../../scripts/animator.js";
 import {logout} from "../../api/user.js";
-
+import { WebSocket } from "../../utils/WebSocket.js";
 
 export class SideBar extends HTMLElement{
+
     constructor(app){
         super();
         this._app = app;
@@ -10,6 +11,19 @@ export class SideBar extends HTMLElement{
         this.friendList = ["friend1", "friend3", "friend2"];
         this._friendValue = "";
 
+        if(this._app.connected){
+
+            this._socket = WebSocket.getSocketByNameSpace("/api/friends");
+
+            this._socket.on("friend request", (data) => {
+                alert(data.message);
+            });
+
+            this._socket.on("notify", (data) => {
+                alert(data.message)
+            })
+            
+        }
     }
 
 
@@ -57,12 +71,11 @@ export class SideBar extends HTMLElement{
 
     _handleAddFriend(){
         console.log("add friend");
-        this._friendValue = document.getElementById("searchFriend");
-        console.log(this._friendValue);
-        console.log(this._friendValue.value);
-
+        let friendtag = document.getElementById("searchFriend");
+        console.log(this.friendtag);
+        console.log(this.friendtag.value);
+        this._socket.emit("send request",{ username: friendtag.value })
     }
-
 
 }
 

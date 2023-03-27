@@ -1,8 +1,7 @@
 import { checkWin } from "../logic/checkWin.js";
-import { nextMove } from "../logic/ai.js";
 import { UserModal } from "../models/user.js";
 import { getNewRating } from "../logic/elo.js";
-import { nextMove, setUp, setUpLocal } from "./ai.js";
+import { nextMove, setUp, setUpLocal } from "../logic/ai.js";
 import { v4 as uuid } from "uuid";
 import { GameModal } from "../models/game.js";
 import { InGameMessages } from "../utils/constants/messages.js";

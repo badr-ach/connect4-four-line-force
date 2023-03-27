@@ -1,4 +1,4 @@
-import { UserModal } from "../models/user"
+import { UserModal } from "../models/user.js"
 
 
 export const sendRequest = async (data, io, socket) => {
@@ -30,7 +30,7 @@ export const sendRequest = async (data, io, socket) => {
 
                 if(sock.username === data.username) {
 
-                    socket.to(id).emit("friend request", {username: socket.username});
+                    socket.to(id).emit("friend request", {username: socket.username , message: `${socket.username} sent you a friend request.`});
 
                     socket.emit("notify", {message: "Friend request sent."})
                 }

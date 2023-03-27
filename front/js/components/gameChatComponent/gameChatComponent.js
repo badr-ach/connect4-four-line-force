@@ -1,3 +1,5 @@
+import { Animator } from "../../scripts/animator.js";
+
 export class GameChat extends HTMLElement {
     constructor({ app, gameId, playerOne, playerTwo, board, currPlayer, currColumns, lastPlayer, gameOver, winner }) {
         super();
@@ -23,8 +25,8 @@ export class GameChat extends HTMLElement {
         .then((html) => html);
         this._messageInput = this.shadowRoot.querySelector(".message-input");
         this._messageList = this.shadowRoot.querySelector(".message-list");
-        this._messageSubmit = this.shadowRoot.querySelector(".message-submit");
-        this._messageSubmit.addEventListener("click", () => this._handleMessageSubmit());
+        // this._messageSubmit = this.shadowRoot.querySelector(".message-submit");
+        // this._messageSubmit.addEventListener("click", () => this._handleMessageSubmit());
     }
 
     _handleMessageSubmit() {

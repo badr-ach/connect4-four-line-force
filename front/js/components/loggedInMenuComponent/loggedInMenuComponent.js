@@ -1,6 +1,8 @@
 import { logout } from "../../api/user.js";
 import { events } from "../../events/events.js";
 import { Animator } from "../../scripts/animator.js";
+import { PlayMode } from "../playModeComponent/playModeComponent.js";
+PlayMode
 
 export class LoggedIntroMenu extends HTMLElement {
   constructor(app) {
@@ -31,13 +33,6 @@ export class LoggedIntroMenu extends HTMLElement {
     this.lilCards[2].addEventListener("click", () => this._handleLogoutClicked());
   }
 
-  // _handleResumeClicked() {
-  //   this._handleCircleClick();
-  //   this._animator.beginAnimation("slide-left", this, () => {
-  //     this._app.dispatchEvent(new CustomEvent(events.resumeGameClicked));
-  //   });
-  // }
-
 
   _handleResumeClick() {
     this._app.removeChild(this);
@@ -57,7 +52,8 @@ export class LoggedIntroMenu extends HTMLElement {
   _handlePlayClicked() {
     this._handleCircleClick();
     this._animator.beginAnimation("slide-left", this, () => {
-      this._app.dispatchEvent(new CustomEvent(events.guestClicked));
+        this._app.removeChild(this);
+        this._app.appendChild(new PlayMode(this._app));
     });
   }
 
