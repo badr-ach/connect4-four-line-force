@@ -1,107 +1,103 @@
-<style>
-    @import url("profileComponent.css");
-</style>
-
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Valorant Profile</title>
+    <link rel="stylesheet" href="profileComponent.css">
+</head>
 <body>
-
-    <div class="wrapper">
-        <div class="left">
-            <h2>User Info</h2>
-            <br>
-            <div class="profile">
-                <h4>Name: <span id="name"></span></h4>
-                <br>
-                <h4>Email: <span id="email"></span></h4>
-
+<div class="container">
+    <div class="profile">
+        <div class="user-info">
+            <img src="" alt="Profile Picture">
+            <div class="profile-name">
+                <h1>John Smith</h1>
+                <p>Rank: Diamond 1</p>
             </div>
         </div>
-        <div class="middle">
-            <div class="info">
-                <h3 class="subtitle">Game History</h3>
-                <div class="info_data">
-                    <div class="friend-list">
-                        <ul id="history">
-                        </ul>
-                    </div>
-                </div>
-
+        <div class="stats">
+            <div class="stat">
+                <h2>Games</h2>
+                <p id="wins">300</p>
+            </div>
+            <div class="stat">
+                <h2>Online Wins</h2>
+                <p id="online-wins">1500</p>
+            </div>
+            <div class="stat">
+                <h2>AI Wins</h2>
+                <p id="ai-wins">700</p>
             </div>
         </div>
-        <div class="right">
-            <div class="info">
-                <h3 class="subtitle">Friend List</h3>
-                <div class="info_data">
-                    <div class="friend-list">
-                        <ul id="friends">
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="projects">
-                <h3 class="subtitle">Pending invitations</h3>
-                <div class="invitation-list">
-                    <ul id="invitations">
-                    </ul>
-                </div>
-            </div>
-        </div>
-
     </div>
+    <div class="history">
+        <h2 class="history-title">Game History</h2>
+        <div class="history-list">
+        <table>
+            <tr class="history-tab">
+                <th>Against</th>
+                <th>Result</th>
+
+            </tr>
+            <tr>
+                <td>AI</td>
+                <td>Win</td>
+
+            </tr>
+            <tr>
+                <td>PLayer19</td>
+                <td>Loss</td>
+
+            </tr>
+            <tr>
+                <td>Player64</td>
+                <td>Win</td>
+
+            </tr><tr>
+                <td>Player64</td>
+                <td>Win</td>
+
+            </tr><tr>
+                <td>Player64</td>
+                <td>Win</td>
+
+            </tr><tr>
+                <td>Player64</td>
+                <td>Win</td>
+
+            </tr><tr>
+                <td>Player64</td>
+                <td>Win</td>
+
+            </tr><tr>
+                <td>Player64</td>
+                <td>Win</td>
+
+            </tr><tr>
+                <td>Player64</td>
+                <td>Win</td>
+
+            </tr><tr>
+                <td>Player64</td>
+                <td>Win</td>
+
+            </tr><tr>
+                <td>Player64</td>
+                <td>Win</td>
+
+            </tr><tr>
+                <td>Player64</td>
+                <td>Win</td>
+
+            </tr><tr>
+                <td>Player64</td>
+                <td>Win</td>
+
+            </tr>
+        </table>
+        </div>
+    </div>
+</div>
+<script src="script.js"></script>
 </body>
-<script >
-    const user = {
-        name: "John Smith",
-        email: "john.smith@example.com",
-    };
-    const friends = ["Jane Doe", "Mark Johnson", "Emily Lee","Jane Doe", "Mark Johnson", "Emily Lee", "Jane Doe", "Mark Johnson", "Emily Lee"];
-
-    const invitations = ["David Kim", "Amy Chen", "Tom Brown","David Kim", "Amy Chen", "Tom Brown","David Kim", "Amy Chen", "Tom Brown"];
-
-    document.getElementById("name").innerText = user.name;
-    document.getElementById("email").innerText = user.email;
-
-    const friendList = document.getElementById("friends");
-    friends.forEach(friend => {
-        const li = document.createElement("li");
-        li.classList.add("friend");
-        li.innerText = friend;
-        friendList.appendChild(li);
-    });
-
-    const invitationList = document.getElementById("invitations");
-    invitations.forEach(invitation => {
-        //const li = document.createElement("li");
-        //li.innerText = invitation;
-        //li.classList.add("pending");
-        //invitationList.appendChild(li);
-        const li = document.createElement("li");
-        li.classList.add("friend-invitation");
-        li.innerText = invitation;
-        li.classList.add("pending");
-
-        const acceptButton = document.createElement("button");
-        acceptButton.innerText = "Accepter";
-        acceptButton.classList.add("accept-button");
-        acceptButton.addEventListener("click", () => {
-            // Remove invitation from the list of pending invitations
-            invitationList.removeChild(li);
-
-            // Add friend to the list of friends
-            const newFriend = document.createElement("li");
-            newFriend.innerText = invitation;
-            friendList.appendChild(newFriend);
-        });
-        li.appendChild(acceptButton);
-
-        const rejectButton = document.createElement("button");
-        rejectButton.innerText = "Refuser";
-        rejectButton.classList.add("reject-button");
-        rejectButton.addEventListener("click", () => {
-            invitationList.removeChild(li);
-        });
-        li.appendChild(rejectButton);
-
-        invitationList.appendChild(li);
-    });
-</script>
+</html>

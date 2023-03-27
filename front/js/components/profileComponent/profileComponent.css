@@ -1,212 +1,133 @@
-@import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
-
-*{
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    list-style: none;
-    font-family: 'Josefin Sans', sans-serif;
 }
 
-body{
-    background-color: #606060;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000000;
 }
 
-.wrapper{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    width: 100%;
-    height: 100%;
-    display: flex;
-    box-shadow: 0 10px 20px 0 rgba(69,90,100,.08);
-}
-.wrapper .middle .info h3{
-    margin-bottom: 15px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #e0e0e0;
-    color: #353c4e;
-    text-transform: uppercase;
-    letter-spacing: 5px;
-
-}
-
-.wrapper .middle{
-    width: 50%;
-    background: #fff;
-    padding: 30px 25px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-.wrapper .middle  p {
-    font-size: 12px;
-}
-
-.wrapper .left{
-    width: 35%;
-    background: linear-gradient(to right,#454545,#151515);
-    padding: 30px 25px;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    text-align: center;
-    color: #fff;
-}
-
-.wrapper .left img{
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-
-.wrapper .left h4{
-    margin-bottom: 10px;
-}
-
-.wrapper .left p{
-    font-size: 12px;
-}
-
-.wrapper .right{
-    width: 65%;
-    background: #fff;
-    padding: 30px 25px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-.wrapper .right .info,
-.wrapper .right .projects{
-    margin-bottom: 25px;
-}
-
-.wrapper .right .info h3,
-.wrapper .right .projects h3{
-    margin-bottom: 15px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #e0e0e0;
-    color: #353c4e;
-    text-transform: uppercase;
-    letter-spacing: 5px;
-}
-
-.wrapper .right .info_data,
-.wrapper .right .projects_data{
-    display: flex;
-    justify-content: space-between;
-
-}
-
-.wrapper .right .info_data .data,
-.wrapper .right .projects_data .data{
-    width: 45%;
-}
-
-.wrapper .right .info_data .data h4,
-.wrapper .right .projects_data .data h4{
-    color: #353c4e;
-    margin-bottom: 5px;
-}
-
-.wrapper .right .info_data .data p,
-.wrapper .right .projects_data .data p{
-    font-size: 13px;
-    margin-bottom: 10px;
-    color: #919aa3;
-}
-
-.wrapper .social_media ul{
-    display: flex;
-}
-
-.wrapper .social_media ul li{
-    width: 45px;
-    height: 45px;
-    background: linear-gradient(to right,#01a9ac,#01dbdf);
-    margin-right: 10px;
-    border-radius: 5px;
-    text-align: center;
-    line-height: 45px;
-}
-
-.wrapper .social_media ul li a{
-    color :#fff;
-    display: block;
-    font-size: 18px;
-}
-
-.accept-button .reject-button {
-    background-color: #909090
-}
-
-
-.projects{
-    margin-top: 50px;
-}
-.invitation-list {
-    height:300px;
-    overflow-y: scroll;
-}
-
-.info_data {
-    height:200px;
-    overflow-y: scroll;
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 .profile {
-    padding-top: 40px;
-    margin: auto ;
-    width: 50%;
-    align-content: center;
-}
 
-/* CSS styling for accept and reject buttons */
-.accept-button, .reject-button {
-    padding: 7px;
-    background-color: #4CAF50;
-    margin-left: 10px;
-    border: none;
-    color: white;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 5px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px #fff;
+
 }
 
-.reject-button {
-    background-color: #f44336; /* Red */
-}
-
-/* CSS styling to align buttons to the right */
-li {
-    padding: 5px;
+.user-info {
     display: flex;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-name{
+    padding-left: 20px;
+}
+
+.profile img {
+    float: left;
+    margin-right: 20px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+
+}
+
+.profile h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.profile p {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.stat {
+    flex-basis: 30%;
+    border-radius: 10px;
+
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    text-align: center;
+    background: linear-gradient(to right, #9ef1b7, #23be57);
+
+}
+
+.stat h2 {
+    font-size: 24px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.stat p {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.history {
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    height: 300px;
+    margin-top: 40px;
+    box-shadow: 0 0 10px #fff;
+    background: #ffffff;
+
+}
+
+.history-list {
+    overflow-y: scroll;
+    height: 80%;
+    box-shadow: 0 0 5px #808080;
+}
+
+.history-tab{
+    background: #fff900;
+}
+
+.history h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.history-title {
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
-
-/* Apply styles to the accept and reject buttons */
-li button {
-    margin-left: 10px;
-
-}
-li button:last-child {
-    margin-left: 30px;
-}
-
-li button:first-child {
-    margin-left: 50px;
-}
-
-.friend{
-    font-size: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.friend-invitation{
-    font-size: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-
-}
-
-
