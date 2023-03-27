@@ -41,6 +41,14 @@ export class Db{
         }
     }
 
+    static async updateOne(query, data){
+        try{
+            return await this.collection.updateOne(query, {$set: data});
+        }catch(err){
+            console.log(err);
+        }
+    }
+
     static async create(data){
         try{
             return await this.collection.insertOne(data);
