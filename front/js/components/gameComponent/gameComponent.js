@@ -19,89 +19,11 @@ export class Connect4 extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
 
-    this.shadowRoot.innerHTML = `
-            <style>@import "./js/components/gameComponent/gameComponent.css"; </style>
-            <h1 id="winner"></h1>
-            <div id="wrapper">
-              <button id="home-btn"> Home </button>
-            <table>
-              <thead>
-                <tr class="column-selector">
-                    <td class="column"><span class="hidden arrow" column=0>&darr;</span></td>
-                    <td class="column"><span class="hidden arrow" column=1>&darr;</span></td>
-                    <td class="column"><span class="hidden arrow" column=2>&darr;</span></td>
-                    <td class="column"><span class="hidden arrow" column=3>&darr;</span></td>
-                    <td class="column"><span class="hidden arrow" column=4>&darr;</span></td>
-                    <td class="column"><span class="hidden arrow" column=5>&darr;</span></td>
-                    <td class="column"><span class="hidden arrow" column=6>&darr;</span></td>
-                </tr>
-              </thead>
-              <tbody id="board">
-                <tr>
-                  <td class="tile" row=0 column=0></td>
-                  <td class="tile" row=0 column=1></td>
-                  <td class="tile" row=0 column=2></td>
-                  <td class="tile" row=0 column=3></td>
-                  <td class="tile" row=0 column=4></td>
-                  <td class="tile" row=0 column=5></td>
-                  <td class="tile" row=0 column=6></td>
-                </tr>
-                <tr>
-                  <td class="tile" row=1 column=0></td>
-                  <td class="tile" row=1 column=1></td>
-                  <td class="tile" row=1 column=2></td>
-                  <td class="tile" row=1 column=3></td>
-                  <td class="tile" row=1 column=4></td>
-                  <td class="tile" row=1 column=5></td>
-                  <td class="tile" row=1 column=6></td>
-                </tr>
-                <tr>
-                  <td class="tile" row=2 column=0></td>
-                  <td class="tile" row=2 column=1></td>
-                  <td class="tile" row=2 column=2></td>
-                  <td class="tile" row=2 column=3></td>
-                  <td class="tile" row=2 column=4></td>
-                  <td class="tile" row=2 column=5></td>
-                  <td class="tile" row=2 column=6></td>
-                </tr>
-                <tr>
-                  <td class="tile" row=3 column=0></td>
-                  <td class="tile" row=3 column=1></td>
-                  <td class="tile" row=3 column=2></td>
-                  <td class="tile" row=3 column=3></td>
-                  <td class="tile" row=3 column=4></td>
-                  <td class="tile" row=3 column=5></td>
-                  <td class="tile" row=3 column=6></td>
-                </tr>
-                <tr>
-                  <td class="tile" row=4 column=0></td>
-                  <td class="tile" row=4 column=1></td>
-                  <td class="tile" row=4 column=2></td>
-                  <td class="tile" row=4 column=3></td>
-                  <td class="tile" row=4 column=4></td>
-                  <td class="tile" row=4 column=5></td>
-                  <td class="tile" row=4 column=6></td>
-                </tr>
-                <tr>
-                  <td class="tile" row=5 column=0></td>
-                  <td class="tile" row=5 column=1></td>
-                  <td class="tile" row=5 column=2></td>
-                  <td class="tile" row=5 column=3></td>
-                  <td class="tile" row=5 column=4></td>
-                  <td class="tile" row=5 column=5></td>
-                  <td class="tile" row=5 column=6></td>
-                </tr>
-              </tbody>
-            </table>
-            <button id="save-btn"> SAVE THE GAME STATE </button>
-          </div>
-         `;
-
     this._app = app;
     this._animator = new Animator();
     this._gameId = gameId;
 
-    
+
     this.roomId = roomId;
     this.playerRed = playerOne;
     this.playerYellow = playerTwo;
@@ -112,7 +34,7 @@ export class Connect4 extends HTMLElement {
 
     this.rows = 6;
     this.columns = 7;
-    
+
     this._lastPlayer = lastPlayer;
     this.gameOver = gameOver;
     this.winner = winner;
@@ -121,6 +43,9 @@ export class Connect4 extends HTMLElement {
 
 
   async connectedCallback() {
+    this.shadowRoot.innerHTML = await fetch("./js/components/gameComponent/gameComponent.html")
+        .then((r) => r.text())
+        .then((html) => html);
     this._setUpSocket();
     this._attachEventListeners();
     this.renderBoard();
@@ -146,7 +71,7 @@ export class Connect4 extends HTMLElement {
 
   _setUpSocket(){
     this._socket = WebSocket.getSocketByNameSpace("/api/game");
-    
+
     this._socket.on("updatedBoard", (data) => {
       this.board = data.board;
       this.currColumns = data.currColumns;
