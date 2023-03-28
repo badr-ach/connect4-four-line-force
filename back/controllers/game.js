@@ -77,6 +77,8 @@ export async function setup(data, io, socket, activeGames, queue) {
         activeGames.set(gameId, game);
         io.of("/api/game").to(roomId).emit("setup", activeGames.get(gameId));
 
+        await GameModal.create(game);
+
         // Handle disconnects
         socket.on("disconnect", () => {
           socket.leave(roomId);
@@ -105,6 +107,7 @@ export async function setup(data, io, socket, activeGames, queue) {
         game.board[aiMove[1]][aiMove[0]] = 2;
         game.currColumns[aiMove[0]]--;
       }
+
     } else {
       const res = await GameModal.last({
         playerOne: playerOne,
@@ -158,10 +161,21 @@ export async function newMove(data, io, socket, activeGames) {
     if (gameStatus.gameOver) {
       game.gameOver = gameStatus.gameOver;
       game.winner = gameStatus.winner;
+
+      const res = await GameModal.last({
+        playerOne: playerOne,
+        type: "singleplayer",
+        gameOver: false,
+      });
+      if(!res)
+        await GameModal.create(game);
+      else
+        await GameModal.updateOne({ gameId: game.gameId }, game);
     }
     
     activeGames.set(data.gameId, game);
     io.of("/api/game").emit("updatedBoard", activeGames.get(data.gameId));
+
   }else{
     if (gameStatus.gameOver) {
         game.gameOver = gameStatus.gameOver;
@@ -172,6 +186,8 @@ export async function newMove(data, io, socket, activeGames) {
         }
     }
     
+    await GameModal.updateOne({ gameId: game.gameId }, game);
+
     activeGames.set(data.gameId, game);
     io.of("/api/game").to(roomId).emit("updatedBoard", activeGames.get(data.gameId));
   }
