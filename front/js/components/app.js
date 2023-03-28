@@ -60,7 +60,7 @@ export class App extends HTMLElement {
     }
 
     _handleError({ detail }) {
-        alert(detail);
+        this.appendChild(new PopUp(this, "Error", detail, () => {}, () => {}, true));
     }
 
 };

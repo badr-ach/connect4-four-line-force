@@ -2,6 +2,7 @@ import { Animator } from "../../scripts/animator.js";
 import {logout} from "../../api/user.js";
 import { WebSocket } from "../../utils/WebSocket.js";
 import { events } from "../../events/events.js";
+import { GameChat } from "../gameChatComponent/gameChatComponent.js";
 
 export class SideBar extends HTMLElement{
 
@@ -11,13 +12,21 @@ export class SideBar extends HTMLElement{
         this._animator = new Animator();
         this.friendList = this._app.user.friends
         this._friendValue = "";
+        this._chat_open = false;
 
         console.log(this._app)
         console.log(JSON.stringify(this._app))
 
-        this._socket = WebSocket.getSocketByNameSpace("/api/friends",{ auth: { token: this._app.token ? this._app.token : "guest" } });
+        this._chat_socket =  WebSocket.getSocketByNameSpace("/api/chat",{ auth: { token: this._app.token ? this._app.token : "guest" } });
+        
+        this._chat_socket.on("user connected", (data) => {
+            if(this._app.user.friends.includes(data.username))
+                this._chat_socket.emit("user connected", data);
+        });
 
-        this._socket.on("notify", (data) => {
+        this._friends_socket = WebSocket.getSocketByNameSpace("/api/friends",{ auth: { token: this._app.token ? this._app.token : "guest" } });
+
+        this._friends_socket.on("notify", (data) => {
             this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: { 
                 title: "Notification",
                 content: data.message,
@@ -27,12 +36,12 @@ export class SideBar extends HTMLElement{
             } }));
         })
 
-        this._socket.on("friend request", (data) => {
+        this._friends_socket.on("friend request", (data) => {
             this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: { 
                 title: "Friend request",
                 content: data.message,
                 accept: () => {
-                    this._socket.emit("accept request", { username: data.username });
+                    this._friends_socket.emit("accept request", { username: data.username });
                 },
                 decline: () => {},
                 temporary: false
@@ -53,8 +62,20 @@ export class SideBar extends HTMLElement{
             let friendName = document.createElement("a");
             friendName.innerHTML = this.friendList[i];
             friendName.href = "#";
+            friendName.classList.add("friend");
+            friendName.dataset.username = this.friendList[i];
             friend.appendChild(friendName);
             friends.appendChild(friend);
+
+            friendName.addEventListener("click", (e)=>{
+                if(!this._chat_open){
+                    this._app.appendChild(new GameChat(this._app, e.target.dataset.username));
+                }else{
+                    this._app.removeChild(this._app.lastChild);
+                    this._app.appendChild(new GameChat(this._app, e.target.dataset.username));
+                }
+
+            });
         }
 
         let arrow = document.querySelectorAll(".arrow");
@@ -68,8 +89,8 @@ export class SideBar extends HTMLElement{
         let sidebar = document.querySelector(".sidebar");
         let sidebarBtn = document.querySelector(".bx-btn");
 
-        console.log(sidebarBtn);
-        console.log(sidebar)
+        let username = document.getElementById("sidebar-username");
+        username.innerHTML = this._app.user.username;
 
         sidebarBtn.addEventListener("click", ()=>{
             sidebar.classList.toggle("close");
@@ -98,7 +119,7 @@ export class SideBar extends HTMLElement{
         let friendtag = document.getElementById("input-friend");
         console.log(friendtag);
         console.log(friendtag.value);
-        this._socket.emit("send request",{ username: friendtag.value })
+        this._friends_socket.emit("send request",{ username: friendtag.value })
         friendtag.value = "";
     }
 
