@@ -8,6 +8,7 @@ import { Login } from "./loginPageComponent/loginPageComponent.js";
 import { PlayMode } from "./playModeComponent/playModeComponent.js";
 import { Register } from "./registerPageComponent/registerPageComponent.js";
 import { SideBar } from "./sideBarComponent/sideBarComponent.js";
+import {ProfileComponent} from "./profileComponent/profileComponent.js";
 
 export class App extends HTMLElement {
 
@@ -23,7 +24,7 @@ export class App extends HTMLElement {
     async connectedCallback() {
         this.appendChild(new SideBar(this));
         this.appendChild(new IntroMenu(this));
-        this.appendChild(new GameChat(this));
+        //this.appendChild(new GameChat(this));
         this.attachEventListeners();
         if (!this.connected) {
             loadUser()(this.dispatchEvent.bind(this));
@@ -64,7 +65,7 @@ export class App extends HTMLElement {
             this.removeChild(this.firstChild);
         }
         console.log("Im here in details")
-        this.appendChild(new SideBar(this));                                                                                        
+        this.appendChild(new SideBar(this));
         this.appendChild(new LoggedIntroMenu(this));
     }
 
@@ -75,7 +76,7 @@ export class App extends HTMLElement {
         while (this.firstChild) {
             this.removeChild(this.firstChild);
         }
-        this.appendChild(new SideBar(this));     
+        this.appendChild(new SideBar(this));
         this.appendChild(new IntroMenu(this));
     }
 

@@ -71,6 +71,12 @@
     font-size: 30px;
   }
 }
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh; /* sets the container height to the full viewport height */
+}
 
 .tile {
   height: 70px;
@@ -93,7 +99,19 @@
 
 
 #winner{
+  font-size: 48px;
+  font-family: 'Helvetica Neue', sans-serif;
+  color: #4CAF50; /* green */
   text-align: center;
-  font-size: 30px;
-  color: white;
+  text-shadow: 2px 2px #ccc;
+
+  background-color: #f2f2f2;
+}
+#turn{
+  font-size: 48px;
+  font-family: 'Helvetica Neue', sans-serif;
+  color: #4CAF50; /* green */
+ float: right;
+
+  background-color: #f2f2f2;
 }
