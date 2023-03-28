@@ -24,6 +24,12 @@ export const sendRequest = async (data, io, socket) => {
                 return;
             }
 
+            if (receiver.outgoingFriendRequests.includes(data.username)) {
+                    
+                    socket.emit("notify", { message: "This user has already sent you a friend request." });
+                    return;
+            }
+
 
             if (receiver.incomingFriendRequests.includes(sender.username)) {
 

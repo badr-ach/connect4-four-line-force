@@ -18,7 +18,6 @@ export class App extends HTMLElement {
     }
 
     async connectedCallback() {
-        this.appendChild(new PopUp(this, "Welcome", "Welcome to the game", () => { console.log("accept")}, () => {} , false));
         this.appendChild(new IntroMenu(this));
         this.attachEventListeners();
         if (!this.connected) {
@@ -34,13 +33,15 @@ export class App extends HTMLElement {
     }
 
     _handleUserLoaded({ detail }) {
+        while (this.firstChild) {
+            this.removeChild(this.firstChild);
+        }
+
         this.user = detail;
         this.connected = true;
         this.player = detail.username;
         this.token = localStorage.getItem("token");
-        while (this.firstChild) {
-            this.removeChild(this.firstChild);
-        }
+
         this.appendChild(new SideBar(this));                                                                                        
         this.appendChild(new LoggedIntroMenu(this));
     }

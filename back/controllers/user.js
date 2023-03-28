@@ -39,6 +39,7 @@ export const login = async (req, res) => {
 };
 
 export const signin = async (req, res) => {
+
     const { mail, password, username } = req.body;
 
     try {
@@ -51,13 +52,13 @@ export const signin = async (req, res) => {
         const result = await UserModal.create({ mail, password: hashedPassword, username, rating: 1000, friends: [], 
         outgoingFriendRequests: [], incomingFriendRequests: [] });
 
-        const data = result;
+        const data = await UserModal.findOne( { username });
 
         delete data.password;
 
-        const token = jwt.sign({ mail: result.mail, id: result._id, username:result.username}, secret, { expiresIn: "1h" });
+        const token = jwt.sign({ mail: data.mail, username:data.username, id: data._id }, secret, { expiresIn: "1h" });
 
-        res.status(201).json({ user: data, token: token });
+        res.status(200).json({ user: data, token: token });
 
     } catch (error) {
 
@@ -69,7 +70,9 @@ export const signin = async (req, res) => {
 
 
 export const loadUser = async (req,res) =>{
+
     try{
+
         const oldUser = await UserModal.findById(req.userId);
 
         if (!oldUser) return res.status(404).json({ message: "User doesn't exist" });
@@ -78,15 +81,18 @@ export const loadUser = async (req,res) =>{
 
         delete data.password;
 
-
         res.status(200).json({ user: data });
+
     }catch (err){
+
         res.status(500).json({ message: "Something went wrong" });
+
     }
 }
 
 
 export const befriend = async (req, res) => {
+
     const {friendId} = req.body;
     
     try{
@@ -110,6 +116,8 @@ export const befriend = async (req, res) => {
         await friend.save();
 
     }catch(err){
+
         res.status(500).json({ message: "Something went wrong" });
+
     }
 }

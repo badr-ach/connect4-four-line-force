@@ -9,7 +9,6 @@ export const loadUser = () => async (dispatch) => {
   try {
 
     if(localStorage.getItem("token") === null){
-      // api.delete(Authorization);
       return;
     }
 
