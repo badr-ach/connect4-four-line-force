@@ -163,7 +163,7 @@ export async function newMove(data, io, socket, activeGames) {
       game.winner = gameStatus.winner;
 
       const res = await GameModal.last({
-        playerOne: playerOne,
+        playerOne: player,
         type: "singleplayer",
         gameOver: false,
       });
@@ -172,7 +172,7 @@ export async function newMove(data, io, socket, activeGames) {
       else
         await GameModal.updateOne({ gameId: game.gameId }, game);
     }
-    
+
     activeGames.set(data.gameId, game);
     io.of("/api/game").emit("updatedBoard", activeGames.get(data.gameId));
 
@@ -185,7 +185,7 @@ export async function newMove(data, io, socket, activeGames) {
           await updateRatings(game.winner, game.winner === game.playerOne ? game.playerTwo : game.playerOne);
         }
     }
-    
+
     await GameModal.updateOne({ gameId: game.gameId }, game);
 
     activeGames.set(data.gameId, game);
@@ -194,19 +194,19 @@ export async function newMove(data, io, socket, activeGames) {
 }
 
 export function saveGame(data, socket, activeGames) {
-  
+
     let game = activeGames.get(data.gameId);
     if (socket.handshake.auth.id === "guest") {
       socket.emit("savedGame", { message: "Guests cannot save games" });
       return;
     }
-  
+
     if(game.playerTwo !== "AI"){
       socket.emit("savedGame", { message: "Only singleplayer games can be saved" });
       return;
     }
-    
-  
+
+
     GameModal.create({
       gameId: game.gameId,
       board: game.board,
