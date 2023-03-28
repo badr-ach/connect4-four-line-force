@@ -162,15 +162,11 @@ export async function newMove(data, io, socket, activeGames) {
       game.gameOver = gameStatus.gameOver;
       game.winner = gameStatus.winner;
 
-      const res = await GameModal.last({
-        playerOne: player,
-        type: "singleplayer",
-        gameOver: false,
-      });
-      if(!res)
+      const res = await GameModal.findOne({ gameId: game.gameId });
+
+      if(!res){
         await GameModal.create(game);
-      else
-        await GameModal.updateOne({ gameId: game.gameId }, game);
+      }
     }
 
     activeGames.set(data.gameId, game);
