@@ -5,6 +5,7 @@ const auth = async (socket, next) => {
 
   try {
     const token = socket.handshake.auth.token;
+    console.log("in socket auth" + token)
     if(token === "guest"){
       return next();
     }

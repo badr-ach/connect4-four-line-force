@@ -49,13 +49,13 @@ export const signin = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 12);
 
         const result = await UserModal.create({ mail, password: hashedPassword, username, rating: 1000, friends: [], 
-        outgoingFriendRequests: [], incomnigFriendRequests: [] });
+        outgoingFriendRequests: [], incomingFriendRequests: [] });
 
         const data = result;
 
         delete data.password;
 
-        const token = jwt.sign({ mail: result.mail, id: result._id }, secret, { expiresIn: "1h" });
+        const token = jwt.sign({ mail: result.mail, id: result._id, username:result.username}, secret, { expiresIn: "1h" });
 
         res.status(201).json({ user: data, token: token });
 

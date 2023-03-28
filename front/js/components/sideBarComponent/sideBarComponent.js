@@ -1,6 +1,7 @@
 import { Animator } from "../../scripts/animator.js";
 import {logout} from "../../api/user.js";
 import { WebSocket } from "../../utils/WebSocket.js";
+import { events } from "../../events/events.js";
 
 export class SideBar extends HTMLElement{
 
@@ -8,22 +9,35 @@ export class SideBar extends HTMLElement{
         super();
         this._app = app;
         this._animator = new Animator();
-        this.friendList = ["friend1", "friend3", "friend2"];
+        this.friendList = this._app.user.friends
         this._friendValue = "";
 
-        if(this._app.connected){
+        console.log(this._app)
+        console.log(JSON.stringify(this._app))
 
-            this._socket = WebSocket.getSocketByNameSpace("/api/friends");
+        this._socket = WebSocket.getSocketByNameSpace("/api/friends",{ auth: { token: this._app.token ? this._app.token : "guest" } });
 
-            this._socket.on("friend request", (data) => {
-                alert(data.message);
-            });
+        this._socket.on("notify", (data) => {
+            this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: { 
+                title: "Notification",
+                content: data.message,
+                accept: () => {},
+                decline: () => {},
+                temporary: true
+            } }));
+        })
 
-            this._socket.on("notify", (data) => {
-                alert(data.message)
-            })
-            
-        }
+        this._socket.on("friend request", (data) => {
+            this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: { 
+                title: "Friend request",
+                content: data.message,
+                accept: () => {
+                    this._socket.emit("accept request", { username: data.username });
+                },
+                decline: () => {},
+                temporary: false
+            } }));
+        });
     }
 
 
@@ -32,6 +46,16 @@ export class SideBar extends HTMLElement{
             await fetch("./js/components/sideBarComponent/sideBarComponent.html")
                 .then((r) => r.text())
                 .then((html) => html);
+
+        let friends = document.querySelector(".friends");
+        for(let i = 0; i < this.friendList.length; i++){
+            let friend = document.createElement("li");
+            let friendName = document.createElement("a");
+            friendName.innerHTML = this.friendList[i];
+            friendName.href = "#";
+            friend.appendChild(friendName);
+            friends.appendChild(friend);
+        }
 
         let arrow = document.querySelectorAll(".arrow");
         for (var i = 0; i < arrow.length; i++) {
@@ -55,7 +79,6 @@ export class SideBar extends HTMLElement{
     }
 
 
-
     _attachEventListeners(){
         this.logoutBtn = document.querySelector(".fa-sign-out");
         this.addFriendBtn = document.querySelector(".fa-plus");
@@ -64,6 +87,7 @@ export class SideBar extends HTMLElement{
         this.addFriendBtn.addEventListener("click", () => this._handleAddFriend());
     }
 
+
     _handleLogoutClicked(){
         logout()(this._app.dispatchEvent.bind(this._app));
     }
@@ -71,10 +95,11 @@ export class SideBar extends HTMLElement{
 
     _handleAddFriend(){
         console.log("add friend");
-        let friendtag = document.getElementById("searchFriend");
-        console.log(this.friendtag);
-        console.log(this.friendtag.value);
+        let friendtag = document.getElementById("input-friend");
+        console.log(friendtag);
+        console.log(friendtag.value);
         this._socket.emit("send request",{ username: friendtag.value })
+        friendtag.value = "";
     }
 
 }

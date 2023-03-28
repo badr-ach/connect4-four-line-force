@@ -31,8 +31,15 @@ export const signup = (body) => async (dispatch) => {
   try {
     const res = await api.post(rootPath+"/api/signup", body);
     localStorage.setItem("token", res.token);
-    alert("You have been registered successfully");
     dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
+    dispatch(new CustomEvent(events.popUp, {
+          detail: {
+            title: "Success",
+            content: "You have been signed up", 
+            temporary: true,
+            accept: () => {}, 
+            decline: () => {}
+          }}));
   } catch (err) {
     localStorage.removeItem('token');
     console.log(err);
@@ -44,9 +51,17 @@ export const signup = (body) => async (dispatch) => {
 export const login = (body) => async (dispatch) => {
   try {
     const res = await api.post(rootPath+"/api/login", body);
+    
     localStorage.setItem("token", res.token);
-    alert("You have been logged in");
     dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
+    dispatch(new CustomEvent(events.popUp, {
+          detail: { 
+            title: "Success", 
+            content: "You have been logged in", 
+            temporary: true,
+            accept: () => {}, 
+            decline: () => {}
+          }}));
   } catch (err) {
     localStorage.removeItem('token');
     console.log(err);
@@ -59,7 +74,14 @@ export const logout = () => async (dispatch) => {
   try {
     localStorage.removeItem('token');
     dispatch(new CustomEvent(events.signedOut, {detail: null}));
-    alert("You have been logged out");
+    dispatch(new CustomEvent(events.popUp, {
+      detail: { 
+        title: "Success", 
+        content: "You have been logged out", 
+        temporary: true,
+        accept: () => {}, 
+        decline: () => {}
+      }}));
   } catch (err) {
     console.log(err);
     dispatch(new CustomEvent(events.error, {detail: err}));

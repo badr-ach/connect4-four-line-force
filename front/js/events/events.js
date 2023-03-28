@@ -14,4 +14,5 @@ export const events = {
     vsComputerClicked: "vs-computer-clicked",
     vsPlayerClicked: "vs-player-clicked",
     onlineGameClicked: "online-game-clicked",
+    popUp: "pop-up",
 }

@@ -27,7 +27,7 @@ export class PlayMode extends HTMLElement{
 
     _handleVsComputerClick() {
         this._app.removeChild(this);
-        const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app._token ? this._app._token : "guest" } });
+        const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token ? this._app.token : "guest" } });
         socket.emit("setup", { AIplays : Math.round(Math.random()) + 1});
         socket.on("setup", (data) => {
             this._app.appendChild(new Connect4({app : this._app,...data}));
@@ -36,7 +36,7 @@ export class PlayMode extends HTMLElement{
 
     _handleVsPlayerClick() {
         this._app.removeChild(this);
-        const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app._token ? this._app._token : "guest" } });
+        const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token ? this._app.token : "guest" } });
         socket.emit("setup", { AIplays:-1});
         socket.on("setup", (data) => {
             console.log(data);

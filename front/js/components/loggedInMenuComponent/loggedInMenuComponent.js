@@ -36,7 +36,7 @@ export class LoggedIntroMenu extends HTMLElement {
 
   _handleResumeClick() {
     this._app.removeChild(this);
-    const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app._token  } });
+    const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token  } });
     socket.emit("setup", { player: this._app._player, resume: true });
     socket.on("setup", (data) => {
         if(data === null) {
