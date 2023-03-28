@@ -11,6 +11,8 @@ export class SideBar extends HTMLElement{
         this._app = app;
         this._animator = new Animator();
         this.friendList = this._app.user.friends
+        this.friendList = ["friend1", "friend3", "friend2"];
+        this.invitations = ["friend2", "friend3", "friend4"];
         this._friendValue = "";
         this._chat_open = false;
 
@@ -18,7 +20,7 @@ export class SideBar extends HTMLElement{
         console.log(JSON.stringify(this._app))
 
         this._chat_socket =  WebSocket.getSocketByNameSpace("/api/chat",{ auth: { token: this._app.token ? this._app.token : "guest" } });
-        
+
         this._chat_socket.on("user connected", (data) => {
             if(this._app.user.friends.includes(data.username))
                 this._chat_socket.emit("user connected", data);
@@ -27,7 +29,7 @@ export class SideBar extends HTMLElement{
         this._friends_socket = WebSocket.getSocketByNameSpace("/api/friends",{ auth: { token: this._app.token ? this._app.token : "guest" } });
 
         this._friends_socket.on("notify", (data) => {
-            this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: { 
+            this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
                 title: "Notification",
                 content: data.message,
                 accept: () => {},
@@ -37,7 +39,7 @@ export class SideBar extends HTMLElement{
         })
 
         this._friends_socket.on("friend request", (data) => {
-            this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: { 
+            this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
                 title: "Friend request",
                 content: data.message,
                 accept: () => {
@@ -47,7 +49,10 @@ export class SideBar extends HTMLElement{
                 temporary: false
             } }));
         });
-    }
+
+
+        }
+
 
 
     async connectedCallback(){
@@ -97,13 +102,14 @@ export class SideBar extends HTMLElement{
         });
 
         this._attachEventListeners();
+        this._handleInvitations();
     }
 
 
     _attachEventListeners(){
         this.logoutBtn = document.querySelector(".fa-sign-out");
         this.addFriendBtn = document.querySelector(".fa-plus");
-        
+
         this.logoutBtn.addEventListener("click", () => this._handleLogoutClicked());
         this.addFriendBtn.addEventListener("click", () => this._handleAddFriend());
     }
@@ -111,6 +117,35 @@ export class SideBar extends HTMLElement{
 
     _handleLogoutClicked(){
         logout()(this._app.dispatchEvent.bind(this._app));
+    }
+
+    _handleInvitations(){
+        const list = document.querySelector('.friend-requests-list');
+        const items = Array.from(list.children);
+        const container = document.querySelector('.friend-requests-container');
+        const leftButton = document.querySelector('.scroll-button.left');
+        const rightButton = document.querySelector('.scroll-button.right');
+
+        let currentIndex = 0;
+        let itemWidth = items[0].offsetWidth;
+        let containerWidth = container.offsetWidth;
+        let visibleItems = Math.floor(containerWidth / itemWidth);
+
+        leftButton.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                list.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+            }
+        });
+
+        rightButton.addEventListener('click', () => {
+            if (currentIndex < items.length - visibleItems) {
+                currentIndex++;
+                list.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+            }
+        });
+
+
     }
 
 
@@ -124,5 +159,6 @@ export class SideBar extends HTMLElement{
     }
 
 }
+
 
 customElements.define("side-bar-component", SideBar);

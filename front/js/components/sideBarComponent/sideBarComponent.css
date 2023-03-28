@@ -279,3 +279,47 @@
         left: 0;
     }
 }
+
+.friend-requests {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.friend-requests-container {
+    overflow: hidden;
+    flex: 1;
+    margin: 0 10px;
+}
+
+.friend-requests-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    transition: transform 0.3s ease-in-out;
+}
+
+.friend-request {
+    flex: 0 0 auto;
+    margin-right: 10px;
+    padding: 5px 10px;
+    background-color: #eee;
+    border-radius: 5px;
+}
+
+.scroll-button {
+    border: none;
+    background-color: transparent;
+    color: #555;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.left {
+    margin-right: 10px;
+}
+
+.right {
+    margin-left: 10px;
+}
