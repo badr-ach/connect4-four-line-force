@@ -65,14 +65,24 @@ export class SideBar extends HTMLElement{
         for(let i = 0; i < this.friendList.length; i++){
             let friend = document.createElement("li");
             let friendName = document.createElement("a");
+
+
+            let acceptIcon = document.createElement("i");
+            let acceptIcon1 = document.createElement("i");
+            acceptIcon.classList.add( "fa", "fa-envelope");
+            acceptIcon1.classList.add( "fa", "fa-bolt");
+
+
             friendName.innerHTML = this.friendList[i];
-            friendName.href = "#";
+            acceptIcon.href = "#";
             friendName.classList.add("friend");
             friendName.dataset.username = this.friendList[i];
             friend.appendChild(friendName);
             friends.appendChild(friend);
+            friendName.appendChild(acceptIcon);
+            friendName.appendChild(acceptIcon1);
 
-            friendName.addEventListener("click", (e)=>{
+            acceptIcon.addEventListener("click", (e)=>{
                 if(!this._chat_open){
                     this._app.appendChild(new GameChat(this._app, e.target.dataset.username));
                 }else{
@@ -103,6 +113,7 @@ export class SideBar extends HTMLElement{
 
         this._attachEventListeners();
         this._handleInvitations();
+
     }
 
 
@@ -145,6 +156,68 @@ export class SideBar extends HTMLElement{
             }
         });
 
+
+    }
+    writeUserData() {
+        const invitation1 = document.querySelector(".friend-requests-list");
+
+        this.invitations.forEach(invitation => {
+            console.log(invitation);
+            const li = document.createElement("li");
+            li.classList.add("friend-request");
+            const sp = document.createElement("span");
+            sp.classList.add("friend-request-name");
+            sp.innerText = invitation;
+            const sp2 = document.createElement("span");
+            sp2.classList.add("friend-request-icons");
+            let acceptIcon = document.createElement("i");
+            let declineIcon = document.createElement("i");
+            acceptIcon.classList.add("accept-icon fa", "fa-check");
+            declineIcon.classList.add("decline-icon fa", "fa-times");
+            li.appendChild(sp);
+            li.appendChild(sp2);
+            sp2.appendChild(acceptIcon);
+            sp2.appendChild(declineIcon);
+            invitation1.appendChild(li);
+        });
+
+
+
+
+
+
+        /*
+        const invitationList = this.shadowRoot.ownerDocument.getElementById("invitations");
+        this.invitations.forEach(invitation => {
+
+            const li = this.shadowRoot.ownerDocument.createElement("li");
+            li.innerText = invitation;
+            li.classList.add("pending");
+
+            const acceptButton = this.shadowRoot.ownerDocument.createElement("button");
+            acceptButton.classList.add("accept-button");
+            acceptButton.innerText = "Accepter";
+            acceptButton.addEventListener("click", () => {
+                invitationList.removeChild(li);
+
+                const newFriend = this.shadowRoot.ownerDocument.createElement("li");
+                newFriend.innerText = invitation;
+                friendList.appendChild(newFriend);
+            });
+            li.appendChild(acceptButton);
+
+            const rejectButton = this.shadowRoot.ownerDocument.createElement("button");
+            rejectButton.classList.add("accept-button");
+
+            rejectButton.innerText = "Refuser";
+            rejectButton.addEventListener("click", () => {
+                invitationList.removeChild(li);
+            });
+            li.appendChild(rejectButton);
+
+            invitationList.appendChild(li);
+        });
+        */
 
     }
 
