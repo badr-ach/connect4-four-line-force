@@ -1,6 +1,7 @@
 import { Animator } from "../../scripts/animator.js";
 import { WebSocket } from "../../utils/WebSocket.js";
 import {events} from "../../events/events.js";
+import {fetcher} from "../../utils/requester.js";
 
 export class Connect4 extends HTMLElement {
   constructor({
@@ -38,6 +39,8 @@ export class Connect4 extends HTMLElement {
     this._lastPlayer = lastPlayer;
     this.gameOver = gameOver;
     this.winner = winner;
+    this.api = fetcher();
+
   }
 
 
@@ -47,8 +50,16 @@ export class Connect4 extends HTMLElement {
         .then((r) => r.text())
         .then((html) => html);
     this._setUpSocket();
+    this._showGameTurn();
     this._attachEventListeners();
     this.renderBoard();
+
+
+  }
+
+  _showGameTurn() {
+    console.log("curr player", this.currPlayer, this.playerRed ,this.playerYellow)
+    this.shadowRoot.getElementById("turn").innerText = this.currPlayer;
   }
 
 

@@ -52,7 +52,7 @@ export class ProfileComponent extends HTMLElement{
             const againstTd = document.createElement("td");
             againstTd.textContent = game.playerTwo;
             const resultTd = document.createElement("td");
-            resultTd.textContent = game.winner === game.playerOne ? "Win" : "Loss";
+            resultTd.textContent = game.winner === this.username ? "Win" : "Loss";
             tr.appendChild(againstTd);
             tr.appendChild(resultTd);
             historyTable.appendChild(tr);
