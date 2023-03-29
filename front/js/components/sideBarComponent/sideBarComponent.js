@@ -12,7 +12,8 @@ export class SideBar extends HTMLElement{
         this._animator = new Animator();
         this.friendList = this._app.user.friends
         this.friendList = ["friend1", "friend3", "friend2"];
-        this.invitations = ["friend2", "friend3", "friend4"];
+        this.invitations = this._app.user.incomingFriendRequests;
+
         this._friendValue = "";
         this._chat_open = false;
 
@@ -132,11 +133,69 @@ export class SideBar extends HTMLElement{
 
     _handleInvitations(){
         const list = document.querySelector('.friend-requests-list');
-        const items = Array.from(list.children);
+
         const container = document.querySelector('.friend-requests-container');
         const leftButton = document.querySelector('.scroll-button.left');
         const rightButton = document.querySelector('.scroll-button.right');
+        this.invitations.forEach(invitation => {
+            const li = document.createElement("li");
+            li.classList.add("friend-request");
+            const sp = document.createElement("span");
+            sp.classList.add("friend-request-name");
+            sp.innerText = invitation;
+            const sp2 = document.createElement("span");
+            sp2.classList.add("friend-request-icons");
+            let acceptIcon = document.createElement("i");
+            let declineIcon = document.createElement("i");
+            acceptIcon.classList.add("fa", "fa-check","accept-icon");
+            declineIcon.classList.add("fa", "fa-times","decline-icon");
 
+            li.appendChild(sp);
+            li.appendChild(sp2);
+            sp2.appendChild(acceptIcon);
+            sp2.appendChild(declineIcon);
+            list.appendChild(li);
+
+            acceptIcon.addEventListener("click", () => {
+                list.removeChild(li);
+                //////////////////////////////
+                let friends = document.querySelector(".friends");
+                let friend = document.createElement("li");
+                let friendName = document.createElement("a");
+
+
+                let acceptIcon = document.createElement("i");
+                let acceptIcon1 = document.createElement("i");
+                acceptIcon.classList.add( "fa", "fa-envelope");
+                acceptIcon1.classList.add( "fa", "fa-bolt");
+
+
+                friendName.innerHTML = invitation;
+                acceptIcon.href = "#";
+                friendName.classList.add("friend");
+                friendName.dataset.username = invitation;
+                friend.appendChild(friendName);
+                friends.appendChild(friend);
+                friendName.appendChild(acceptIcon);
+                friendName.appendChild(acceptIcon1);
+
+                acceptIcon.addEventListener("click", (e)=>{
+                    if(!this._chat_open){
+                        this._app.appendChild(new GameChat(this._app, e.target.dataset.username));
+                    }else{
+                        this._app.removeChild(this._app.lastChild);
+                        this._app.appendChild(new GameChat(this._app, e.target.dataset.username));
+                    }
+
+                });
+
+            });
+
+            declineIcon.addEventListener("click", () => {
+                list.removeChild(li);
+            });
+        });
+        const items = Array.from(list.children);
         let currentIndex = 0;
         let itemWidth = items[0].offsetWidth;
         let containerWidth = container.offsetWidth;
@@ -174,6 +233,7 @@ export class SideBar extends HTMLElement{
             let declineIcon = document.createElement("i");
             acceptIcon.classList.add("accept-icon fa", "fa-check");
             declineIcon.classList.add("decline-icon fa", "fa-times");
+
             li.appendChild(sp);
             li.appendChild(sp2);
             sp2.appendChild(acceptIcon);
@@ -186,7 +246,7 @@ export class SideBar extends HTMLElement{
 
 
 
-        /*
+
         const invitationList = this.shadowRoot.ownerDocument.getElementById("invitations");
         this.invitations.forEach(invitation => {
 
@@ -217,7 +277,7 @@ export class SideBar extends HTMLElement{
 
             invitationList.appendChild(li);
         });
-        */
+
 
     }
 
