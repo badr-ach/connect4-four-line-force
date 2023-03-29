@@ -101,7 +101,7 @@ export class Connect4 extends HTMLElement {
     this._animator = new Animator();
     this._gameId = gameId;
 
-    
+
     this.roomId = roomId;
     this.playerRed = playerOne;
     this.playerYellow = playerTwo;
@@ -112,7 +112,7 @@ export class Connect4 extends HTMLElement {
 
     this.rows = 6;
     this.columns = 7;
-    
+
     this._lastPlayer = lastPlayer;
     this.gameOver = gameOver;
     this.winner = winner;
@@ -146,7 +146,7 @@ export class Connect4 extends HTMLElement {
 
   _setUpSocket(){
     this._socket = WebSocket.getSocketByNameSpace("/api/game");
-    
+
     this._socket.on("updatedBoard", (data) => {
       this.board = data.board;
       this.currColumns = data.currColumns;

@@ -3,6 +3,7 @@ import {logout} from "../../api/user.js";
 import { WebSocket } from "../../utils/WebSocket.js";
 import { events } from "../../events/events.js";
 import { GameChat } from "../gameChatComponent/gameChatComponent.js";
+import { LoggedIntroMenu } from "../loggedInMenuComponent/loggedInMenuComponent.js";
 
 export class SideBar extends HTMLElement{
 
@@ -10,8 +11,7 @@ export class SideBar extends HTMLElement{
         super();
         this._app = app;
         this._animator = new Animator();
-        this.friendList = this._app.user.friends
-        this.friendList = ["friend1", "friend3", "friend2"];
+        this.friendList = app.user.friends
         this.invitations = this._app.user.incomingFriendRequests;
 
         this._friendValue = "";
@@ -61,7 +61,15 @@ export class SideBar extends HTMLElement{
             await fetch("./js/components/sideBarComponent/sideBarComponent.html")
                 .then((r) => r.text())
                 .then((html) => html);
+        let home = document.getElementById("home-link");
+        home.addEventListener("click", () => {
+            while (this._app.firstChild) {
+                this._app.removeChild(this._app.firstChild);
 
+            }
+            this._app.appendChild(new SideBar(this._app));
+            this._app.appendChild(new LoggedIntroMenu(this._app));
+        });
         let friends = document.querySelector(".friends");
         for(let i = 0; i < this.friendList.length; i++){
             let friend = document.createElement("li");

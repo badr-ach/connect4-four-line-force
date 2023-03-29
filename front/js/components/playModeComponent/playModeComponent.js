@@ -1,6 +1,7 @@
 import { Animator } from "../../scripts/animator.js";
 import { WebSocket } from "../../utils/WebSocket.js";
 import { Connect4 } from "../gameComponent/gameComponent.js";
+import {LoadingPage} from "../loadingPageComponent/loadingPageComponent.js";
 
 
 export class PlayMode extends HTMLElement{
@@ -40,10 +41,13 @@ export class PlayMode extends HTMLElement{
         socket.emit("setup", { AIplays:-1});
         socket.on("setup", (data) => {
             console.log(data);
+            this._app.removeChild(this._app.lastChild);
             this._app.appendChild(new Connect4({app : this._app,...data}));
+
         });
         socket.on("waitingForOpponent" , (data) => {
             alert("Waiting for opponent");
+            this._app.appendChild(new LoadingPage(this._app));
         });
     }
 }
