@@ -83,3 +83,39 @@ export const logout = () => async (dispatch) => {
 
   }
 }
+
+
+export const befriend = (body) => async (dispatch) => {
+  try{
+    if(localStorage.getItem("token") === null){
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    api.use({Authorization: "Bearer " + token});
+
+    const res = await api.post(rootPath+"/api/befriend", body);
+    dispatch(new CustomEvent(events.popUp, {detail: {title: "Success", content: "You have befriended " + 
+    body.username, temporary: true, accept: () => {}, decline: () => {}}}));
+
+  }catch(err){
+    dispatch(new CustomEvent(events.error, {detail: err}));
+  }
+}
+
+export const rejectfriend = (body) => async (dispatch) => {
+  try{
+    if(localStorage.getItem("token") === null){
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    api.use({Authorization: "Bearer " + token});
+
+    const res = await api.post(rootPath+"/api/rejectfriend", body);
+    dispatch(new CustomEvent(events.popUp, {detail: {title: "Success", content: "You have rejected " +
+    body.username, temporary: true, accept: () => {}, decline: () => {}}}));
+  }catch(err){
+    dispatch(new CustomEvent(events.error, {detail: err}));
+  }
+}

@@ -52,12 +52,6 @@ export class SideBar extends HTMLElement{
                 temporary: false
             } }));
         });
-
-
-            this._socket.on("notify", (data) => {
-                alert(data.message)
-            })
-
         }
 
 

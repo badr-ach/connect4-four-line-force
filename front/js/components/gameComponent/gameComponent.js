@@ -76,8 +76,30 @@ export class Connect4 extends HTMLElement {
       arrows[i].addEventListener("mouseout", this._handleMouseOut.bind(this));
     }
 
+    this.shadowRoot.querySelector("#mute-btn").addEventListener("click", this._handleMute.bind(this));
+    this.shadowRoot.querySelectorAll(".chat-input").forEach( (e) => e.addEventListener("click", this._handleChat.bind(this)));
     this.shadowRoot.querySelector("#save-btn").addEventListener("click", this._handleSaveGame.bind(this));
     this.shadowRoot.querySelector("#home-btn").addEventListener("click", this._handleHome.bind(this));
+  }
+
+  _handleMute(e){
+    let muteBtn = this.shadowRoot.querySelector("#mute-btn");
+    if (muteBtn.innerHTML === "Mute") {
+      muteBtn.innerHTML = "Unmute";
+      this._socket.emit("mute", {player: this._app.player, gameId: this._gameId});
+    } else {
+      muteBtn.innerHTML = "Mute";
+      this._socket.emit("unmute", {player: this._app.player, gameId: this._gameId});
+    }
+  }
+
+  _handleChat(e){
+    let message = e.target.innerHTML;
+    this._socket.emit("new message", {message: message, player: this._app.player, roomId: this.roomId, gameId: this._gameId});
+    let chatbox = this.shadowRoot.querySelector("#chat-box");
+    let messageSpan = document.createElement("span");
+    messageSpan.innerHTML = this._app.player + " : " + message;
+    chatbox.appendChild(messageSpan);
   }
 
   _setUpSocket(){
@@ -87,6 +109,8 @@ export class Connect4 extends HTMLElement {
       this.board = data.board;
       this.currColumns = data.currColumns;
       this.currPlayer = data.currPlayer;
+      let turn = this.shadowRoot.getElementById("turn");
+      turn.innerText = this.currPlayer;
       if (data.gameOver) {
         this.gameOver = true;
         this.winner = data.winner;
@@ -96,6 +120,13 @@ export class Connect4 extends HTMLElement {
 
     this._socket.on("game-error", (data) => {
       alert(data.message);
+    });
+
+    this._socket.on("new message", (data) => {
+      let chatbox = this.shadowRoot.querySelector("#chat-box");
+      let message = document.createElement("span");
+      message.innerHTML = data.player + " : " + data.message;
+      chatbox.appendChild(message);
     });
   }
 

@@ -229,10 +229,12 @@ export function newMessage(data, socket, activeGames) {
   if(socket.username !== player) return;
   if(game.mute) return;
 
-  for(let message in InGameMessages){
+  for(let index in InGameMessages){
+    let message = InGameMessages[index];
+    console.log(message, data.message);
     if(message === data.message){
       if (roomId) {
-        socket.to(roomId).emit("newMessage", {
+        socket.to(roomId).emit("new message", {
           message,
           player,
         });

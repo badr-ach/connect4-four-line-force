@@ -93,7 +93,7 @@ export const loadUser = async (req,res) =>{
 
 export const befriend = async (req, res) => {
 
-    const {friendId} = req.body;
+    const {username} = req.body;
     
     try{
 
@@ -101,23 +101,59 @@ export const befriend = async (req, res) => {
 
         if (!user) return res.status(404).json({ message: "User doesn't exist" });
 
-        const friend = await UserModal.findById(friendId);
+        const friend = await UserModal.findOne({ username : username });
 
         if (!friend) return res.status(404).json({ message: "User to befriend doesn't exist" });
 
-        if(user.friends.includes(friendId)) return res.status(400).json({ message: "User is already a friend" });
+        if(user.friends.includes(username)) return res.status(400).json({ message: "User is already a friend" });
 
-        user.friends.push(friendId);
+        user.friends.push(username);
 
-        friend.friends.push(req.userId);
+        user.outgoingFriendRequests = user.outgoingFriendRequests.filter((item) => item !== username);
 
-        await user.save();
+        friend.friends.push(user.username);
 
-        await friend.save();
+        friend.incomingFriendRequests = friend.incomingFriendRequests.filter((item) => item !== user.username);
+
+        await UserModal.updateOne({ _id: user._id }, { friends: user.friends, outgoingFriendRequests: user.outgoingFriendRequests });
+        
+        await UserModal.updateOne({ _id: friend._id }, { friends: friend.friends, incomingFriendRequests: friend.incomingFriendRequests });
+
+        return res.status(200).json({ message: "Friend added", username : username });
 
     }catch(err){
 
         res.status(500).json({ message: "Something went wrong" });
 
+    }
+}
+
+export const rejectfriend = async (req, res) => {
+
+    const {username} = req.body;
+
+    try{
+
+        const user = await UserModal.findById(req.userId);
+
+        if (!user) return res.status(404).json({ message: "User doesn't exist" });
+
+        const friend = await UserModal.findOne({ username : username });
+
+        if (!friend) return res.status(404).json({ message: "User to befriend doesn't exist" });
+
+        if(user.friends.includes(username)) return res.status(400).json({ message: "User is already a friend" });
+
+        user.outgoingFriendRequests = user.outgoingFriendRequests.filter((item) => item !== username);
+
+        friend.incomingFriendRequests = friend.incomingFriendRequests.filter((item) => item !== user.username);
+
+        await UserModal.updateOne({ _id: user._id }, { outgoingFriendRequests: user.outgoingFriendRequests });
+
+        await UserModal.updateOne({ _id: friend._id }, { incomingFriendRequests: friend.incomingFriendRequests });
+
+    }catch(err){
+            
+            res.status(500).json({ message: "Something went wrong" });
     }
 }

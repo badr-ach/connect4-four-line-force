@@ -1,5 +1,5 @@
 import auth from "../middlewares/socket.js";
-import { setup, newMove, saveGame } from "../controllers/game.js";
+import { setup, newMove, saveGame, newMessage, mute, unmute } from "../controllers/game.js";
 
 export const init_game_socket = (io) => {
 
