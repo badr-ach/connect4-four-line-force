@@ -10,7 +10,7 @@ export class GameChat extends HTMLElement {
         this._animator = new Animator();
         this._message = "";
         this._messageList = [];
-        this._chat_socket = WebSocket.getSocketByNameSpace("/api/chat",{ auth: { token: this._app.token ? 
+        this._chat_socket = WebSocket.getSocketByNameSpace("/api/chat",{ auth: { token: this._app.token ?
             this._app.token : "guest" } });
 
         this._chat_socket.on("private message", (data) => {
@@ -27,16 +27,21 @@ export class GameChat extends HTMLElement {
         this._messageInput = this.shadowRoot.querySelector("#message-input");
         this._messageList = this.shadowRoot.querySelector("#message-list");
         this._messageSubmit = this.shadowRoot.querySelector("#submit-btn");
+        this._closeBtn = this.shadowRoot.querySelector(".close-button");
+        this._closeBtn.addEventListener("click", () => this._handleCloseBtnClick());
         this._messageSubmit.addEventListener("click", () => this._handleMessageSubmit());
     }
 
     _handleMessageSubmit() {
-        
+
         this._message = this._messageInput.value;
         this._messageList.innerHTML += `<li class="message">${this._app.user.username} : ${this._message}</li>`;
         this._messageInput.value = "";
 
         this._chat_socket.emit("private message", { content: this._message, to: this.username });
+    }
+    _handleCloseBtnClick() {
+        this._app.removeChild(this);
     }
 }
 
