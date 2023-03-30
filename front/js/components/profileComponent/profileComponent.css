@@ -23,7 +23,8 @@ body {
     text-align: center;
     margin-bottom: 20px;
     box-shadow: 0 0 10px #fff;
-
+    margin-top: 50px;
+    width: 700px;
 }
 
 .user-info {
@@ -47,13 +48,12 @@ body {
 }
 
 .profile h1 {
-    font-size: 36px;
+    font-size: 26px;
     margin-bottom: 10px;
 }
 
-.profile p {
-    font-size: 24px;
-    margin-bottom: 20px;
+.info-element{
+    margin-bottom: 15px;
 }
 
 .stats {
@@ -81,6 +81,10 @@ body {
     font-weight: bold;
 }
 
+.infos{
+    display: inline-block;
+}
+
 .history {
     border-radius: 10px;
     padding: 20px;
@@ -89,6 +93,8 @@ body {
     margin-top: 40px;
     box-shadow: 0 0 10px #fff;
     background: #ffffff;
+    width: 700px;
+
 
 }
 
