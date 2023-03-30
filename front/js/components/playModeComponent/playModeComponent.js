@@ -42,7 +42,7 @@ export class PlayMode extends HTMLElement{
         socket.emit("setup", { AIplays:-1});
         socket.once("setup", (data) => {
             console.log(data);
-            this._app.removeChild(this._app.lastChild);
+            this._removingLoadingScreen();
             this._app.appendChild(new Connect4({app : this._app,...data}));
 
         });
@@ -56,6 +56,11 @@ export class PlayMode extends HTMLElement{
         for(let node of this._app.children){
             if(node.id === "side-bar") continue;
             this._app.removeChild(node);
+        }
+    }
+    _removingLoadingScreen(){
+        for(let node of this._app.children){
+            if(node.id === "loading-page") this._app.removeChild(node);
         }
     }
 }

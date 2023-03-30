@@ -7,6 +7,7 @@ export class LoadingPage extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
         this._app = app;
+        this.id= "loading-page";
         this._animator = new Animator();
     }
 
