@@ -27,28 +27,36 @@ export class PlayMode extends HTMLElement{
 
 
     _handleVsComputerClick() {
-        this._app.removeChild(this);
+        this._removingMyself();
         const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token ? this._app.token : "guest" } });
         socket.emit("setup", { AIplays : Math.round(Math.random()) + 1});
-        socket.on("setup", (data) => {
+        socket.once("setup", (data) => {
+            console.log(data);
             this._app.appendChild(new Connect4({app : this._app,...data}));
         });
     }
 
     _handleVsPlayerClick() {
-        this._app.removeChild(this);
+        this._removingMyself();
         const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token ? this._app.token : "guest" } });
         socket.emit("setup", { AIplays:-1});
-        socket.on("setup", (data) => {
+        socket.once("setup", (data) => {
             console.log(data);
             this._app.removeChild(this._app.lastChild);
             this._app.appendChild(new Connect4({app : this._app,...data}));
 
         });
-        socket.on("waitingForOpponent" , (data) => {
+        socket.once("waitingForOpponent" , (data) => {
             alert("Waiting for opponent");
             this._app.appendChild(new LoadingPage(this._app));
         });
+    }
+
+    _removingMyself(){
+        for(let node of this._app.children){
+            if(node.id === "side-bar") continue;
+            this._app.removeChild(node);
+        }
     }
 }
 

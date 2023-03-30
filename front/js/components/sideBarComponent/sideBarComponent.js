@@ -10,6 +10,7 @@ export class SideBar extends HTMLElement{
     constructor(app){
         super();
         this._app = app;
+        this.id = "side-bar"
         this._animator = new Animator();
         this.friendList = app.user.friends
         this.invitations = this._app.user.incomingFriendRequests;
@@ -63,11 +64,10 @@ export class SideBar extends HTMLElement{
                 .then((html) => html);
         let home = document.getElementById("home-link");
         home.addEventListener("click", () => {
-            while (this._app.firstChild) {
-                this._app.removeChild(this._app.firstChild);
-
+            for(let node of this._app.children){
+                if(node.id === "side-bar") continue;
+                this._app.removeChild(node);
             }
-            this._app.appendChild(new SideBar(this._app));
             this._app.appendChild(new LoggedIntroMenu(this._app));
         });
         let friends = document.querySelector(".friends");
@@ -204,26 +204,26 @@ export class SideBar extends HTMLElement{
             });
         });
         const items = Array.from(list.children);
-        let currentIndex = 0;
-        let itemWidth = items[0].offsetWidth;
-        let containerWidth = container.offsetWidth;
-        let visibleItems = Math.floor(containerWidth / itemWidth);
+        if(items.length !== 0){
+            let currentIndex = 0;
+            let itemWidth = items[0].offsetWidth;
+            let containerWidth = container.offsetWidth;
+            let visibleItems = Math.floor(containerWidth / itemWidth);
 
-        leftButton.addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                list.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
-            }
-        });
+            leftButton.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    list.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+                }
+            });
 
-        rightButton.addEventListener('click', () => {
-            if (currentIndex < items.length - visibleItems) {
-                currentIndex++;
-                list.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
-            }
-        });
-
-
+            rightButton.addEventListener('click', () => {
+                if (currentIndex < items.length - visibleItems) {
+                    currentIndex++;
+                    list.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+                }
+            });
+        }
     }
     writeUserData() {
         const invitation1 = document.querySelector(".friend-requests-list");

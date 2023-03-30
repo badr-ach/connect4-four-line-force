@@ -42,6 +42,7 @@ export class App extends HTMLElement {
         this.player = detail.username;
         this.token = localStorage.getItem("token");
 
+        console.log("I got called")
         this.appendChild(new SideBar(this));                                                                                        
         this.appendChild(new LoggedIntroMenu(this));
     }
