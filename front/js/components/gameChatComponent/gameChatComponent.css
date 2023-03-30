@@ -7,18 +7,21 @@
     border: 1px solid #ccc;
     border-radius: 10px;
     overflow: hidden;
+    scrollbar-width: thin;
 }
 
 .chat-history {
     height: 80%;
     overflow-y: scroll;
+    padding-top: 27;
+    scrollbar-width: thin;
 }
 
 .chat-input {
-    height: 20%;
+    height: 18%;
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 0px;
 }
 
 .chat-input input[type="text"] {
@@ -37,5 +40,15 @@
     border: none;
     border-radius: 5px;
     font-size: 16px;
+    cursor: pointer;
+}
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 20;
+    padding: 6px;
+    font-size: 20px;
+    background-color: #fff;
+    border: none;
     cursor: pointer;
 }
