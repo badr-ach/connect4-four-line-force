@@ -16,4 +16,5 @@ export const events = {
     onlineGameClicked: "online-game-clicked",
     popUp: "pop-up",
     friendClicked: "friend-clicked",
+    profileClicked: "profile-clicked",
 }

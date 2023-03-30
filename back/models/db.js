@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 import { ObjectId } from "mongodb";
 
-const uri = 
+const uri =
 "mongodb://admin:admin@mongodb:27017/admin?directConnection=true";
 
 export class Db{
@@ -20,6 +20,14 @@ export class Db{
     static async findOne(query){
         try{
             return await this.collection.findOne(query);
+        }catch(err){
+            console.log(err);
+        }
+    }
+
+    static async findAll(query){
+        try{
+            return await this.collection.find(query).toArray();
         }catch(err){
             console.log(err);
         }

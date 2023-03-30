@@ -4,6 +4,7 @@ import { WebSocket } from "../../utils/WebSocket.js";
 import { events } from "../../events/events.js";
 import { GameChat } from "../gameChatComponent/gameChatComponent.js";
 import { LoggedIntroMenu } from "../loggedInMenuComponent/loggedInMenuComponent.js";
+import { ProfileComponent } from "../profileComponent/profileComponent.js";
 
 export class SideBar extends HTMLElement{
 
@@ -52,6 +53,10 @@ export class SideBar extends HTMLElement{
             } }));
         });
 
+
+            this._socket.on("notify", (data) => {
+                alert(data.message)
+            })
 
         }
 
@@ -132,6 +137,7 @@ export class SideBar extends HTMLElement{
 
         this.logoutBtn.addEventListener("click", () => this._handleLogoutClicked());
         this.addFriendBtn.addEventListener("click", () => this._handleAddFriend());
+        document.getElementById("profile").addEventListener("click", () => this._handleProfileClicked());
     }
 
 
@@ -289,6 +295,14 @@ export class SideBar extends HTMLElement{
 
     }
 
+
+    _handleProfileClicked(){
+        while (this._app.firstChild) {
+            this._app.removeChild(this._app.firstChild);
+        }
+        this._app.appendChild(this);
+        this._app.appendChild(new ProfileComponent(this._app));
+    }
 
     _handleAddFriend(){
         console.log("add friend");
