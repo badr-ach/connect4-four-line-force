@@ -7,18 +7,24 @@
     border: 1px solid #ccc;
     border-radius: 10px;
     overflow: hidden;
+    scrollbar-width: thin;
+    background-color: white;
 }
 
 .chat-history {
     height: 80%;
     overflow-y: scroll;
+    padding-top: 27px;
+    scrollbar-width: thin;
+    background-color: white;
 }
 
 .chat-input {
-    height: 20%;
+    height: 18%;
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 0px;
+    background-color: white;
 }
 
 .chat-input input[type="text"] {
@@ -37,5 +43,15 @@
     border: none;
     border-radius: 5px;
     font-size: 16px;
+    cursor: pointer;
+}
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    padding: 6px;
+    font-size: 20px;
+    background-color: #fff;
+    border: none;
     cursor: pointer;
 }
