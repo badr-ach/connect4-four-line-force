@@ -33,8 +33,10 @@ export class ProfileComponent extends HTMLElement{
 
         const res = await this.api.post(this.rootPath + "/api/loadUser");
         this.username = res.user.username;
+        console.log("user is " + res.user.rating)
         this.shadowRoot.getElementById("userName").innerHTML = res.user.username;
         this.shadowRoot.getElementById("email").innerHTML = res.user.mail;
+        this.shadowRoot.getElementById("rank").innerHTML = res.user.rating;
     }
 
     async _setUpHistory() {
