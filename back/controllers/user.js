@@ -31,7 +31,7 @@ export const login = async (req, res) => {
         const token = jwt.sign({ mail: oldUser.mail, username:oldUser.username, id: oldUser._id }, secret, { expiresIn: "1h" });
 
         res.status(200).json({ user: data, token: token });
-        
+
     } catch (err) {
 
         res.status(500).json({ message: "Something went wrong" });
@@ -49,7 +49,7 @@ export const signin = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const result = await UserModal.create({ mail, password: hashedPassword, username, rating: 1000, friends: [], 
+        const result = await UserModal.create({ mail, password: hashedPassword, username, rating: 1000, friends: [],
         outgoingFriendRequests: [], incomingFriendRequests: [] });
 
         const data = await UserModal.findOne( { username });
@@ -94,7 +94,9 @@ export const loadUser = async (req,res) =>{
 export const befriend = async (req, res) => {
 
     const {username} = req.body;
-    
+
+    const {friendId} = req.body;
+
     try{
 
         const user = await UserModal.findById(req.userId);
@@ -116,7 +118,7 @@ export const befriend = async (req, res) => {
         friend.incomingFriendRequests = friend.incomingFriendRequests.filter((item) => item !== user.username);
 
         await UserModal.updateOne({ _id: user._id }, { friends: user.friends, outgoingFriendRequests: user.outgoingFriendRequests });
-        
+
         await UserModal.updateOne({ _id: friend._id }, { friends: friend.friends, incomingFriendRequests: friend.incomingFriendRequests });
 
         return res.status(200).json({ message: "Friend added", username : username });
@@ -153,7 +155,7 @@ export const rejectfriend = async (req, res) => {
         await UserModal.updateOne({ _id: friend._id }, { incomingFriendRequests: friend.incomingFriendRequests });
 
     }catch(err){
-            
+
             res.status(500).json({ message: "Something went wrong" });
     }
 }
