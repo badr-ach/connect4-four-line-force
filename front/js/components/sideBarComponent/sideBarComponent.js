@@ -349,10 +349,9 @@ export class SideBar extends HTMLElement{
 
     _handleProfileClicked(){
         while (this._app.firstChild) {
-            if(this._app.firstChild.id === "side-bar") continue;
             this._app.removeChild(this._app.firstChild);
         }
-        this._app.appendChild(this);
+        this._app.appendChild(new SideBar(this._app));
         this._app.appendChild(new ProfileComponent(this._app));
     }
 
