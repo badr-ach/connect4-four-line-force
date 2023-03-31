@@ -10,9 +10,8 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1050px;
     margin: 0 auto;
-    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
