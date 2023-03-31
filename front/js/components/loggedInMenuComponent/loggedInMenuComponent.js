@@ -2,7 +2,6 @@ import { logout } from "../../api/user.js";
 import { events } from "../../events/events.js";
 import { Animator } from "../../scripts/animator.js";
 import { PlayMode } from "../playModeComponent/playModeComponent.js";
-PlayMode
 
 export class LoggedIntroMenu extends HTMLElement {
   constructor(app) {

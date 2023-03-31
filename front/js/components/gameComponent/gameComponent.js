@@ -2,6 +2,7 @@ import { Animator } from "../../scripts/animator.js";
 import { WebSocket } from "../../utils/WebSocket.js";
 import {events} from "../../events/events.js";
 import {fetcher} from "../../utils/requester.js";
+import {LoggedIntroMenu} from "../loggedInMenuComponent/loggedInMenuComponent.js";
 
 export class Connect4 extends HTMLElement {
   constructor({
@@ -155,8 +156,25 @@ export class Connect4 extends HTMLElement {
   _handleSaveGame(){
     this._socket.emit("saveGame", { gameId: this._gameId });
     this._socket.on("savedGame", (data) => {
-      alert(data.message);
+      //alert(data.message);
+
     });
+
+      for(let node of this._app.children){
+        if(node.id === "side-bar") continue;
+        this._app.removeChild(node);
+      }
+      this._app.appendChild(new LoggedIntroMenu(this._app));
+/*
+    dispatch(new CustomEvent(events.popUp, {
+      detail: {
+        title: "",
+        content: "This game has been saved",
+        temporary: true,
+        accept: () => {},
+        decline: () => {}
+      }}));*/
+
   }
 
   _handleMouseHover(e) {
