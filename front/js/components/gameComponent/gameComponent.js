@@ -97,10 +97,17 @@ export class Connect4 extends HTMLElement {
   _handleChat(e){
     let message = e.target.innerHTML;
     this._socket.emit("new message", {message: message, player: this._app.player, roomId: this.roomId, gameId: this._gameId});
-    let chatbox = this.shadowRoot.querySelector("#chat-box");
-    let messageSpan = document.createElement("span");
-    messageSpan.innerHTML = this._app.player + " : " + message;
-    chatbox.appendChild(messageSpan);
+    let div = this.shadowRoot.ownerDocument.createElement("div");
+
+    div.classList.add("bubble", "bubble-bottom-left");
+    let messageSpan = document.createElement("h2");
+    messageSpan.innerHTML =  message;
+    div.appendChild(messageSpan);
+    console.log(div);
+    this.shadowRoot.appendChild(div);
+    setTimeout(() => {
+      this.shadowRoot.removeChild(div);
+    }, 2000);
   }
 
   _setUpSocket(){
@@ -130,10 +137,17 @@ export class Connect4 extends HTMLElement {
     });
 
     this._socket.on("new message", (data) => {
-      let chatbox = this.shadowRoot.querySelector("#chat-box");
-      let message = document.createElement("span");
-      message.innerHTML = data.player + " : " + data.message;
-      chatbox.appendChild(message);
+      let div = this.shadowRoot.ownerDocument.createElement("div");
+
+      div.classList.add("bubble1", "bubble-bottom-left1");
+      let messageSpan = document.createElement("h2");
+      messageSpan.innerHTML = "From "+ data.player + " : " + data.message;
+      div.appendChild(messageSpan);
+      console.log(div);
+      this.shadowRoot.appendChild(div);
+      setTimeout(() => {
+        this.shadowRoot.removeChild(div);
+      }, 2000);
     });
   }
 

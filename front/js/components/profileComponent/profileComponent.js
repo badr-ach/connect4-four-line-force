@@ -14,7 +14,8 @@ export class ProfileComponent extends HTMLElement{
         const token = localStorage.getItem("token");
         this.api.use({Authorization: "Bearer " + token});
         this.username = "";
-
+        this.rank = "";
+        this.rangeRank = ["../../../images/bronze-coin.png", "../../../images/silver-coin.png", "../../../images/gold-coin.png"];
     }
 
 
@@ -36,7 +37,26 @@ export class ProfileComponent extends HTMLElement{
         console.log("user is " + res.user.rating)
         this.shadowRoot.getElementById("userName").innerHTML = res.user.username;
         this.shadowRoot.getElementById("email").innerHTML = res.user.mail;
-        this.shadowRoot.getElementById("rank").innerHTML = res.user.rating;
+        this.shadowRoot.getElementById("score").innerHTML = res.user.rating;
+        if(res.user.rating < 300){
+            this.rank = "Bronze";
+        } else if(res.user.rating < 600){
+            this.rank = "Silver";
+        }else {
+            this.rank = "Gold";
+        }
+        this.shadowRoot.getElementById("rank").innerHTML = this.rank;
+
+        const rankImg = this.shadowRoot.querySelector('.rank-img');
+
+        if (this.rank === "Bronze") {
+            rankImg.src = this.rangeRank[0];
+        } else if (this.rank === "Silver") {
+            rankImg.src = this.rangeRank[1];
+        } else if (this.rank === "Gold") {
+            rankImg.src = this.rangeRank[2];
+        }
+
     }
 
     async _setUpHistory() {
