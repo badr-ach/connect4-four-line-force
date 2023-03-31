@@ -9,6 +9,7 @@
     overflow: hidden;
     scrollbar-width: thin;
     background-color: white;
+    z-index: 9000;
 }
 
 .chat-history {

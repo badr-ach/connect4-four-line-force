@@ -80,9 +80,10 @@ export async function setup(data, io, socket, activeGames, queue) {
         await GameModal.create(game);
 
         // Handle disconnects
-        socket.on("disconnect", () => {
+        socket.on("disconnect", async () => {
           socket.leave(roomId);
           activeGames.delete(gameId);
+          await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
           io.of("/api/game").to(roomId).emit("game-error", {
             message: "Opponent disconnected",
           });
@@ -124,15 +125,86 @@ export async function setup(data, io, socket, activeGames, queue) {
   }
 }
 
+export async function customSetup(data, io, socket, activeGames, customqueue) {
+  let gameId = uuid();
+
+  let game = {
+    gameId,
+    board: JSON.parse(JSON.stringify(board)),
+    currColumns: JSON.parse(JSON.stringify(currColumns)),
+    gameOver: false,
+    winner: null,
+  };
+
+  if (customqueue.filter((x) => (x[0].username === socket.username) || (x[0].username === data.username)).length === 0) {
+
+    const roomId = uuid();
+    socket.join(roomId);
+    customqueue.push([socket, roomId]);
+
+    socket.on("disconnect", () => {
+      customqueue = customqueue.filter((x) => x[0].username !== socket.username);
+      socket.leave(roomId);
+    });
+
+    socket.on("disconnect game", () =>{
+      customqueue = customqueue.filter((x) => x[0].username !== socket.username);
+      socket.leave(roomId)
+    })
+
+    socket.emit("custom waitingForOpponent");
+  } else {
+
+    const [playerWaiting, roomId] = customqueue.filter((x) => (x[0].username === data.username) || (x[0].username === socket.username))[0];
+
+    customqueue = customqueue.filter((x) => (x[0].username !== data.username) || (x[0].username !== socket.username));
+
+    socket.join(roomId);
+
+    game.playerOne = playerWaiting.username;
+    game.playerTwo = socket.username;
+    game.currPlayer = playerWaiting.username;
+    game.type = "multiplayer";
+    game.roomId = roomId;
+
+    activeGames.set(gameId, game);
+
+    await GameModal.create(game);
+
+    // Handle disconnects
+    socket.on("disconnect", async () => {
+      socket.leave(roomId);
+      activeGames.delete(gameId);
+      await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
+      io.of("/api/game").to(roomId).emit("game-error", {
+        message: "Opponent disconnected",
+      });
+    });
+
+    socket.on("disconnect game", async () => {
+      socket.leave(roomId)
+      activeGames.delete(gameId)
+      await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
+      io.of("/api/game").to(roomId).emit("game-error",{
+        message: "Opponent disconnected"
+      })
+    })
+
+    activeGames.set(gameId, game);
+    io.of("/api/game").to(roomId).emit("custom setup", activeGames.get(gameId));
+  }
+}
+
+
 export async function newMove(data, io, socket, activeGames) {
   let player = data.player;
   let roomId = data.roomId;
   let move = data.move;
   let game = activeGames.get(data.gameId);
 
-  if(!game || game.currPlayer !== player) return;
+  if (!game || game.currPlayer !== player) return;
 
-  if(socket.username !== player) return;
+  if (socket.username !== player) return;
 
   if (move[0] < 0 || move[0] > 5 || move[1] < 0 || move[1] > 6) return;
 
@@ -164,7 +236,7 @@ export async function newMove(data, io, socket, activeGames) {
 
       const res = await GameModal.findOne({ gameId: game.gameId });
 
-      if(!res){
+      if (!res) {
         await GameModal.create(game);
       }
     }
@@ -172,14 +244,14 @@ export async function newMove(data, io, socket, activeGames) {
     activeGames.set(data.gameId, game);
     io.of("/api/game").emit("updatedBoard", activeGames.get(data.gameId));
 
-  }else{
+  } else {
     if (gameStatus.gameOver) {
-        game.gameOver = gameStatus.gameOver;
-        game.winner = gameStatus.winner;
+      game.gameOver = gameStatus.gameOver;
+      game.winner = gameStatus.winner;
 
-        if(game.winner !== "draw"){
-          await updateRatings(game.winner, game.winner === game.playerOne ? game.playerTwo : game.playerOne);
-        }
+      if (game.winner !== "draw") {
+        await updateRatings(game.winner, game.winner === game.playerOne ? game.playerTwo : game.playerOne);
+      }
     }
 
     await GameModal.updateOne({ gameId: game.gameId }, game);
@@ -191,34 +263,34 @@ export async function newMove(data, io, socket, activeGames) {
 
 export function saveGame(data, socket, activeGames) {
 
-    let game = activeGames.get(data.gameId);
-    if (socket.handshake.auth.id === "guest") {
-      socket.emit("savedGame", { message: "Guests cannot save games" });
-      return;
-    }
+  let game = activeGames.get(data.gameId);
+  if (socket.handshake.auth.id === "guest") {
+    socket.emit("savedGame", { message: "Guests cannot save games" });
+    return;
+  }
 
-    if(game.playerTwo !== "AI"){
-      socket.emit("savedGame", { message: "Only singleplayer games can be saved" });
-      return;
-    }
+  if (game.playerTwo !== "AI") {
+    socket.emit("savedGame", { message: "Only singleplayer games can be saved" });
+    return;
+  }
 
 
-    GameModal.create({
-      gameId: game.gameId,
-      board: game.board,
-      currColumns: game.currColumns,
-      playerOne: game.playerOne,
-      playerTwo: game.playerTwo,
-      currPlayer: game.currPlayer,
-      gameOver: game.gameOver,
-      winner: game.winner,
+  GameModal.create({
+    gameId: game.gameId,
+    board: game.board,
+    currColumns: game.currColumns,
+    playerOne: game.playerOne,
+    playerTwo: game.playerTwo,
+    currPlayer: game.currPlayer,
+    gameOver: game.gameOver,
+    winner: game.winner,
+  })
+    .then((res) => {
+      socket.emit("savedGame", { message: "Game saved successfully" });
     })
-      .then((res) => {
-        socket.emit("savedGame", { message: "Game saved successfully" });
-      })
-      .catch((err) => {
-        socket.emit("savedGame", { message: "Game could not be saved" });
-      });
+    .catch((err) => {
+      socket.emit("savedGame", { message: "Game could not be saved" });
+    });
 }
 
 export function newMessage(data, socket, activeGames) {
@@ -226,13 +298,13 @@ export function newMessage(data, socket, activeGames) {
   let player = data.player;
   let game = activeGames.get(data.gameId);
 
-  if(socket.username !== player) return;
-  if(game.mute) return;
+  if (socket.username !== player) return;
+  if (game.mute) return;
 
-  for(let index in InGameMessages){
+  for (let index in InGameMessages) {
     let message = InGameMessages[index];
     console.log(message, data.message);
-    if(message === data.message){
+    if (message === data.message) {
       if (roomId) {
         socket.to(roomId).emit("new message", {
           message,
@@ -247,13 +319,13 @@ export function newMessage(data, socket, activeGames) {
 export function mute(data, socket, activeGames) {
   let player = data.player;
   let game = activeGames.get(data.gameId);
-  if(socket.username !== player) return;
+  if (socket.username !== player) return;
   game.mute = true;
 }
 
 export function unmute(data, socket, activeGames) {
   let player = data.player;
   let game = activeGames.get(data.gameId);
-  if(socket.username !== player) return;
+  if (socket.username !== player) return;
   game.mute = false;
 }

@@ -5,6 +5,8 @@ import { events } from "../../events/events.js";
 import { GameChat } from "../gameChatComponent/gameChatComponent.js";
 import { LoggedIntroMenu } from "../loggedInMenuComponent/loggedInMenuComponent.js";
 import { ProfileComponent } from "../profileComponent/profileComponent.js";
+import { LoadingPage } from "../loadingPageComponent/loadingPageComponent.js";
+import { Connect4 } from "../gameComponent/gameComponent.js";
 
 export class SideBar extends HTMLElement{
 
@@ -23,6 +25,27 @@ export class SideBar extends HTMLElement{
         console.log(JSON.stringify(this._app))
 
         this._chat_socket =  WebSocket.getSocketByNameSpace("/api/chat",{ auth: { token: this._app.token ? this._app.token : "guest" } });
+
+        this._game_socket = WebSocket.getSocketByNameSpace("/api/game",{ auth: { token: this._app.token ? this._app.token : "guest" } });
+
+        this._game_socket.on("custom setup", (data) => {
+            for(let node of this._app.children){
+                if(node.id === "side-bar") continue;
+                this._app.removeChild(node);
+            }
+            this._app.appendChild(new Connect4({app : this._app,...data}));
+
+        });
+
+        // this._game_socket.on("custom waitingForOpponent" , (data) => {
+        //     for(let node of this._app.children){
+        //         if(node.id === "side-bar") continue;
+        //         this._app.removeChild(node);
+        //     }
+        //     this._app.appendChild(new LoadingPage(this._app));
+        // });
+
+
 
         this._chat_socket.on("user connected", (data) => {
             if(this._app.user.friends.includes(data.username))
@@ -52,7 +75,34 @@ export class SideBar extends HTMLElement{
                 temporary: false
             } }));
         });
-        }
+
+        this._friends_socket.on("challenge accepted", (data) => {
+            this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
+                title: "Challenge accepted",
+                content: data.message,
+                accept: () => {},
+                decline: () => {},
+                temporary: true
+            } }));
+            this._game_socket.emit("challenge", { username: data.username });
+        });
+
+        this._friends_socket.on("challenge", (data) => {
+            this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
+                title: "Challenge",
+                content: data.message,
+                accept: () => {
+                    this._friends_socket.emit("challenge accepted", { username: data.username });
+                    this._game_socket.emit("challenge", { username: data.username });
+                },
+                decline: () => {
+                    this._friends_socket.emit("challenge declined", { username: data.username });
+                    this._game_socket.emit("challenge declined", { username: data.username });
+                },
+                temporary: false
+            } }));
+        });
+    }
 
 
 
@@ -75,22 +125,24 @@ export class SideBar extends HTMLElement{
             let friendName = document.createElement("a");
 
 
-            let acceptIcon = document.createElement("i");
-            let acceptIcon1 = document.createElement("i");
-            acceptIcon.classList.add( "fa", "fa-envelope");
-            acceptIcon1.classList.add( "fa", "fa-bolt");
+            let msgBtn = document.createElement("i");
+            let challengeBtn = document.createElement("i");
+            msgBtn.classList.add( "fa", "fa-envelope");
+            msgBtn.dataset.username = this.friendList[i];
+            challengeBtn.classList.add( "fa", "fa-bolt");
+            challengeBtn.dataset.username = this.friendList[i];
 
 
             friendName.innerHTML = this.friendList[i];
-            acceptIcon.href = "#";
+            msgBtn.href = "#";
             friendName.classList.add("friend");
             friendName.dataset.username = this.friendList[i];
             friend.appendChild(friendName);
             friends.appendChild(friend);
-            friendName.appendChild(acceptIcon);
-            friendName.appendChild(acceptIcon1);
+            friendName.appendChild(msgBtn);
+            friendName.appendChild(challengeBtn);
 
-            acceptIcon.addEventListener("click", (e)=>{
+            msgBtn.addEventListener("click", (e)=>{
                 if(!this._chat_open){
                     this._app.appendChild(new GameChat(this._app, e.target.dataset.username));
                 }else{
@@ -98,6 +150,10 @@ export class SideBar extends HTMLElement{
                     this._app.appendChild(new GameChat(this._app, e.target.dataset.username));
                 }
 
+            });
+
+            challengeBtn.addEventListener("click", (e)=>{
+                this._friends_socket.emit("challenge", { username: e.target.dataset.username });
             });
         }
 
@@ -225,6 +281,7 @@ export class SideBar extends HTMLElement{
             });
         }
     }
+
     writeUserData() {
         const invitation1 = document.querySelector(".friend-requests-list");
 
@@ -254,7 +311,7 @@ export class SideBar extends HTMLElement{
 
 
 
-
+        
         const invitationList = this.shadowRoot.ownerDocument.getElementById("invitations");
         this.invitations.forEach(invitation => {
 
@@ -292,6 +349,7 @@ export class SideBar extends HTMLElement{
 
     _handleProfileClicked(){
         while (this._app.firstChild) {
+            if(this._app.firstChild.id === "side-bar") continue;
             this._app.removeChild(this._app.firstChild);
         }
         this._app.appendChild(this);

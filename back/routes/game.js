@@ -1,11 +1,13 @@
 import auth from "../middlewares/socket.js";
-import { setup, newMove, saveGame, newMessage, mute, unmute } from "../controllers/game.js";
+import { setup, newMove, saveGame, newMessage, mute, unmute, customSetup } from "../controllers/game.js";
 
 export const init_game_socket = (io) => {
 
-    const activeGames = new Map();
+    let activeGames = new Map();
 
-    const queue = new Array();
+    let queue = new Array();
+
+    let challengequeue = new Array();
 
     io.of("/api/game").use(auth);
 
@@ -13,6 +15,10 @@ export const init_game_socket = (io) => {
   
       // probably shared and should be stored with sockets playing the game
       socket.on("setup", async (data) => setup(data, io, socket, activeGames, queue));
+
+      socket.on("challenge", async (data) => customSetup(data, io, socket, activeGames, challengequeue));
+
+      socket.on("challenge declined", async (data) => { challengequeue = challengequeue.filter((x) => x[0].username !== data.username) });
   
       socket.on("newMove", async (data) => newMove(data, io, socket, activeGames));
   

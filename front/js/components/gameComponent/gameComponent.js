@@ -53,8 +53,10 @@ export class Connect4 extends HTMLElement {
     this._showGameTurn();
     this._attachEventListeners();
     this.renderBoard();
+  }
 
-
+  async disconnectedCallback(){
+    this._socket.emit("disconnect game");
   }
 
   _showGameTurn() {
@@ -79,7 +81,6 @@ export class Connect4 extends HTMLElement {
     this.shadowRoot.querySelector("#mute-btn").addEventListener("click", this._handleMute.bind(this));
     this.shadowRoot.querySelectorAll(".chat-input").forEach( (e) => e.addEventListener("click", this._handleChat.bind(this)));
     this.shadowRoot.querySelector("#save-btn").addEventListener("click", this._handleSaveGame.bind(this));
-    this.shadowRoot.querySelector("#home-btn").addEventListener("click", this._handleHome.bind(this));
   }
 
   _handleMute(e){
@@ -119,7 +120,13 @@ export class Connect4 extends HTMLElement {
     });
 
     this._socket.on("game-error", (data) => {
-      alert(data.message);
+      this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
+        title: "Error",
+        message: data,
+        accept: () => {},
+        decline: () => {},
+        temporary: true
+      } }));
     });
 
     this._socket.on("new message", (data) => {
@@ -130,9 +137,6 @@ export class Connect4 extends HTMLElement {
     });
   }
 
-  _handleHome(){
-    this._app.dispatchEvent(new CustomEvent(events.userLoaded));
-  }
 
   _handleSaveGame(){
     this._socket.emit("saveGame", { gameId: this._gameId });

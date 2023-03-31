@@ -10,11 +10,11 @@ export class GameChat extends HTMLElement {
         this._animator = new Animator();
         this._message = "";
         this._messageList = [];
+
         this._chat_socket = WebSocket.getSocketByNameSpace("/api/chat",{ auth: { token: this._app.token ?
             this._app.token : "guest" } });
 
         this._chat_socket.on("private message", (data) => {
-            console.log("got private message");
             this._messageList.innerHTML += `<li class="message">${data.from} : ${data.content}</li>`;
         });
 
@@ -40,6 +40,7 @@ export class GameChat extends HTMLElement {
 
         this._chat_socket.emit("private message", { content: this._message, to: this.username });
     }
+
     _handleCloseBtnClick() {
         this._app.removeChild(this);
     }
