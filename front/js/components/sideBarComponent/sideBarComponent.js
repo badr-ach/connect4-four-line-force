@@ -182,7 +182,7 @@ export class SideBar extends HTMLElement{
 
 
     _attachEventListeners(){
-        this.logoutBtn = document.querySelector(".fa-sign-out");
+        this.logoutBtn = document.getElementById("logout-link");
         this.addFriendBtn = document.querySelector(".fa-plus");
 
         this.logoutBtn.addEventListener("click", () => this._handleLogoutClicked());
@@ -311,7 +311,7 @@ export class SideBar extends HTMLElement{
 
 
 
-        
+
         const invitationList = this.shadowRoot.ownerDocument.getElementById("invitations");
         this.invitations.forEach(invitation => {
 

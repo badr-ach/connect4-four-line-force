@@ -146,12 +146,12 @@ th {
 }
 
 .title-profile{
-    margin-bottom: 20px;
+    margin-bottom: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #fff;
-    font-size: 30px;
-    font-family: Arial;
+    font-size: 33px;
     font-weight: bold;
+    font-style: italic;
 }
