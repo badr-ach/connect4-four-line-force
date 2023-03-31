@@ -51,7 +51,7 @@ export class Connect4 extends HTMLElement {
         .then((r) => r.text())
         .then((html) => html);
     this._setUpSocket();
-    this._showGameTurn();
+    this._handleChatBox()
     this._attachEventListeners();
     this.renderBoard();
   }
@@ -60,10 +60,9 @@ export class Connect4 extends HTMLElement {
     this._socket.emit("disconnect game");
   }
 
-  _showGameTurn() {
-    console.log("curr player", this.currPlayer, this.playerRed ,this.playerYellow)
-    this.shadowRoot.getElementById("turn").innerText = this.currPlayer;
-  }
+
+
+
 
 
   _attachEventListeners() {
@@ -94,7 +93,52 @@ export class Connect4 extends HTMLElement {
       this._socket.emit("unmute", {player: this._app.player, gameId: this._gameId});
     }
   }
+  _handleChatBox(){
+    if(this.playerRed !== "AI" && this.playerYellow !== "AI") {
+      const chatBox = this.shadowRoot.ownerDocument.createElement("div");
+      chatBox.id = "chat";
+      chatBox.classList.add("chat-box");
 
+      const chatMessages = this.shadowRoot.ownerDocument.createElement("div");
+      chatMessages.classList.add("chat-messages");
+
+      const chatButtons = this.shadowRoot.ownerDocument.createElement("div");
+      chatButtons.id = "chat-messages";
+      chatButtons.classList.add("chat-buttons");
+      const button1 = this.shadowRoot.ownerDocument.createElement("button");
+      button1.classList.add("chat-input");
+      button1.textContent = "Nice move!";
+
+      const button2 = this.shadowRoot.ownerDocument.createElement("button");
+      button2.classList.add("chat-input");
+      button2.textContent = "You're a beast!";
+
+      const button3 = this.shadowRoot.ownerDocument.createElement("button");
+      button3.classList.add("chat-input");
+      button3.textContent = "Well played!";
+
+      const button4 = this.shadowRoot.ownerDocument.createElement("button");
+      button4.classList.add("chat-input");
+      button4.textContent = "Good game!";
+
+      chatButtons.appendChild(button1);
+      chatButtons.appendChild(button2);
+      chatButtons.appendChild(button3);
+      chatButtons.appendChild(button4);
+
+      const muteButton = this.shadowRoot.ownerDocument.createElement("button");
+      muteButton.id = "mute-btn";
+      muteButton.classList.add("mute-icon");
+      muteButton.textContent = "Mute";
+
+      chatBox.appendChild(chatMessages);
+      chatBox.appendChild(chatButtons);
+      chatBox.appendChild(muteButton);
+
+      this.shadowRoot.appendChild(chatBox);
+    }
+
+  }
   _handleChat(e){
     let message = e.target.innerHTML;
     this._socket.emit("new message", {message: message, player: this._app.player, roomId: this.roomId, gameId: this._gameId});
@@ -118,8 +162,18 @@ export class Connect4 extends HTMLElement {
       this.board = data.board;
       this.currColumns = data.currColumns;
       this.currPlayer = data.currPlayer;
-      let turn = this.shadowRoot.getElementById("turn");
-      turn.innerText = this.currPlayer;
+      let turn = this.shadowRoot.querySelector(".turn");
+      turn.removeChild(turn.childNodes[2])
+      if (this.currPlayer === this.playerRed) {
+        let span = this.shadowRoot.ownerDocument.createElement("span");
+        span.classList.add("redCircle");
+        turn.appendChild(span);
+      }
+      else {
+        let span1 = this.shadowRoot.ownerDocument.createElement("span");
+        span1.classList.add("yellowCircle");
+        turn.appendChild(span1);
+      }
       if (data.gameOver) {
         this.gameOver = true;
         this.winner = data.winner;
