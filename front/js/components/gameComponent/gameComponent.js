@@ -211,8 +211,13 @@ export class Connect4 extends HTMLElement {
   _handleSaveGame(){
     this._socket.emit("saveGame", { gameId: this._gameId });
     this._socket.on("savedGame", (data) => {
-      alert(data.message);
-
+      this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
+        title: "Notification",
+        content: data.message,
+        accept: () => {},
+        decline: () => {},
+        temporary: true
+      } }));
     });
 
       for(let node of this._app.children){
@@ -220,15 +225,6 @@ export class Connect4 extends HTMLElement {
         this._app.removeChild(node);
       }
       this._app.appendChild(new LoggedIntroMenu(this._app));
-/*
-    dispatch(new CustomEvent(events.popUp, {
-      detail: {
-        title: "",
-        content: "This game has been saved",
-        temporary: true,
-        accept: () => {},
-        decline: () => {}
-      }}));*/
 
   }
 

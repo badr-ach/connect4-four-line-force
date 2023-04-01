@@ -264,7 +264,7 @@ export async function newMove(data, io, socket, activeGames) {
 export function saveGame(data, socket, activeGames) {
 
   let game = activeGames.get(data.gameId);
-  if (socket.handshake.auth.id === "guest") {
+  if (socket.handshake.auth.token === "guest") {
     socket.emit("savedGame", { message: "Guests cannot save games" });
     return;
   }
