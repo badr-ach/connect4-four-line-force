@@ -15,7 +15,7 @@ export class SideBar extends HTMLElement{
         this._app = app;
         this.id = "side-bar"
         this._animator = new Animator();
-        this.friendList = app.user.friends
+        this.friendList = app.user.friends;
         this.invitations = this._app.user.incomingFriendRequests;
 
         this._friendValue = "";
@@ -69,6 +69,75 @@ export class SideBar extends HTMLElement{
                 content: data.message,
                 accept: () => {
                     this._friends_socket.emit("accept request", { username: data.username });
+                    ////////////////////////////
+                    let username =  data.username;
+                    let friend = document.createElement("li");
+                    let friendName = document.createElement("a");
+
+                    let wrapper = document.createElement("div");
+                    wrapper.classList.add("friendicons-wrapper");
+
+                    let textwrapper = document.createElement("div");
+                    textwrapper.classList.add("friendname-text-wrapper");
+                    textwrapper.innerHTML = username;
+                    textwrapper.dataset.username = username;
+
+                    let msgBtn = document.createElement("i");
+                    let challengeBtn = document.createElement("i");
+                    let deleteBtn = document.createElement("i");
+
+                    msgBtn.classList.add( "fa", "fa-envelope");
+                    msgBtn.dataset.username = username;
+                    deleteBtn.classList.add( "fa", "fa-trash");
+                    deleteBtn.dataset.username = username;
+                    challengeBtn.classList.add( "fa", "fa-bolt");
+                    challengeBtn.dataset.username = username;
+
+                    friendName.appendChild(textwrapper);
+                    msgBtn.href = "#";
+                    friendName.classList.add("friend");
+                    friendName.dataset.username = username;
+                    friend.appendChild(friendName);
+                    friends.appendChild(friend);
+
+                    wrapper.appendChild(msgBtn);
+                    wrapper.appendChild(deleteBtn);
+                    wrapper.appendChild(challengeBtn);
+
+                    friendName.appendChild(wrapper);
+
+                    msgBtn.addEventListener("click", (e)=>{
+                        if(!this._chat_open){
+                            this._app.appendChild(new GameChat(this._app, e.target.dataset.username,
+                                this._messages.get(e.target.dataset.username) ? this._messages.get(e.target.dataset.username) : [],
+                                (from,message)=>{
+                                    let messages = this._messages.get(from) ? this._messages.get(from) : [];
+                                    messages.push([this._app.user.username,message]);
+                                    this._messages.set(from, messages);
+                                }));
+                        }else{
+                            this._app.removeChild(this._app.lastChild);
+                            this._app.appendChild(new GameChat(this._app, e.target.dataset.username,
+                                this._messages.get(e.target.dataset.username) ? this._messages.get(e.target.dataset.username) : [],
+                                (from,message)=>{
+                                    let messages = this._messages.get(from) ? this._messages.get(from) : [];
+                                    messages.push([this._app.user.username,message]);
+                                    this._messages.set(from, messages);
+                                }));
+                        }
+
+                    });
+
+                    challengeBtn.addEventListener("click", (e)=>{
+                        this._friends_socket.emit("challenge", { username: e.target.dataset.username });
+                    });
+
+                    deleteBtn.addEventListener("click", (e)=>{
+                        this._friends_socket.emit("delete friend", { username: e.target.dataset.username });
+                    });
+
+
+                    ////////////////////////////
                 },
                 decline: () => {},
                 temporary: false
@@ -157,7 +226,7 @@ export class SideBar extends HTMLElement{
 
             msgBtn.addEventListener("click", (e)=>{
                 if(!this._chat_open){
-                    this._app.appendChild(new GameChat(this._app, e.target.dataset.username, 
+                    this._app.appendChild(new GameChat(this._app, e.target.dataset.username,
                         this._messages.get(e.target.dataset.username) ? this._messages.get(e.target.dataset.username) : [],
                         (from,message)=>{
                             let messages = this._messages.get(from) ? this._messages.get(from) : [];
@@ -299,6 +368,7 @@ export class SideBar extends HTMLElement{
 
             declineIcon.addEventListener("click", () => {
                 rejectfriend({username: invitation})(this._app.dispatchEvent.bind(this._app));
+
                 list.removeChild(li);
             });
         });
