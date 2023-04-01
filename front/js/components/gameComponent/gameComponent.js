@@ -50,6 +50,13 @@ export class Connect4 extends HTMLElement {
     this.shadowRoot.innerHTML = await fetch("./js/components/gameComponent/gameComponent.html")
         .then((r) => r.text())
         .then((html) => html);
+    if(this.playerRed !== "AI" && this.playerYellow !== "AI") {
+      const divElement = this.shadowRoot.ownerDocument.createElement("div");
+      const h1Element = this.shadowRoot.ownerDocument.createElement("h1");
+      h1Element.textContent = "Turn : ";
+      divElement.appendChild(h1Element);
+      divElement.classList.add("turn");
+    }
     this._setUpSocket();
     this._handleChatBox()
     this._attachEventListeners();
@@ -163,17 +170,20 @@ export class Connect4 extends HTMLElement {
       this.board = data.board;
       this.currColumns = data.currColumns;
       this.currPlayer = data.currPlayer;
-      let turn = this.shadowRoot.querySelector(".turn");
-      turn.removeChild(turn.childNodes[2])
-      if (this.currPlayer === this.playerRed) {
-        let span = this.shadowRoot.ownerDocument.createElement("span");
-        span.classList.add("redCircle");
-        turn.appendChild(span);
-      }
-      else {
-        let span1 = this.shadowRoot.ownerDocument.createElement("span");
-        span1.classList.add("yellowCircle");
-        turn.appendChild(span1);
+
+
+      if(this.playerRed !== "AI" && this.playerYellow !== "AI") {
+        let turn = this.shadowRoot.querySelector(".turn");
+        turn.removeChild(turn.childNodes[2])
+        if (this.currPlayer === this.playerRed) {
+          let span = this.shadowRoot.ownerDocument.createElement("span");
+          span.classList.add("redCircle");
+          turn.appendChild(span);
+        } else {
+          let span1 = this.shadowRoot.ownerDocument.createElement("span");
+          span1.classList.add("yellowCircle");
+          turn.appendChild(span1);
+        }
       }
       if (data.gameOver) {
         this.gameOver = true;
