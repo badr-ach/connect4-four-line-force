@@ -140,11 +140,9 @@
 #winner{
   font-size: 48px;
   font-family: 'Helvetica Neue', sans-serif;
-  color: #4CAF50; /* green */
+  color: #4CAF50;
   text-align: center;
-  text-shadow: 2px 2px #ccc;
-
-  background-color: #f2f2f2;
+  background-color: transparent;
 }
 
 
@@ -275,8 +273,8 @@
   margin-bottom: 10px;
   cursor: pointer;
   position: fixed;
-  bottom: 0px;
-  left: 670px;
+  top: 30px;
+  right: 50px;
 }
 
 .redCircle{
