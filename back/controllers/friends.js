@@ -99,15 +99,6 @@ export const acceptRequest = async (data, io, socket) => {
 
                 socket.emit("notify", { message: "Friend request accepted." });
 
-                // for (let [id, sock] in io.of("/api/friends").sockets) {
-
-                //     if (sock.username === data.username) {
-
-                        // socket.to(id).emit("notify", { message: `${socket.username} accepted your friend request.` });
-
-                //     }
-                // }
-
                 Object.values(io.of("/api/friends").sockets).forEach((sock) => {
                     
                     console.log("socket" + sock.username + "socket id" + sock.id)
@@ -120,8 +111,6 @@ export const acceptRequest = async (data, io, socket) => {
     
                     }
                 });
-
-                // socket.to(id).emit("friend request accepted", { username: socket.username });
             }
 
         }
@@ -130,5 +119,48 @@ export const acceptRequest = async (data, io, socket) => {
 
         console.log(err)
 
+    }
+}
+
+export const deleteFriend = async (data, io, socket) => {
+    try{
+        if(socket.username === data.username) return;
+
+        let username = data.username;
+
+        const user = await UserModal.findOne({ username: socket.username });
+
+        const friend = await UserModal.findOne({ username : username });
+
+        if (!friend) return socket.emit("notify",{ message: "User to unfriend doesn't exist" });
+
+        if(!user.friends.includes(username) || !friend.friends.includes(user.username)) return socket.emit("notify",{ message: "User is not your friend" });
+
+        user.friends = user.friends.filter((item) => item !== username);
+        
+        friend.friends = friend.friends.filter((item) => item !== user.username);
+
+        await UserModal.updateOne({ _id: user._id }, { friends: user.friends });
+
+        await UserModal.updateOne({ _id: friend._id }, { friends: friend.friends });
+
+        socket.emit("notify", { message: "Friend deleted." });
+
+        // Object.values(io.of("/api/friends").sockets).forEach((sock) => {
+
+        //     console.log("socket" + sock.username + "socket id" + sock.id)
+
+        //     if (sock.username === data.username) {
+
+        //         console.log("I am here in send request 4")
+
+        //         socket.to(sock.id).emit("friend request", { username: socket.username, message: `${socket.username} sent you a friend request.` });
+
+        //     }
+
+        // });
+
+    }catch(err){
+        console.log(err)
     }
 }

@@ -445,3 +445,27 @@
     flex-direction: column;
 
 }
+
+.friend {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.friendicons-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-right: 10%;
+}
+
+.friendicons-wrapper i{
+    
+    min-width: 30px !important;
+    max-width: 30px !important;
+}
+
+.friendname-text-wrapper{
+    
+}

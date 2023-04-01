@@ -185,7 +185,7 @@ export class Connect4 extends HTMLElement {
     this._socket.on("game-error", (data) => {
       this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
         title: "Error",
-        message: data,
+        content: data,
         accept: () => {},
         decline: () => {},
         temporary: true
