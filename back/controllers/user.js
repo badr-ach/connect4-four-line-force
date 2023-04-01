@@ -95,8 +95,6 @@ export const befriend = async (req, res) => {
 
     const {username} = req.body;
 
-    const {friendId} = req.body;
-
     try{
 
         const user = await UserModal.findById(req.userId);
@@ -154,8 +152,42 @@ export const rejectfriend = async (req, res) => {
 
         await UserModal.updateOne({ _id: friend._id }, { incomingFriendRequests: friend.incomingFriendRequests });
 
+        return res.status(200).json({ message: "Friend request rejected", username : username });
+
     }catch(err){
 
             res.status(500).json({ message: "Something went wrong" });
+    }
+}
+
+
+export const unfriend = async (req, res) => {
+
+    const {username} = req.body;
+
+    try{
+
+        const user = await UserModal.findById(req.userId);
+
+        if (!user) return res.status(404).json({ message: "User doesn't exist" });
+
+        const friend = await UserModal.findOne({ username : username });
+
+        if (!friend) return res.status(404).json({ message: "User to unfriend doesn't exist" });
+
+        if(!user.friends.includes(username) || !friend.friends.includes(user.username)) return res.status(400).json({ message: "User is not your friend" });
+
+        user.friends = user.friends.filter((item) => item !== username);
+        
+        friend.friends = friend.friends.filter((item) => item !== user.username);
+
+        await UserModal.updateOne({ _id: user._id }, { friends: user.friends });
+
+        await UserModal.updateOne({ _id: friend._id }, { friends: friend.friends });
+
+        return res.status(200).json({ message: "Friend removed", username : username });
+
+    }catch(err){
+        res.status(500).json({ message: "Something went wrong" });
     }
 }

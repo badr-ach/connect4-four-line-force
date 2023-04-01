@@ -111,13 +111,16 @@ export async function setup(data, io, socket, activeGames, queue) {
 
     } else {
       const res = await GameModal.last({
-        playerOne: playerOne,
+        playerOne: socket.username,
         type: "singleplayer",
         gameOver: false,
       });
-      game = res ? res[0] : {};
-      gameId = res ? (res[0] ? res[0].gameId : null) : null;
-      setUpLocal(JSON.parse(JSON.stringify(game.board)), 1);
+      game = res.length > 0 ? res[0] : null;
+      gameId = game !== null ? game.gameId : null;
+      if(game)
+        setUpLocal(JSON.parse(JSON.stringify(game.board)), 1);
+      else
+        return;
     }
 
     activeGames.set(gameId, game);
@@ -264,16 +267,10 @@ export async function newMove(data, io, socket, activeGames) {
 export function saveGame(data, socket, activeGames) {
 
   let game = activeGames.get(data.gameId);
-  if (socket.handshake.auth.id === "guest") {
+  if (socket.handshake.auth.token === "guest") {
     socket.emit("savedGame", { message: "Guests cannot save games" });
     return;
   }
-
-  if (game.playerTwo !== "AI") {
-    socket.emit("savedGame", { message: "Only singleplayer games can be saved" });
-    return;
-  }
-
 
   GameModal.create({
     gameId: game.gameId,
@@ -284,6 +281,7 @@ export function saveGame(data, socket, activeGames) {
     currPlayer: game.currPlayer,
     gameOver: game.gameOver,
     winner: game.winner,
+    type: game.type,
   })
     .then((res) => {
       socket.emit("savedGame", { message: "Game saved successfully" });

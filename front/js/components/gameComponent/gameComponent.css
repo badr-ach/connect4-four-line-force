@@ -92,7 +92,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 10vh; /* sets the container height to the full viewport height */
+  height: 10vh;
+  position: fixed;
+  left: 680px;
+  top: 10px;
 }
 
 .turn {
@@ -100,7 +103,10 @@
   justify-content: center;
   align-items: center;
   color: #ffffff;
-  height: 10vh; /* sets the container height to the full viewport height */
+  height: 10vh;
+  position: fixed;
+  left: 200px;
+  bottom: 350px;
 }
 
 .turnPLayer{
@@ -146,7 +152,7 @@
 
 .chat-box {
   position: fixed;
-  bottom: 20px;
+  bottom: 62px;
   right: 20px;
   width: 300px;
   background-color: #fff;
@@ -212,7 +218,7 @@
   text-align: center;
   color: #000;
   right: 60px;
-  bottom:220px;
+  bottom:260px;
 
 }
 
@@ -258,5 +264,37 @@
   bottom: -24px;
 }
 
+#save-btn{
+  border: none;
+  outline: none;
+  background-color: rgb(134, 200, 188);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  position: fixed;
+  bottom: 0px;
+  left: 670px;
+}
+
+.redCircle{
+  height: 70px;
+  width: 80px;
+  margin: 5px;
+  background-color: rgb(255, 158, 158);
+  border-radius: 50%;
+  border: 3px solid rgb(10, 100, 73);
+}
+
+.yellowCircle{
+  height: 70px;
+  width: 80px;
+  margin: 5px;
+  background-color: rgb(248, 249, 136);
+  border-radius: 50%;
+  border: 3px solid rgb(10, 100, 73);
+}
 
 

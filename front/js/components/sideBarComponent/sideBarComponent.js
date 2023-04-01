@@ -1,5 +1,5 @@
 import { Animator } from "../../scripts/animator.js";
-import {logout} from "../../api/user.js";
+import {befriend, logout, rejectfriend} from "../../api/user.js";
 import { WebSocket } from "../../utils/WebSocket.js";
 import { events } from "../../events/events.js";
 import { GameChat } from "../gameChatComponent/gameChatComponent.js";
@@ -21,10 +21,19 @@ export class SideBar extends HTMLElement{
         this._friendValue = "";
         this._chat_open = false;
 
+        this._messages = new Map();
+
         console.log(this._app)
         console.log(JSON.stringify(this._app))
 
         this._chat_socket =  WebSocket.getSocketByNameSpace("/api/chat",{ auth: { token: this._app.token ? this._app.token : "guest" } });
+
+
+        this._chat_socket.on("private message", (data) => {
+            let messages = this._messages.get(data.from) ? this._messages.get(data.from) : [];
+            messages.push([data.from,data.content]);
+            this._messages.set(data.from, messages);
+        });
 
         this._game_socket = WebSocket.getSocketByNameSpace("/api/game",{ auth: { token: this._app.token ? this._app.token : "guest" } });
 
@@ -36,16 +45,6 @@ export class SideBar extends HTMLElement{
             this._app.appendChild(new Connect4({app : this._app,...data}));
 
         });
-
-        // this._game_socket.on("custom waitingForOpponent" , (data) => {
-        //     for(let node of this._app.children){
-        //         if(node.id === "side-bar") continue;
-        //         this._app.removeChild(node);
-        //     }
-        //     this._app.appendChild(new LoadingPage(this._app));
-        // });
-
-
 
         this._chat_socket.on("user connected", (data) => {
             if(this._app.user.friends.includes(data.username))
@@ -124,36 +123,66 @@ export class SideBar extends HTMLElement{
             let friend = document.createElement("li");
             let friendName = document.createElement("a");
 
+            let wrapper = document.createElement("div");
+            wrapper.classList.add("friendicons-wrapper");
+
+            let textwrapper = document.createElement("div");
+            textwrapper.classList.add("friendname-text-wrapper");
+            textwrapper.innerHTML = this.friendList[i];
+            textwrapper.dataset.username = this.friendList[i];
 
             let msgBtn = document.createElement("i");
             let challengeBtn = document.createElement("i");
+            let deleteBtn = document.createElement("i");
+
             msgBtn.classList.add( "fa", "fa-envelope");
             msgBtn.dataset.username = this.friendList[i];
+            deleteBtn.classList.add( "fa", "fa-trash");
+            deleteBtn.dataset.username = this.friendList[i];
             challengeBtn.classList.add( "fa", "fa-bolt");
             challengeBtn.dataset.username = this.friendList[i];
 
-
-            friendName.innerHTML = this.friendList[i];
+            friendName.appendChild(textwrapper);
             msgBtn.href = "#";
             friendName.classList.add("friend");
             friendName.dataset.username = this.friendList[i];
             friend.appendChild(friendName);
             friends.appendChild(friend);
-            friendName.appendChild(msgBtn);
-            friendName.appendChild(challengeBtn);
+
+            wrapper.appendChild(msgBtn);
+            wrapper.appendChild(deleteBtn);
+            wrapper.appendChild(challengeBtn);
+
+            friendName.appendChild(wrapper);
 
             msgBtn.addEventListener("click", (e)=>{
                 if(!this._chat_open){
-                    this._app.appendChild(new GameChat(this._app, e.target.dataset.username));
+                    this._app.appendChild(new GameChat(this._app, e.target.dataset.username, 
+                        this._messages.get(e.target.dataset.username) ? this._messages.get(e.target.dataset.username) : [],
+                        (from,message)=>{
+                            let messages = this._messages.get(from) ? this._messages.get(from) : [];
+                            messages.push([this._app.user.username,message]);
+                            this._messages.set(from, messages);
+                        }));
                 }else{
                     this._app.removeChild(this._app.lastChild);
-                    this._app.appendChild(new GameChat(this._app, e.target.dataset.username));
+                    this._app.appendChild(new GameChat(this._app, e.target.dataset.username,
+                        this._messages.get(e.target.dataset.username) ? this._messages.get(e.target.dataset.username) : [],
+                        (from,message)=>{
+                            let messages = this._messages.get(from) ? this._messages.get(from) : [];
+                            messages.push([this._app.user.username,message]);
+                            this._messages.set(from, messages);
+                        }));
                 }
 
             });
 
             challengeBtn.addEventListener("click", (e)=>{
                 this._friends_socket.emit("challenge", { username: e.target.dataset.username });
+            });
+
+            deleteBtn.addEventListener("click", (e)=>{
+                this._friends_socket.emit("delete friend", { username: e.target.dataset.username });
             });
         }
 
@@ -221,6 +250,9 @@ export class SideBar extends HTMLElement{
             list.appendChild(li);
 
             acceptIcon.addEventListener("click", () => {
+
+                befriend({username: invitation})(this._app.dispatchEvent.bind(this._app));
+
                 list.removeChild(li);
                 //////////////////////////////
                 let friends = document.querySelector(".friends");
@@ -245,10 +277,20 @@ export class SideBar extends HTMLElement{
 
                 acceptIcon.addEventListener("click", (e)=>{
                     if(!this._chat_open){
-                        this._app.appendChild(new GameChat(this._app, e.target.dataset.username));
+                        this._app.appendChild(new GameChat(this._app, e.target.dataset.username,this._messages.get(e.target.dataset.username) ? this._messages.get(e.target.dataset.username) : [],
+                        (from,message)=>{
+                            let messages = this._messages.get(from) ? this._messages.get(from) : [];
+                            messages.push([this._app.user.username,message]);
+                            this._messages.set(from, messages);
+                        }));
                     }else{
                         this._app.removeChild(this._app.lastChild);
-                        this._app.appendChild(new GameChat(this._app, e.target.dataset.username));
+                        this._app.appendChild(new GameChat(this._app, e.target.dataset.username,this._messages.get(e.target.dataset.username) ? this._messages.get(e.target.dataset.username) : [],
+                        (from,message)=>{
+                            let messages = this._messages.get(from) ? this._messages.get(from) : [];
+                            messages.push([this._app.user.username,message]);
+                            this._messages.set(from, messages);
+                        }));
                     }
 
                 });
@@ -256,6 +298,7 @@ export class SideBar extends HTMLElement{
             });
 
             declineIcon.addEventListener("click", () => {
+                rejectfriend({username: invitation})(this._app.dispatchEvent.bind(this._app));
                 list.removeChild(li);
             });
         });
@@ -323,6 +366,8 @@ export class SideBar extends HTMLElement{
             acceptButton.classList.add("accept-button");
             acceptButton.innerText = "Accepter";
             acceptButton.addEventListener("click", () => {
+                befriend({username: invitation})(this._app.dispatchEvent.bind(this._app));
+
                 invitationList.removeChild(li);
 
                 const newFriend = this.shadowRoot.ownerDocument.createElement("li");
@@ -336,6 +381,7 @@ export class SideBar extends HTMLElement{
 
             rejectButton.innerText = "Refuser";
             rejectButton.addEventListener("click", () => {
+                rejectfriend({username: invitation})(this._app.dispatchEvent.bind(this._app));
                 invitationList.removeChild(li);
             });
             li.appendChild(rejectButton);

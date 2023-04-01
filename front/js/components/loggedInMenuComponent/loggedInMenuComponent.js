@@ -2,6 +2,8 @@ import { logout } from "../../api/user.js";
 import { events } from "../../events/events.js";
 import { Animator } from "../../scripts/animator.js";
 import { PlayMode } from "../playModeComponent/playModeComponent.js";
+import {Connect4} from "../gameComponent/gameComponent.js";
+import { WebSocket } from "../../utils/WebSocket.js";
 
 export class LoggedIntroMenu extends HTMLElement {
   constructor(app) {
@@ -28,24 +30,34 @@ export class LoggedIntroMenu extends HTMLElement {
   _attachEventListeners() {
     this.circle.addEventListener("click", () => this._handleCircleClick());
     this.lilCards[0].addEventListener("click", () => this._handlePlayClicked());
-    this.lilCards[1].addEventListener("click", () => this._handleResumeClicked());
+    this.lilCards[1].addEventListener("click", () => this._handleResumeClick());
     this.lilCards[2].addEventListener("click", () => this._handleLogoutClicked());
   }
 
 
   _handleResumeClick() {
+    
     this._app.removeChild(this);
     const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token  } });
-    socket.emit("setup", { player: this._app._player, resume: true });
-    socket.on("setup", (data) => {
+    socket.emit("setup", { player: this._app.player, resume: true });
+    socket.once("setup", (data) => {
         if(data === null) {
-            alert("No game to resume");
-            this.appendChild(new LoggedIntroMenu(this._app));
+            this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: 
+                {
+                    title: "No games to resume",
+                    content: "You have no games to resume",
+                    accept: () => {},
+                    decline : () => {},
+                    temporary: true
+            }}));
+            this._app.appendChild(new LoggedIntroMenu(this._app));
             return;
         }else{
-            this.appendChild(new Connect4({app : this._app,...data}));
+          this._app.appendChild(new Connect4({app : this._app,...data}));
         }
     });
+
+     
   }
 
   _handlePlayClicked() {
