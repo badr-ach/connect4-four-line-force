@@ -77,9 +77,10 @@ export class Connect4 extends HTMLElement {
       );
       arrows[i].addEventListener("mouseout", this._handleMouseOut.bind(this));
     }
-
-    this.shadowRoot.querySelector("#mute-btn").addEventListener("click", this._handleMute.bind(this));
-    this.shadowRoot.querySelectorAll(".chat-input").forEach( (e) => e.addEventListener("click", this._handleChat.bind(this)));
+    if(this.playerRed !== "AI" && this.playerYellow !== "AI") {
+      this.shadowRoot.querySelector("#mute-btn").addEventListener("click", this._handleMute.bind(this));
+      this.shadowRoot.querySelectorAll(".chat-input").forEach((e) => e.addEventListener("click", this._handleChat.bind(this)));
+    }
     this.shadowRoot.querySelector("#save-btn").addEventListener("click", this._handleSaveGame.bind(this));
   }
 
@@ -210,7 +211,7 @@ export class Connect4 extends HTMLElement {
   _handleSaveGame(){
     this._socket.emit("saveGame", { gameId: this._gameId });
     this._socket.on("savedGame", (data) => {
-      //alert(data.message);
+      alert(data.message);
 
     });
 

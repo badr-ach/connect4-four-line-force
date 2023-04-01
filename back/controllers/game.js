@@ -111,7 +111,7 @@ export async function setup(data, io, socket, activeGames, queue) {
 
     } else {
       const res = await GameModal.last({
-        playerOne: playerOne,
+        playerOne: data.player,
         type: "singleplayer",
         gameOver: false,
       });
@@ -268,12 +268,6 @@ export function saveGame(data, socket, activeGames) {
     socket.emit("savedGame", { message: "Guests cannot save games" });
     return;
   }
-
-  if (game.playerTwo !== "AI") {
-    socket.emit("savedGame", { message: "Only singleplayer games can be saved" });
-    return;
-  }
-
 
   GameModal.create({
     gameId: game.gameId,
