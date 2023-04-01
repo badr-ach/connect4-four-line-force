@@ -27,6 +27,7 @@ export class ProfileComponent extends HTMLElement{
             .then((html) => html);
         await this._setUpUser();
         await this._setUpHistory();
+        await this._setUpProgression();
 
     }
 
@@ -64,7 +65,32 @@ export class ProfileComponent extends HTMLElement{
         const res = await this.api.post(this.rootPath + "/api/history");
         this.shadowRoot.getElementById("games").innerHTML = res.history.length;
         this.shadowRoot.getElementById("online-wins").innerHTML = res.history.filter(x => x.winner === this.username).length;
+        console.log(res.history)
+        this.shadowRoot.getElementById("tie").innerHTML = res.history.filter(x => x.winner === "Tie").length;
         this._fillUpHistory(res.history);
+        this._setUpProgression(res.history)
+    }
+
+    async _setUpProgression(history) {
+        const wins = history.filter(x => x.winner === this.username).length;
+        const games = history.length;
+
+        this.shadowRoot.getElementById("novicePlayer").style.width = Math.min(100, Math.round(((games) / 10) * 100)) + "%";
+        this.shadowRoot.getElementById("novicePlayer").innerHTML = Math.min(100, Math.round(((games) / 10) * 100)) + "%";
+
+        this.shadowRoot.getElementById("noviceWinner").style.width = Math.min(100, Math.round((wins / 10) * 100)) + "%";
+        this.shadowRoot.getElementById("noviceWinner").innerHTML = Math.min(100, Math.round((wins / 10) * 100)) + "%";
+
+        this.shadowRoot.getElementById("OG").style.width = Math.min(100, Math.round(((games) / 100) * 100)) + "%";
+        this.shadowRoot.getElementById("OG").innerHTML = Math.min(Math.round(((games) / 100) * 100)) + "%";
+
+        const player = await this.api.post(this.rootPath + "/api/loadUser");
+        const playerScore = player.user.rating;
+        this.shadowRoot.getElementById("intermediatePlayer").style.width = Math.min(Math.round((playerScore / 400) * 100)) + "%";
+        this.shadowRoot.getElementById("intermediatePlayer").innerHTML = Math.min(100, Math.round((playerScore / 400) * 100)) + "%";
+
+        this.shadowRoot.getElementById("goodPlayer").style.width = Math.min(100, Math.round((playerScore / 800) * 100)) + "%";
+        this.shadowRoot.getElementById("goodPlayer").innerHTML = Math.min(Math.round((playerScore / 800) * 100)) + "%";
     }
 
     _fillUpHistory(history){

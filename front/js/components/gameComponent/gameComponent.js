@@ -160,20 +160,22 @@ export class Connect4 extends HTMLElement {
 
     });
 
+
       for(let node of this._app.children){
         if(node.id === "side-bar") continue;
         this._app.removeChild(node);
       }
       this._app.appendChild(new LoggedIntroMenu(this._app));
-/*
-    dispatch(new CustomEvent(events.popUp, {
-      detail: {
-        title: "",
-        content: "This game has been saved",
-        temporary: true,
-        accept: () => {},
-        decline: () => {}
+
+      /*this._app.dispatch(new CustomEvent(events.popUp, {
+        detail: {
+          title: "",
+          content: "This game has been saved",
+          temporary: true,
+          accept: () => {},
+          decline: () => {}
       }}));*/
+
 
   }
 
@@ -255,9 +257,10 @@ export class Connect4 extends HTMLElement {
 
     if (this.winner !== null) {
       this.shadowRoot.querySelector("#winner").innerHTML =
-        this.winner == "Tie" ? "Tie!" : this.winner + " wins!";
+        this.winner === "Tie" ? "Tie!" : this.winner + " wins!";
+        }
     }
-  }
+
 
   reset() {
     this.board = [];
