@@ -30,6 +30,7 @@ export class LocalConnect4 extends HTMLElement {
     _setGame() {
         this.board = [];
         this.currColumns = [5, 5, 5, 5, 5, 5, 5];
+        console.log("this.currColumns", this.currColumns);
 
         for (let r = 0; r < this.rows; r++) {
             let row = [];
@@ -53,12 +54,16 @@ export class LocalConnect4 extends HTMLElement {
         }
 
         //get coords of that tile clicked
+        console.log("this id", this.id);
         let coords = this.id.split("-");
         let r = parseInt(coords[0]);
         let c = parseInt(coords[1]);
+        console.log("coords", r,c);
 
         // figure out which row the current column should be on
+        console.log("currColumns", this.currColumns);
         r = this.currColumns[c];
+        console.log("r", this.currColumns[c]);
 
         if (r < 0) { // board[r][c] != ' '
             return;
@@ -66,7 +71,7 @@ export class LocalConnect4 extends HTMLElement {
 
         this.board[r][c] = this.currPlayer; //update JS board
         let tile = this.shadowRoot.getElementById(r.toString() + "-" + c.toString());
-        if (this.currPlayer == this.playerRed) {
+        if (this.currPlayer === this.playerRed) {
             tile.classList.add("red-piece");
             this.currPlayer = this.playerYellow;
         }
@@ -83,11 +88,11 @@ export class LocalConnect4 extends HTMLElement {
 
     _checkWinner() {
         // horizontal
-        for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < columns - 3; c++){
+        for (let r = 0; r < this.rows; r++) {
+            for (let c = 0; c < this.columns - 3; c++){
                 if (this.board[r][c] != ' ') {
-                    if (this.board[r][c] == board[r][c+1] && this.board[r][c+1] == this.board[r][c+2] && this.board[r][c+2] == this.board[r][c+3]) {
-                        this.setWinner(r, c);
+                    if (this.board[r][c] == this.board[r][c+1] && this.board[r][c+1] == this.board[r][c+2] && this.board[r][c+2] == this.board[r][c+3]) {
+                        this._setWinner(r, c);
                         return;
                     }
                 }
@@ -95,11 +100,11 @@ export class LocalConnect4 extends HTMLElement {
         }
 
         // vertical
-        for (let c = 0; c < columns; c++) {
-            for (let r = 0; r < rows - 3; r++) {
+        for (let c = 0; c < this.columns; c++) {
+            for (let r = 0; r < this.rows - 3; r++) {
                 if (this.board[r][c] != ' ') {
                     if (this.board[r][c] == this.board[r+1][c] && this.board[r+1][c] == this.board[r+2][c] && this.board[r+2][c] == this.board[r+3][c]) {
-                        this.setWinner(r, c);
+                        this._setWinner(r, c);
                         return;
                     }
                 }
@@ -107,11 +112,11 @@ export class LocalConnect4 extends HTMLElement {
         }
 
         // anti diagonal
-        for (let r = 0; r < rows - 3; r++) {
-            for (let c = 0; c < columns - 3; c++) {
+        for (let r = 0; r < this.rows - 3; r++) {
+            for (let c = 0; c < this.columns - 3; c++) {
                 if (this.board[r][c] != ' ') {
                     if (this.board[r][c] == this.board[r+1][c+1] && this.board[r+1][c+1] == this.board[r+2][c+2] && this.board[r+2][c+2] == this.board[r+3][c+3]) {
-                        this.setWinner(r, c);
+                        this._setWinner(r, c);
                         return;
                     }
                 }
@@ -123,7 +128,7 @@ export class LocalConnect4 extends HTMLElement {
             for (let c = 0; c < this.columns - 3; c++) {
                 if (this.board[r][c] != ' ') {
                     if (this.board[r][c] == this.board[r-1][c+1] && this.board[r-1][c+1] == this.board[r-2][c+2] && this.board[r-2][c+2] == this.board[r-3][c+3]) {
-                        this.setWinner(r, c);
+                        this._setWinner(r, c);
                         return;
                     }
                 }

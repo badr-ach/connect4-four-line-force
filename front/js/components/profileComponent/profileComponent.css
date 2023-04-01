@@ -121,6 +121,11 @@ body {
     box-shadow: 0 0 5px #808080;
 }
 
+.trophee-list {
+    height: 80%;
+    box-shadow: 0 0 5px #808080;
+}
+
 .history-tab{
     background: #fff900;
 }

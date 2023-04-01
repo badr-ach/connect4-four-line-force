@@ -16,6 +16,7 @@ export class ProfileComponent extends HTMLElement{
         this.username = "";
         this.rank = "";
         this.rangeRank = ["../../../images/bronze-coin.png", "../../../images/silver-coin.png", "../../../images/gold-coin.png"];
+
     }
 
 
@@ -75,22 +76,43 @@ export class ProfileComponent extends HTMLElement{
         const wins = history.filter(x => x.winner === this.username).length;
         const games = history.length;
 
-        this.shadowRoot.getElementById("novicePlayer").style.width = Math.min(100, Math.round(((games) / 10) * 100)) + "%";
-        this.shadowRoot.getElementById("novicePlayer").innerHTML = Math.min(100, Math.round(((games) / 10) * 100)) + "%";
+        this.shadowRoot.getElementById("welcome-abroad").style.width = Math.min(100, Math.round(((games) / 10) * 100)) + "%";
+        this.shadowRoot.getElementById("welcome-abroad").innerHTML = Math.min(100, Math.round(((games) / 10) * 100)) + "%";
 
-        this.shadowRoot.getElementById("noviceWinner").style.width = Math.min(100, Math.round((wins / 10) * 100)) + "%";
-        this.shadowRoot.getElementById("noviceWinner").innerHTML = Math.min(100, Math.round((wins / 10) * 100)) + "%";
+        this.shadowRoot.getElementById("primer").style.width = Math.min(100, Math.round((wins / 15) * 100)) + "%";
+        this.shadowRoot.getElementById("primer").innerHTML = Math.min(100, Math.round((wins / 15) * 100)) + "%";
 
-        this.shadowRoot.getElementById("OG").style.width = Math.min(100, Math.round(((games) / 100) * 100)) + "%";
-        this.shadowRoot.getElementById("OG").innerHTML = Math.min(Math.round(((games) / 100) * 100)) + "%";
+        this.shadowRoot.getElementById("goat").style.width = Math.min(100, Math.round(((games) / 100) * 100)) + "%";
+        this.shadowRoot.getElementById("goat").innerHTML = Math.min(100, Math.round(((games) / 100) * 100)) + "%";
 
         const player = await this.api.post(this.rootPath + "/api/loadUser");
         const playerScore = player.user.rating;
-        this.shadowRoot.getElementById("intermediatePlayer").style.width = Math.min(Math.round((playerScore / 400) * 100)) + "%";
-        this.shadowRoot.getElementById("intermediatePlayer").innerHTML = Math.min(100, Math.round((playerScore / 400) * 100)) + "%";
+        this.shadowRoot.getElementById("levelup").style.width = Math.min(100,Math.round( (playerScore / 400) * 100)) + "%";
+        this.shadowRoot.getElementById("levelup").innerHTML = Math.min(100, Math.round((playerScore / 400) * 100)) + "%";
 
-        this.shadowRoot.getElementById("goodPlayer").style.width = Math.min(100, Math.round((playerScore / 800) * 100)) + "%";
-        this.shadowRoot.getElementById("goodPlayer").innerHTML = Math.min(Math.round((playerScore / 800) * 100)) + "%";
+        this.shadowRoot.getElementById("utlimate-goat").style.width = Math.min(100, Math.round((playerScore / 800) * 100)) + "%";
+        this.shadowRoot.getElementById("utlimate-goat").innerHTML = Math.min(100, Math.round((playerScore / 800) * 100)) + "%";
+
+        let minConsecutivesWins = 0;
+        let currentConsecutivesWins = 0;
+        for(let i = 0; i < history.length; i++){
+            if(history[i].winner === this.username){
+                currentConsecutivesWins++;
+            } else {
+                if(currentConsecutivesWins >minConsecutivesWins){
+                    minConsecutivesWins = currentConsecutivesWins;
+                }
+                currentConsecutivesWins = 0;
+            }
+            if(currentConsecutivesWins > minConsecutivesWins){
+                minConsecutivesWins = currentConsecutivesWins;
+            }
+        }
+
+        console.log("minConsecutivesWins",minConsecutivesWins, currentConsecutivesWins)
+
+        this.shadowRoot.getElementById("5-games").style.width = Math.min(100, Math.round((minConsecutivesWins / 5) * 100)) + "%";
+        this.shadowRoot.getElementById("5-games").innerHTML = Math.min(100, Math.round((minConsecutivesWins / 5) * 100)) + "%";
     }
 
     _fillUpHistory(history){
