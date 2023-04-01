@@ -109,15 +109,15 @@ export const befriend = async (req, res) => {
 
         user.friends.push(username);
 
-        user.outgoingFriendRequests = user.outgoingFriendRequests.filter((item) => item !== username);
+        user.incomingFriendRequests = user.incomingFriendRequests.filter((item) => item !== username);
 
         friend.friends.push(user.username);
 
-        friend.incomingFriendRequests = friend.incomingFriendRequests.filter((item) => item !== user.username);
+        friend.outgoingFriendRequests = friend.outgoingFriendRequests.filter((item) => item !== user.username);
 
-        await UserModal.updateOne({ _id: user._id }, { friends: user.friends, outgoingFriendRequests: user.outgoingFriendRequests });
+        await UserModal.updateOne({ _id: user._id }, { friends: user.friends, incomingFriendRequests: user.incomingFriendRequests });
 
-        await UserModal.updateOne({ _id: friend._id }, { friends: friend.friends, incomingFriendRequests: friend.incomingFriendRequests });
+        await UserModal.updateOne({ _id: friend._id }, { friends: friend.friends, outgoingFriendRequests: friend.outgoingFriendRequests });
 
         return res.status(200).json({ message: "Friend added", username : username });
 
@@ -144,13 +144,13 @@ export const rejectfriend = async (req, res) => {
 
         if(user.friends.includes(username)) return res.status(400).json({ message: "User is already a friend" });
 
-        user.outgoingFriendRequests = user.outgoingFriendRequests.filter((item) => item !== username);
+        user.incomingFriendRequests = user.incomingFriendRequests.filter((item) => item !== username);
 
-        friend.incomingFriendRequests = friend.incomingFriendRequests.filter((item) => item !== user.username);
+        friend.outgoingFriendRequests = friend.outgoingFriendRequests.filter((item) => item !== user.username);
 
-        await UserModal.updateOne({ _id: user._id }, { outgoingFriendRequests: user.outgoingFriendRequests });
+        await UserModal.updateOne({ _id: user._id }, { incomingFriendRequests: user.incomingFriendRequests });
 
-        await UserModal.updateOne({ _id: friend._id }, { incomingFriendRequests: friend.incomingFriendRequests });
+        await UserModal.updateOne({ _id: friend._id }, { outgoingFriendRequests: friend.outgoingFriendRequests });
 
         return res.status(200).json({ message: "Friend request rejected", username : username });
 
