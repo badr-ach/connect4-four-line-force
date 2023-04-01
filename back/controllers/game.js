@@ -111,13 +111,16 @@ export async function setup(data, io, socket, activeGames, queue) {
 
     } else {
       const res = await GameModal.last({
-        playerOne: data.player,
+        playerOne: socket.username,
         type: "singleplayer",
         gameOver: false,
       });
-      game = res ? res[0] : {};
-      gameId = res ? (res[0] ? res[0].gameId : null) : null;
-      setUpLocal(JSON.parse(JSON.stringify(game.board)), 1);
+      game = res.length > 0 ? res[0] : null;
+      gameId = game !== null ? game.gameId : null;
+      if(game)
+        setUpLocal(JSON.parse(JSON.stringify(game.board)), 1);
+      else
+        return;
     }
 
     activeGames.set(gameId, game);
@@ -278,6 +281,7 @@ export function saveGame(data, socket, activeGames) {
     currPlayer: game.currPlayer,
     gameOver: game.gameOver,
     winner: game.winner,
+    type: game.type,
   })
     .then((res) => {
       socket.emit("savedGame", { message: "Game saved successfully" });

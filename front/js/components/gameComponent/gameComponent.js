@@ -182,7 +182,7 @@ export class Connect4 extends HTMLElement {
       this.renderBoard();
     });
 
-    this._socket.on("game-error", (data) => {
+    this._socket.once("game-error", (data) => {
       this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
         title: "Error",
         content: data,
@@ -210,7 +210,7 @@ export class Connect4 extends HTMLElement {
 
   _handleSaveGame(){
     this._socket.emit("saveGame", { gameId: this._gameId });
-    this._socket.on("savedGame", (data) => {
+    this._socket.once("savedGame", (data) => {
       this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
         title: "Notification",
         content: data.message,

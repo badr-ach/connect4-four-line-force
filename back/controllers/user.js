@@ -95,8 +95,6 @@ export const befriend = async (req, res) => {
 
     const {username} = req.body;
 
-    const {friendId} = req.body;
-
     try{
 
         const user = await UserModal.findById(req.userId);

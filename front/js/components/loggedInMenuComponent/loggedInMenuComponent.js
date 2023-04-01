@@ -36,22 +36,28 @@ export class LoggedIntroMenu extends HTMLElement {
 
 
   _handleResumeClick() {
-    /*
+    
     this._app.removeChild(this);
     const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token  } });
-    console.log("socket", socket);
     socket.emit("setup", { player: this._app.player, resume: true });
-    socket.on("setup", (data) => {
+    socket.once("setup", (data) => {
         if(data === null) {
-            alert("No game to resume");
-            this.appendChild(new LoggedIntroMenu(this._app));
+            this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: 
+                {
+                    title: "No games to resume",
+                    content: "You have no games to resume",
+                    accept: () => {},
+                    decline : () => {},
+                    temporary: true
+            }}));
+            this._app.appendChild(new LoggedIntroMenu(this._app));
             return;
         }else{
-            this.appendChild(new Connect4({app : this._app,...data}));
+          this._app.appendChild(new Connect4({app : this._app,...data}));
         }
     });
 
-     */
+     
   }
 
   _handlePlayClicked() {
