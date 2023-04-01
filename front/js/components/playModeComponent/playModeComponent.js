@@ -2,6 +2,7 @@ import { Animator } from "../../scripts/animator.js";
 import { WebSocket } from "../../utils/WebSocket.js";
 import { Connect4 } from "../gameComponent/gameComponent.js";
 import {LoadingPage} from "../loadingPageComponent/loadingPageComponent.js";
+import {LocalConnect4} from "../localGameComponent/localGameComponent.js";
 
 
 export class PlayMode extends HTMLElement{
@@ -23,6 +24,7 @@ export class PlayMode extends HTMLElement{
     _attachEventListeners(){
         this.shadowRoot.getElementById("vsComputer").addEventListener("click", () => this._handleVsComputerClick());
         this.shadowRoot.getElementById("vsPlayer").addEventListener("click", () => this._handleVsPlayerClick());
+        this.shadowRoot.getElementById("vsLocalPlayer").addEventListener("click", () => this._handleVsLocalPlayerClick());
     }
 
 
@@ -34,6 +36,11 @@ export class PlayMode extends HTMLElement{
             console.log(data);
             this._app.appendChild(new Connect4({app : this._app,...data}));
         });
+    }
+
+    _handleVsLocalPlayerClick() {
+        this._removingMyself();
+        this._app.appendChild(new LocalConnect4(this._app));
     }
 
     _handleVsPlayerClick() {

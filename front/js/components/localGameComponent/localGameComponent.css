@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+#board {
+    height: 540px;
+    width: 630px;
+    background-color: rgb(134, 200, 188);
+    /* border: 1px solid navy; */
+
+    margin: 0;
+    padding-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+
+    border: 6px solid rgb(10, 100, 73);
+    border-radius: 25px;
+}
+
+.tile {
+    height: 70px;
+    width: 80px;
+    margin: 2px;
+
+    /* Circle */
+    background-color: white;
+    border-radius: 50%;
+    border: 3px solid rgb(10, 100, 73);
+
+}
+
+.red-piece {
+    background-color: rgb(255, 158, 158);
+}
+
+.yellow-piece {
+    background-color: rgb(248, 249, 136);
+}
+
+#winner{
+    font-size: 48px;
+    font-family: 'Helvetica Neue', sans-serif;
+    color: #4CAF50; /* green */
+    text-align: center;
+    text-shadow: 2px 2px #ccc;
+
+    background-color: #f2f2f2;
+}
+

@@ -90,7 +90,7 @@ body {
     padding-bottom: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     text-align: center;
-    background: linear-gradient(to right, #a17d22, #ffb600);
+    background: linear-gradient(to right, #ff7e23, #ffb600);
     margin-bottom: 10px;
     justify-content: center;
     align-content: center;
@@ -153,17 +153,6 @@ th {
     align-items: center;
 }
 
-.title-profile{
-    margin-bottom: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    font-size: 33px;
-    font-weight: bold;
-    font-style: italic;
-}
-
 .progress-bar {
     height: 20px;
     background-color: #ddd;
@@ -180,4 +169,12 @@ th {
     padding-right: 10px;
     line-height: 20px;
     transition: width 0.5s ease;
+}
+
+.progressions {
+    margin-top : 20px;
+}
+
+.thead {
+    background: linear-gradient(to right, #e5e573, #b29e5d);
 }
