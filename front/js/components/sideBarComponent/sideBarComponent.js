@@ -140,6 +140,8 @@ export class SideBar extends HTMLElement{
                     });
 
                     deleteBtn.addEventListener("click", (e)=>{
+                        friends.removeChild(friend);
+                        console.log(friend);
                         this._friends_socket.emit("delete friend", { username: e.target.dataset.username });
                     });
 
@@ -259,6 +261,8 @@ export class SideBar extends HTMLElement{
             });
 
             deleteBtn.addEventListener("click", (e)=>{
+                friends.removeChild(friend);
+                console.log(friend);
                 this._friends_socket.emit("delete friend", { username: e.target.dataset.username });
             });
         }
@@ -348,42 +352,72 @@ export class SideBar extends HTMLElement{
                 list.removeChild(li);
                 //////////////////////////////
                 let friends = document.querySelector(".friends");
+                let username =  invitation;
                 let friend = document.createElement("li");
                 let friendName = document.createElement("a");
 
+                let wrapper = document.createElement("div");
+                wrapper.classList.add("friendicons-wrapper");
 
-                let acceptIcon = document.createElement("i");
-                let acceptIcon1 = document.createElement("i");
-                acceptIcon.classList.add( "fa", "fa-envelope");
-                acceptIcon1.classList.add( "fa", "fa-bolt");
+                let textwrapper = document.createElement("div");
+                textwrapper.classList.add("friendname-text-wrapper");
+                textwrapper.innerHTML = username;
+                textwrapper.dataset.username = username;
 
+                let msgBtn = document.createElement("i");
+                let challengeBtn = document.createElement("i");
+                let deleteBtn = document.createElement("i");
 
-                friendName.innerHTML = invitation;
-                acceptIcon.href = "#";
+                msgBtn.classList.add( "fa", "fa-envelope");
+                msgBtn.dataset.username = username;
+                deleteBtn.classList.add( "fa", "fa-trash");
+                deleteBtn.dataset.username = username;
+                challengeBtn.classList.add( "fa", "fa-bolt");
+                challengeBtn.dataset.username = username;
+
+                friendName.appendChild(textwrapper);
+                msgBtn.href = "#";
                 friendName.classList.add("friend");
-                friendName.dataset.username = invitation;
+                friendName.dataset.username = username;
                 friend.appendChild(friendName);
                 friends.appendChild(friend);
-                friendName.appendChild(acceptIcon);
-                friendName.appendChild(acceptIcon1);
 
-                acceptIcon.addEventListener("click", (e)=>{
+                wrapper.appendChild(msgBtn);
+                wrapper.appendChild(deleteBtn);
+                wrapper.appendChild(challengeBtn);
+
+                friendName.appendChild(wrapper);
+
+                msgBtn.addEventListener("click", (e)=>{
                     if(!this._chat_open){
-                        this._app.appendChild(new GameChat(this._app, e.target.dataset.username,this._messages.get(e.target.dataset.username) ? this._messages.get(e.target.dataset.username) : [],
-                        (from,message)=>{
-                            let messages = this._messages.get(from) ? this._messages.get(from) : [];
-                            messages.push([this._app.user.username,message]);
-                            this._messages.set(from, messages);
-                        }));
+                        this._app.appendChild(new GameChat(this._app, e.target.dataset.username,
+                            this._messages.get(e.target.dataset.username) ? this._messages.get(e.target.dataset.username) : [],
+                            (from,message)=>{
+                                let messages = this._messages.get(from) ? this._messages.get(from) : [];
+                                messages.push([this._app.user.username,message]);
+                                this._messages.set(from, messages);
+                            }));
                     }else{
                         this._app.removeChild(this._app.lastChild);
-                        this._app.appendChild(new GameChat(this._app, e.target.dataset.username,this._messages.get(e.target.dataset.username) ? this._messages.get(e.target.dataset.username) : [],
-                        (from,message)=>{
-                            let messages = this._messages.get(from) ? this._messages.get(from) : [];
-                            messages.push([this._app.user.username,message]);
-                            this._messages.set(from, messages);
-                        }));
+                        this._app.appendChild(new GameChat(this._app, e.target.dataset.username,
+                            this._messages.get(e.target.dataset.username) ? this._messages.get(e.target.dataset.username) : [],
+                            (from,message)=>{
+                                let messages = this._messages.get(from) ? this._messages.get(from) : [];
+                                messages.push([this._app.user.username,message]);
+                                this._messages.set(from, messages);
+                            }));
                     }
+
+                });
+
+                challengeBtn.addEventListener("click", (e)=>{
+                    this._friends_socket.emit("challenge", { username: e.target.dataset.username });
+                });
+
+                deleteBtn.addEventListener("click", (e)=>{
+                    friends.removeChild(friend);
+                    console.log(friend);
+                    this._friends_socket.emit("delete friend", { username: e.target.dataset.username });
 
                 });
 
