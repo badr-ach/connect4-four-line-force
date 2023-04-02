@@ -83,7 +83,7 @@ export async function setup(data, io, socket, activeGames, queue) {
         socket.on("disconnect", async () => {
           socket.leave(roomId);
           activeGames.delete(gameId);
-          if(!game.winner){
+          if(!game.gameOver){
             await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
             io.of("/api/game").to(roomId).emit("game-error", {
               message: "Opponent disconnected",

@@ -118,14 +118,16 @@ export class ProfileComponent extends HTMLElement{
     _fillUpHistory(history){
         const historyTable = this.shadowRoot.getElementById("history-table");
         history.forEach(game => {
+            if(game.winner !== null){
             const tr = document.createElement("tr");
             const againstTd = document.createElement("td");
-            againstTd.textContent = game.playerTwo === this.username ? game.playerOne : game.playerTwo;
+            againstTd.textContent = game.playerTwo === this._app.user.username ? game.playerOne : game.playerTwo;
             const resultTd = document.createElement("td");
-            resultTd.textContent = game.winner === this.username ? "Win" : "Loss";
+            resultTd.textContent = game.winner === this._app.user.username ? "Win" : "Loss";
             tr.appendChild(againstTd);
             tr.appendChild(resultTd);
             historyTable.appendChild(tr);
+            }
 
         });
     }
