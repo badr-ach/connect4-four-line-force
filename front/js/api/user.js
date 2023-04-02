@@ -2,7 +2,7 @@ import { fetcher } from "../utils/requester.js";
 import { events } from "../events/events.js";
 
 const api = fetcher();
-const rootPath = "http://localhost:8000";
+const rootPath = "http://13.39.75.52";
 
 // Load User
 export const loadUser = () => async (dispatch) => {
@@ -32,9 +32,9 @@ export const signup = (body) => async (dispatch) => {
     dispatch(new CustomEvent(events.popUp, {
           detail: {
             title: "Success",
-            content: "You have been signed up", 
+            content: "You have been signed up",
             temporary: true,
-            accept: () => {}, 
+            accept: () => {},
             decline: () => {}
           }}));
   } catch (err) {
@@ -47,15 +47,15 @@ export const signup = (body) => async (dispatch) => {
 export const login = (body) => async (dispatch) => {
   try {
     const res = await api.post(rootPath+"/api/login", body);
-    
+
     localStorage.setItem("token", res.token);
     dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
     dispatch(new CustomEvent(events.popUp, {
-          detail: { 
-            title: "Success", 
-            content: "You have been logged in", 
+          detail: {
+            title: "Success",
+            content: "You have been logged in",
             temporary: true,
-            accept: () => {}, 
+            accept: () => {},
             decline: () => {}
           }}));
   } catch (err) {
@@ -70,11 +70,11 @@ export const logout = () => async (dispatch) => {
     localStorage.removeItem('token');
     dispatch(new CustomEvent(events.signedOut, {detail: null}));
     dispatch(new CustomEvent(events.popUp, {
-      detail: { 
-        title: "Success", 
-        content: "You have been logged out", 
+      detail: {
+        title: "Success",
+        content: "You have been logged out",
         temporary: true,
-        accept: () => {}, 
+        accept: () => {},
         decline: () => {}
       }}));
   } catch (err) {
@@ -95,7 +95,7 @@ export const befriend = (body) => async (dispatch) => {
     api.use({Authorization: "Bearer " + token});
 
     const res = await api.post(rootPath+"/api/befriend", body);
-    dispatch(new CustomEvent(events.popUp, {detail: {title: "Success", content: "You have befriended " + 
+    dispatch(new CustomEvent(events.popUp, {detail: {title: "Success", content: "You have befriended " +
     body.username, temporary: true, accept: () => {}, decline: () => {}}}));
 
   }catch(err){
