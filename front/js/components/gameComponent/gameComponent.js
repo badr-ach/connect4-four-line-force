@@ -176,8 +176,9 @@ export class Connect4 extends HTMLElement {
           this.gameOver = true;
           this.winner = data.winner;
         }
+
+        this.renderBoard();
         setTimeout(() =>{
-          this.renderBoard();
           new Audio("../../../audio/piece_down.wav").play();
         }, 500);
     });
