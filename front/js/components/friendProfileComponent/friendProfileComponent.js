@@ -1,5 +1,6 @@
 import {Animator} from "../../scripts/animator.js";
 import {fetcher} from "../../utils/requester.js";
+import {WebSocket} from "../../utils/WebSocket.js";
 
 
 export class FriendProfileComponent extends HTMLElement{
@@ -10,12 +11,12 @@ export class FriendProfileComponent extends HTMLElement{
         this._animator = new Animator();
         this.api = fetcher();
         this.rootPath = "http://localhost:8000";
-        this.historyGames = [];
         const token = localStorage.getItem("token");
         this.api.use({Authorization: "Bearer " + token});
         this.username = friend;
         this.rank = "";
         this.rangeRank = ["../../../images/bronze-coin.png", "../../../images/silver-coin.png", "../../../images/gold-coin.png"];
+
 
     }
 
@@ -28,20 +29,37 @@ export class FriendProfileComponent extends HTMLElement{
             .then((html) => html);
         await this._setUpUser();
         await this._setUpHistory();
-        await this._setUpProgression();
+        this._attachEventListeners();
 
+    }
+
+    _attachEventListeners(){
+
+        const challengeBtn = this.shadowRoot.getElementById("challenge");
+        const deleteBtn = this.shadowRoot.getElementById("delete");
+        console.log("challenge but: ",challengeBtn)
+        console.log("delete but: ",deleteBtn)
+        this._friends_socket = WebSocket.getSocketByNameSpace("/api/friends",{ auth: { token: this._app.token ? this._app.token : "guest" } });
+
+        challengeBtn.addEventListener("click", (e)=>{
+            console.log("challenge is sent to: ",this.username)
+            this._friends_socket.emit("challenge", { username: e.target.dataset.username });
+        });
+
+        deleteBtn.addEventListener("click", (e)=>{
+            console.log("delete : ",this.username);
+            this._friends_socket.emit("delete friend", { username: e.target.dataset.username });
+        });
     }
 
     async _setUpUser() {
 
         const res = await this.api.get(this.rootPath + "/api/profile/" + this.username);
-        console.log("res find is "+ res)
-        console.log("user find is "+ res.user)
         this.shadowRoot.getElementById("userName").innerHTML = this.username;
-        this.shadowRoot.getElementById("score").innerHTML = res.user.rating;
-        if(res.user.rating < 300){
+        this.shadowRoot.getElementById("score").innerHTML = res.profile.user.rating;
+        if(res.profile.user.rating < 300){
             this.rank = "Bronze";
-        } else if(res.user.rating < 600){
+        } else if(res.profile.user.rating < 600){
             this.rank = "Silver";
         }else {
             this.rank = "Gold";
@@ -64,16 +82,17 @@ export class FriendProfileComponent extends HTMLElement{
 
     async _setUpHistory() {
 
-        const res = await this.api.post(this.rootPath + "/api/profile/" + this.username);
+        const res = await this.api.get(this.rootPath + "/api/profile/" + this.username);
+        console.log(res.profile.history)
+        this.shadowRoot.getElementById("games").innerHTML = res.profile.history.length;
+        this.shadowRoot.getElementById("online-wins").innerHTML = res.profile.history.filter(x => x.winner === this.username).length;
         console.log(res.history)
-        this.shadowRoot.getElementById("games").innerHTML = res.history.length;
-        this.shadowRoot.getElementById("online-wins").innerHTML = res.history.filter(x => x.winner === this.username).length;
-        console.log(res.history)
-        this.shadowRoot.getElementById("tie").innerHTML = res.history.filter(x => x.winner === "Tie").length;
-        await this._setUpProgression(res.history)
+        this.shadowRoot.getElementById("tie").innerHTML = res.profile.history.filter(x => x.winner === "Tie").length;
+        await this._setUpProgression(res.profile.history)
     }
 
     async _setUpProgression(history) {
+        console.log("length filter",history.filter(x => x.winner === this.username).length)
         const wins = history.filter(x => x.winner === this.username).length;
         const games = history.length;
 
@@ -115,6 +134,7 @@ export class FriendProfileComponent extends HTMLElement{
         this.shadowRoot.getElementById("5-games").style.width = Math.min(100, Math.round((minConsecutivesWins / 5) * 100)) + "%";
         this.shadowRoot.getElementById("5-games").innerHTML = Math.min(100, Math.round((minConsecutivesWins / 5) * 100)) + "%";
     }
+
 
 }
 

@@ -13,7 +13,7 @@ export class LocalConnect4 extends HTMLElement {
 
         this.rows = 6;
         this.columns = 7;
-        this.currColumns = []; //keeps track of which row each column is at.
+        this.currColumns = [5, 5, 5, 5, 5, 5, 5];
 
         this.attachShadow({ mode: "open" });
 
@@ -23,13 +23,11 @@ export class LocalConnect4 extends HTMLElement {
         this.shadowRoot.innerHTML = await fetch("./js/components/localGameComponent/localGameComponent.html")
             .then((r) => r.text())
             .then((html) => html);
-
         this._setGame();
     }
 
     _setGame() {
         this.board = [];
-        this.currColumns = [5, 5, 5, 5, 5, 5, 5];
         console.log("this.currColumns", this.currColumns);
 
         for (let r = 0; r < this.rows; r++) {
