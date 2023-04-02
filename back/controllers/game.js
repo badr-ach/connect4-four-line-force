@@ -116,6 +116,7 @@ export async function setup(data, io, socket, activeGames, queue) {
         type: "singleplayer",
         gameOver: false,
       });
+      console.log("resume got this game",game,"for",socket.username)
       game = res.length > 0 ? res[0] : null;
       gameId = game !== null ? game.gameId : null;
       if(game)
