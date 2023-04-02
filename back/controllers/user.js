@@ -50,7 +50,7 @@ export const signin = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const result = await UserModal.create({ mail, password: hashedPassword, username, rating: 1000, friends: [],
+        const result = await UserModal.create({ mail, password: hashedPassword, username, rating: 50, friends: [],
         outgoingFriendRequests: [], incomingFriendRequests: [] });
 
         const data = await UserModal.findOne( { username });

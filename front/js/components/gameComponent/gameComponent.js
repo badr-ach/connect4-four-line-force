@@ -167,18 +167,19 @@ export class Connect4 extends HTMLElement {
     this._socket = WebSocket.getSocketByNameSpace("/api/game");
 
     this._socket.on("updatedBoard", (data) => {
-      this.board = data.board;
-      this.currColumns = data.currColumns;
-      this.currPlayer = data.currPlayer;
+        this.board = data.board;
+        this.currColumns = data.currColumns;
+        this.currPlayer = data.currPlayer;
 
-      this.switchTurn();
-      if (data.gameOver) {
-        this.gameOver = true;
-        this.winner = data.winner;
-      }
-      this.renderBoard();
-
-      new Audio("../../../audio/piece_down.wav").play();
+        this.switchTurn();
+        if (data.gameOver) {
+          this.gameOver = true;
+          this.winner = data.winner;
+        }
+        setTimeout(() =>{
+          this.renderBoard();
+          new Audio("../../../audio/piece_down.wav").play();
+        }, 500);
     });
 
 
