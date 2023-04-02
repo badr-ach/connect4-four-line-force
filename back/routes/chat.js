@@ -31,12 +31,13 @@ export const init_chat_socket = (io) => {
       });
 
       socket.on("user connected", (user) => {
-        console.log("user connected", user);
-        users.push(user);
+        if(!users.find((u) => u.userID === user.userID))
+          users.push(user);
       });
 
       socket.on("disconnect", () => {
         delete io.of("/api/chat").sockets[socket.id];
+        users.splice(users.findIndex((user) => user.userID === socket.id), 1);
         socket.broadcast.emit("user disconnected", socket.id);
       });
 
