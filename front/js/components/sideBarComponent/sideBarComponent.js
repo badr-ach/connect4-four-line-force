@@ -174,6 +174,9 @@ export class SideBar extends HTMLElement{
                     textwrapper.classList.add("friendname-text-wrapper");
                     textwrapper.innerHTML = username;
                     textwrapper.dataset.username = username;
+                    textwrapper.addEventListener("click", (e)=>{
+                        this._handleFriendProfileClicked(e.target.dataset.username);
+                    });
 
                     let msgBtn = document.createElement("i");
                     let challengeBtn = document.createElement("i");
