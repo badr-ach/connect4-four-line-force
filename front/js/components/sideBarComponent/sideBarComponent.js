@@ -140,6 +140,8 @@ export class SideBar extends HTMLElement{
                     });
 
                     deleteBtn.addEventListener("click", (e)=>{
+                        friends.removeChild(friend);
+                        console.log(friend);
                         this._friends_socket.emit("delete friend", { username: e.target.dataset.username });
                     });
 
@@ -259,6 +261,8 @@ export class SideBar extends HTMLElement{
             });
 
             deleteBtn.addEventListener("click", (e)=>{
+                friends.removeChild(friend);
+                console.log(friend);
                 this._friends_socket.emit("delete friend", { username: e.target.dataset.username });
             });
         }
@@ -411,7 +415,10 @@ export class SideBar extends HTMLElement{
                 });
 
                 deleteBtn.addEventListener("click", (e)=>{
+                    friends.removeChild(friend);
+                    console.log(friend);
                     this._friends_socket.emit("delete friend", { username: e.target.dataset.username });
+
                 });
 
             });
