@@ -207,6 +207,8 @@ export async function newMove(data, io, socket, activeGames) {
 
   if (!game || game.currPlayer !== player) return;
 
+  if(game.winner !== null) return;
+
   if (socket.username !== player) return;
 
   if (move[0] < 0 || move[0] > 5 || move[1] < 0 || move[1] > 6) return;
