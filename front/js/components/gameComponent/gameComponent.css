@@ -100,13 +100,14 @@
 
 .turn {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   color: #ffffff;
-  height: 10vh;
   position: fixed;
   left: 200px;
   bottom: 350px;
+  flex-wrap: nowrap;
+  flex-direction: column;
 }
 
 .turnPLayer{
@@ -280,7 +281,7 @@
 .redCircle{
   height: 70px;
   width: 80px;
-  margin: 5px;
+  margin: 10px;
   background-color: rgb(255, 158, 158);
   border-radius: 50%;
   border: 3px solid rgb(10, 100, 73);
@@ -289,8 +290,8 @@
 .yellowCircle{
   height: 70px;
   width: 80px;
-  margin: 5px;
-  background-color: rgb(248, 249, 136);
+  margin: 10px;
+  background-color: rgb(255, 158, 158);
   border-radius: 50%;
   border: 3px solid rgb(10, 100, 73);
 }

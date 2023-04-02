@@ -218,13 +218,16 @@ export class Connect4 extends HTMLElement {
   switchTurn(){
     if(this.playerRed !== "AI" && this.playerYellow !== "AI") {
       let turn = this.shadowRoot.querySelector(".turn");
+      let turnText = this.shadowRoot.querySelector(".turn-text");
       turn.removeChild(turn.childNodes[2]);
       if (this.currPlayer === this.playerRed) {
         let span = this.shadowRoot.ownerDocument.createElement("span");
+        turnText.innerHTML = this.currPlayer ;
         span.classList.add("redCircle");
         turn.appendChild(span);
       } else {
         let span1 = this.shadowRoot.ownerDocument.createElement("span");
+        turnText.innerHTML = this.currPlayer ;
         span1.classList.add("yellowCircle");
         turn.appendChild(span1);
       }
