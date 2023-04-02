@@ -18,6 +18,10 @@ export class PlayMode extends HTMLElement{
         this.shadowRoot.innerHTML = await fetch("./js/components/playModeComponent/playModeComponent.html")
         .then((r) => r.text())
         .then((html) => html);
+        
+        if(!this._app.token){
+            this.shadowRoot.querySelector("#vsPlayer").remove();
+        }
 
         this._attachEventListeners();
     }
