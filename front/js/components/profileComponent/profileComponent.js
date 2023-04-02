@@ -120,7 +120,7 @@ export class ProfileComponent extends HTMLElement{
         history.forEach(game => {
             const tr = document.createElement("tr");
             const againstTd = document.createElement("td");
-            againstTd.textContent = game.playerTwo;
+            againstTd.textContent = game.winner !== this.username ? game.winner : this.username;
             const resultTd = document.createElement("td");
             resultTd.textContent = game.winner !== this.username ? "Win" : "Loss";
             tr.appendChild(againstTd);
