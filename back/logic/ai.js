@@ -10,7 +10,10 @@ export function setUpLocal(board,pl){
 
 
 export function setUp(starter){
-
+    return new Promise(function (resolve, reject) {
+        setTimeout(() => {
+            reject("error : Time is out");
+        }, 1000);
         localboard = [
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
@@ -19,14 +22,14 @@ export function setUp(starter){
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
         ];
-
         if(starter === 1){
             player = 1;
             [firstrow,firstcol] = monteCarlo(localboard, player);
         }else{
             player = 2;
         }
-        return true;
+        resolve(true);
+    });
 }
 
 
@@ -43,24 +46,22 @@ function randomMove(board) {
 }
 
 export function nextMove(lastMove) {
-
+    return new Promise(function (resolve, reject) {
         if(lastMove.length === 0){
             //i play first
             localboard = makeMove(localboard, firstcol, player);
-            return[firstcol,firstrow]
-
+            resolve([firstcol,firstrow]);
+            return;
         }
-
         //i play second
-
         //what he played
         let [col,row] = lastMove;
         localboard = makeMove(localboard, col, 3 - player);
         // what i play
         let [myrow,mycol] = monteCarlo(localboard, player);
         localboard = makeMove(localboard, mycol, player);
-        return[mycol,myrow];
-    
+        resolve([mycol,myrow]);
+    });
 }
 
 
