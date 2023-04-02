@@ -28,7 +28,7 @@ export class ProfileComponent extends HTMLElement{
             .then((html) => html);
         await this._setUpUser();
         await this._setUpHistory();
-        await this._setUpProgression();
+        // await this._setUpProgression();
 
     }
 

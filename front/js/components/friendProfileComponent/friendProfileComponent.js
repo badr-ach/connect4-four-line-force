@@ -110,7 +110,7 @@ export class FriendProfileComponent extends HTMLElement{
         const playerScore = player.user.rating;
         this.shadowRoot.getElementById("levelup").style.width = Math.min(100,Math.round( (playerScore / 400) * 100)) + "%";
         this.shadowRoot.getElementById("levelup").innerHTML = Math.min(100, Math.round((playerScore / 400) * 100)) + "%";
-
+        console.log("this",Math.min(100, Math.round((playerScore / 800) * 100)) + "%")
         this.shadowRoot.getElementById("utlimate-goat").style.width = Math.min(100, Math.round((playerScore / 800) * 100)) + "%";
         this.shadowRoot.getElementById("utlimate-goat").innerHTML = Math.min(100, Math.round((playerScore / 800) * 100)) + "%";
 
