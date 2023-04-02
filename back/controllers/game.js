@@ -184,14 +184,14 @@ export async function customSetup(data, io, socket, activeGames, customqueue) {
       });
     });
 
-    socket.on("disconnect game", async () => {
-      socket.leave(roomId)
-      activeGames.delete(gameId)
-      await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
-      io.of("/api/game").to(roomId).emit("game-error",{
-        message: "Opponent disconnected"
-      })
-    })
+    // socket.on("disconnect game", async () => {
+    //   socket.leave(roomId)
+    //   activeGames.delete(gameId)
+    //   await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
+    //   io.of("/api/game").to(roomId).emit("game-error",{
+    //     message: "Opponent disconnected"
+    //   })
+    // })
 
     activeGames.set(gameId, game);
     io.of("/api/game").to(roomId).emit("custom setup", activeGames.get(gameId));
@@ -264,7 +264,8 @@ export async function newMove(data, io, socket, activeGames) {
 
   // Add timeout for gameover
   const timeout = setTimeout(() => {
-    if(!gameStatus.gameOver) {
+    let game = activeGames.get(data.gameId);
+    if(!game.gameOver) {
       game.gameOver = true;
       game.winner = game.currPlayer === game.playerOne ? game.playerTwo : game.playerOne;
       socket.emit("game-error", {message: "Opponent timed out"})
@@ -341,4 +342,18 @@ export function unmute(data, socket, activeGames) {
   let game = activeGames.get(data.gameId);
   if (socket.username !== player) return;
   game.mute = false;
+}
+
+export async function disconnect(data, socket, activeGames, io){
+  let { gameId, roomId } = data;
+    if(!activeGames.has(gameId)) return;
+    let game = activeGames.get(gameId);
+    if(game.playerOne === socket.username || game.playerTwo === socket.username){
+      socket.leave(roomId)
+      activeGames.delete(gameId)
+      await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
+      io.of("/api/game").to(roomId).emit("game-error",{
+        message: "Opponent disconnected"
+      })
+    }  
 }

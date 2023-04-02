@@ -44,10 +44,10 @@ export class SideBar extends HTMLElement{
         this._game_socket = WebSocket.getSocketByNameSpace("/api/game",{ auth: { token: this._app.token ? this._app.token : "guest" } });
 
         this._game_socket.on("custom setup", (data) => {
-            for(let node of this._app.children){
-                if(node.id === "side-bar") continue;
-                this._app.removeChild(node);
+            while(this._app.firstChild){
+                this._app.removeChild(this._app.firstChild);
             }
+            this._app.appendChild(new SideBar(this._app));
             this._app.appendChild(new Connect4({app : this._app,...data}));
 
         });
@@ -189,10 +189,10 @@ export class SideBar extends HTMLElement{
                 .then((html) => html);
         let home = document.getElementById("home-link");
         home.addEventListener("click", () => {
-            for(let node of this._app.children){
-                if(node.id === "side-bar") continue;
-                this._app.removeChild(node);
+            while(this._app.firstChild){
+                this._app.removeChild(this._app.firstChild);
             }
+            this._app.appendChild(new SideBar(this._app));
             this._app.appendChild(new LoggedIntroMenu(this._app));
         });
         let friends = document.querySelector(".friends");

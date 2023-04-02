@@ -63,7 +63,8 @@ export class Connect4 extends HTMLElement {
   }
 
   async disconnectedCallback(){
-    this._socket.emit("disconnect game");
+    console.log("I am disconnected")
+    this._socket.emit("disconnect game", {gameId : this._gameId, roomId : this.roomId});
   }
 
 
@@ -190,7 +191,10 @@ export class Connect4 extends HTMLElement {
         decline: () => {},
         temporary: true
       } }));
-      this._app.removeChild(this);
+      for(let i = 0; i < this._app.children.length; i++){
+        if(this._app.children[i].id === "side-bar") continue;
+        this._app.removeChild(this._app.children[i]);
+      }
       this._app.appendChild(new LoggedIntroMenu(this._app));
     });
 

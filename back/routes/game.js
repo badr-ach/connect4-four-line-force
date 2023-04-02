@@ -1,5 +1,5 @@
 import auth from "../middlewares/socket.js";
-import { setup, newMove, saveGame, newMessage, mute, unmute, customSetup } from "../controllers/game.js";
+import { setup, newMove, saveGame, newMessage, mute, unmute, customSetup, disconnect } from "../controllers/game.js";
 
 export const init_game_socket = (io) => {
 
@@ -22,7 +22,7 @@ export const init_game_socket = (io) => {
   
       socket.on("newMove", async (data) => newMove(data, io, socket, activeGames));
   
-      socket.on("saveGame", (data) => saveGame(data, socket, activeGames));
+      socket.on("saveGame", async (data) => saveGame(data, socket, activeGames));
   
       socket.on("new message", (data) => newMessage(data, socket, activeGames));
 
@@ -30,6 +30,8 @@ export const init_game_socket = (io) => {
 
       socket.on("unmute", (data) => unmute(data, socket, activeGames));
 
+      socket.on("disconnect game", async (data) => disconnect(data, socket, activeGames, io))
+        
     });
 
 }

@@ -1,8 +1,9 @@
 import { Animator } from "../../scripts/animator.js";
 import { WebSocket } from "../../utils/WebSocket.js";
 import { Connect4 } from "../gameComponent/gameComponent.js";
-import {LoadingPage} from "../loadingPageComponent/loadingPageComponent.js";
-import {LocalConnect4} from "../localGameComponent/localGameComponent.js";
+import { LoadingPage } from "../loadingPageComponent/loadingPageComponent.js";
+import { LocalConnect4 } from "../localGameComponent/localGameComponent.js";
+import { SideBar } from "../sideBarComponent/sideBarComponent.js";
 
 
 export class PlayMode extends HTMLElement{
@@ -52,26 +53,28 @@ export class PlayMode extends HTMLElement{
         socket.emit("setup", { AIplays:-1});
         socket.once("setup", (data) => {
             console.log(data);
-            this._removingLoadingScreen();
+            this._removingMyself();
             this._app.appendChild(new Connect4({app : this._app,...data}));
 
         });
+
         socket.once("waitingForOpponent" , (data) => {
             this._app.appendChild(new LoadingPage(this._app));
         });
     }
 
     _removingMyself(){
-        for(let node of this._app.children){
-            if(node.id === "side-bar") continue;
-            this._app.removeChild(node);
-        }
+            while(this._app.firstChild){
+                this._app.removeChild(this._app.firstChild);
+            }
+            this._app.appendChild(new SideBar(this._app));
     }
-    _removingLoadingScreen(){
-        for(let node of this._app.children){
-            if(node.id === "loading-page") this._app.removeChild(node);
-        }
-    }
+
+    // _removingLoadingScreen(){
+    //     for(let node of this._app.children){
+    //         if(node.id === "loading-page") this._app.removeChild(node);
+    //     }
+    // }
 }
 
 customElements.define("play-mode-component", PlayMode);
