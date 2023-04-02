@@ -115,7 +115,7 @@ export async function setup(data, io, socket, activeGames, queue) {
         gameOver:false, 
         type:'singleplayer'
       });
-      console.log("res", JSOn.stringify(res));
+      console.log("res", JSON.stringify(res));
       game = res.length > 0 ? res[0] : null;
       gameId = game !== null ? game.gameId : null;
       if(game)
