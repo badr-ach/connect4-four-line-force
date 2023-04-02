@@ -268,7 +268,7 @@ export async function newMove(data, io, socket, activeGames) {
   // Add timeout for gameover
   const timeout = setTimeout(() => {
     let game = activeGames.get(data.gameId);
-    if(!game.gameOver) {
+    if(game && !game.type !=="singeplayer" && !game.gameOver) {
       game.gameOver = true;
       game.winner = game.currPlayer === game.playerOne ? game.playerTwo : game.playerOne;
       socket.emit("game-error", {message: "Opponent timed out"})
