@@ -19,7 +19,7 @@ export class PlayMode extends HTMLElement{
         .then((r) => r.text())
         .then((html) => html);
         
-        if(!this._app.token){
+        if(this._app.player === "guest"){
             this.shadowRoot.querySelector("#vsPlayer").remove();
         }
 
