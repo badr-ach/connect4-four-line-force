@@ -12,7 +12,7 @@ router.post("/history", auth ,history);
 router.post("/befriend", auth, befriend);
 router.post("/unfriend", auth, unfriend);
 router.post("/rejectfriend", auth, rejectfriend);
-router.get("/profile/:id", profile);
+router.get("/profile/:username", profile);
 
 
 export default router;

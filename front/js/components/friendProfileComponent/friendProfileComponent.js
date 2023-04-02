@@ -34,7 +34,9 @@ export class FriendProfileComponent extends HTMLElement{
 
     async _setUpUser() {
 
-        const res = await this.api.post(this.rootPath + "/api/loadUser");
+        const res = await this.api.get(this.rootPath + "/api/profile/" + this.username);
+        console.log("res find is "+ res)
+        console.log("user find is "+ res.user)
         this.shadowRoot.getElementById("userName").innerHTML = this.username;
         this.shadowRoot.getElementById("score").innerHTML = res.user.rating;
         if(res.user.rating < 300){
@@ -62,12 +64,13 @@ export class FriendProfileComponent extends HTMLElement{
 
     async _setUpHistory() {
 
-        const res = await this.api.post(this.rootPath + "/api/history");
+        const res = await this.api.post(this.rootPath + "/api/profile/" + this.username);
+        console.log(res.history)
         this.shadowRoot.getElementById("games").innerHTML = res.history.length;
         this.shadowRoot.getElementById("online-wins").innerHTML = res.history.filter(x => x.winner === this.username).length;
         console.log(res.history)
         this.shadowRoot.getElementById("tie").innerHTML = res.history.filter(x => x.winner === "Tie").length;
-        this._setUpProgression(res.history)
+        await this._setUpProgression(res.history)
     }
 
     async _setUpProgression(history) {
