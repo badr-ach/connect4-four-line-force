@@ -23,6 +23,10 @@ export class App extends HTMLElement {
         if (!this.connected) {
             loadUser()(this.dispatchEvent.bind(this));
         }
+        let ambient = new Audio("../../../audio/ambient.wav");
+        ambient.loop = true;
+        ambient.volume = 0.2;
+        ambient.play();
     }
 
     attachEventListeners() {

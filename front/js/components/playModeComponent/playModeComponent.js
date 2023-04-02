@@ -57,7 +57,6 @@ export class PlayMode extends HTMLElement{
 
         });
         socket.once("waitingForOpponent" , (data) => {
-            alert("Waiting for opponent");
             this._app.appendChild(new LoadingPage(this._app));
         });
     }
