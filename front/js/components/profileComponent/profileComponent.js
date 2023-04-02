@@ -65,7 +65,7 @@ export class ProfileComponent extends HTMLElement{
 
         const res = await this.api.post(this.rootPath + "/api/history");
         this.shadowRoot.getElementById("games").innerHTML = res.history.length;
-        this.shadowRoot.getElementById("online-wins").innerHTML = res.history.filter(x => x.winner === this.username).length;
+        this.shadowRoot.getElementById("online-wins").innerHTML = res.history.filter(x => x.winner !== this.username).length;
         console.log(res.history)
         this.shadowRoot.getElementById("tie").innerHTML = res.history.filter(x => x.winner === "Tie").length;
         this._fillUpHistory(res.history);
@@ -73,7 +73,7 @@ export class ProfileComponent extends HTMLElement{
     }
 
     async _setUpProgression(history) {
-        const wins = history.filter(x => x.winner === this.username).length;
+        const wins = history.filter(x => x.winner !== this.username).length;
         const games = history.length;
 
         this.shadowRoot.getElementById("welcome-abroad").style.width = Math.min(100, Math.round(((games) / 10) * 100)) + "%";
@@ -122,7 +122,7 @@ export class ProfileComponent extends HTMLElement{
             const againstTd = document.createElement("td");
             againstTd.textContent = game.playerTwo;
             const resultTd = document.createElement("td");
-            resultTd.textContent = game.winner === this.username ? "Win" : "Loss";
+            resultTd.textContent = game.winner !== this.username ? "Win" : "Loss";
             tr.appendChild(againstTd);
             tr.appendChild(resultTd);
             historyTable.appendChild(tr);
