@@ -63,7 +63,6 @@ export class Connect4 extends HTMLElement {
   }
 
   async disconnectedCallback(){
-    console.log("I am disconnected")
     this._socket.emit("disconnect game", {gameId : this._gameId, roomId : this.roomId});
   }
 
@@ -156,7 +155,6 @@ export class Connect4 extends HTMLElement {
     let messageSpan = document.createElement("h2");
     messageSpan.innerHTML =  message;
     div.appendChild(messageSpan);
-    console.log(div);
     this.shadowRoot.appendChild(div);
     setTimeout(() => {
       this.shadowRoot.removeChild(div);
@@ -207,7 +205,6 @@ export class Connect4 extends HTMLElement {
       let messageSpan = document.createElement("h2");
       messageSpan.innerHTML = "From "+ data.player + " : " + data.message;
       div.appendChild(messageSpan);
-      console.log(div);
       this.shadowRoot.appendChild(div);
       setTimeout(() => {
         this.shadowRoot.removeChild(div);
@@ -299,9 +296,6 @@ export class Connect4 extends HTMLElement {
     if (this.gameOver) {
       return;
     }
-
-    console.log("currPlayer: " + this.currPlayer);
-    console.log("app.player: " + this._app.player);
 
     if (this.currPlayer !== this._app.player) {
       return;
