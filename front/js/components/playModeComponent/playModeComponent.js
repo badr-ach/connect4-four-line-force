@@ -29,6 +29,7 @@ export class PlayMode extends HTMLElement{
 
 
     _handleVsComputerClick() {
+        new Audio("../../../audio/click_mode.wav").play();
         this._removingMyself();
         const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token ? this._app.token : "guest" } });
         socket.emit("setup", { AIplays : Math.round(Math.random()) + 1});
@@ -39,11 +40,13 @@ export class PlayMode extends HTMLElement{
     }
 
     _handleVsLocalPlayerClick() {
+        new Audio("../../../audio/click_mode.wav").play();
         this._removingMyself();
         this._app.appendChild(new LocalConnect4(this._app));
     }
 
     _handleVsPlayerClick() {
+        new Audio("../../../audio/click_mode.wav").play();
         this._removingMyself();
         const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token ? this._app.token : "guest" } });
         socket.emit("setup", { AIplays:-1});

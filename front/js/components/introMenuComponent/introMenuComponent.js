@@ -36,6 +36,7 @@ export class IntroMenu extends HTMLElement {
 
   _handleLoginClick() {
     this._handleCircleClick();
+    new Audio("../../../audio/click_mode.wav").play();
     this._animator.beginAnimation("slide-left", this, () => {
         this._app.removeChild(this);
         this._app.appendChild(new Login(this._app));
@@ -44,6 +45,7 @@ export class IntroMenu extends HTMLElement {
 
   _handleSignUpClick() {
     this._handleCircleClick();
+    new Audio("../../../audio/click_mode.wav").play();
     this._animator.beginAnimation("slide-left", this, () => {
         this._app.removeChild(this);
         this._app.appendChild(new Register(this._app));
@@ -52,6 +54,7 @@ export class IntroMenu extends HTMLElement {
 
   _handleGuestClick() {
     this._handleCircleClick();
+    new Audio("../../../audio/click_mode.wav").play();
     this._animator.beginAnimation("slide-left", this, () => {
         this._app.removeChild(this);
         this._app.appendChild(new PlayMode(this._app));
@@ -59,6 +62,9 @@ export class IntroMenu extends HTMLElement {
   }
 
   _handleCircleClick() {
+    let audio = new Audio("../../../audio/circle_click.wav");
+    audio.play();
+
     if (this.toggle === false) {
       this.waves.classList.remove("active-waves");
       this.circle.style.left = "30%";

@@ -23,6 +23,11 @@ export class SideBar extends HTMLElement{
 
         this._messages = new Map();
 
+        this.addEventListener("click", (e) => {
+            let audio = new Audio("../../../audio/click_short.wav");
+            audio.play();
+        });
+
         console.log(this._app)
         console.log(JSON.stringify(this._app))
 

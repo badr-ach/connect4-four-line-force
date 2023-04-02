@@ -190,12 +190,14 @@ export class Connect4 extends HTMLElement {
         this.winner = data.winner;
       }
       this.renderBoard();
+
+      new Audio("../../../audio/piece_down.wav").play();
     });
 
     this._socket.once("game-error", (data) => {
       this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
         title: "Error",
-        content: data,
+        content: data.message,
         accept: () => {},
         decline: () => {},
         temporary: true
@@ -309,6 +311,8 @@ export class Connect4 extends HTMLElement {
       move: [row, column],
       player: this._app.player,
     });
+
+    new Audio("../../../audio/piece_down.wav").play();
   }
 
   renderBoard() {

@@ -38,6 +38,7 @@ export class LoggedIntroMenu extends HTMLElement {
   _handleResumeClick() {
     
     this._app.removeChild(this);
+    new Audio("../../../audio/click_mode.wav").play();
     const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token  } });
     socket.emit("setup", { player: this._app.player, resume: true });
     socket.once("setup", (data) => {
@@ -61,7 +62,8 @@ export class LoggedIntroMenu extends HTMLElement {
   }
 
   _handlePlayClicked() {
-    this._handleCircleClick();
+    this._handleCircleClick(true);
+    new Audio("../../../audio/click_mode.wav").play();
     this._animator.beginAnimation("slide-left", this, () => {
         this._app.removeChild(this);
         this._app.appendChild(new PlayMode(this._app));
@@ -69,11 +71,16 @@ export class LoggedIntroMenu extends HTMLElement {
   }
 
   _handleLogoutClicked() {
+    new Audio("../../../audio/click_mode.wav").play();
     logout()(this._app.dispatchEvent.bind(this._app));
   }
 
 
-  _handleCircleClick() {
+  _handleCircleClick(mute) {
+    if(!mute) {
+      let audio = new Audio("../../../audio/circle_click.wav");
+      audio.play();
+    }
     if (this.toggle === false) {
       this.waves.classList.remove("active-waves");
       this.circle.style.left = "30%";

@@ -25,6 +25,8 @@ export class PopUp extends HTMLElement{
             this.shadowRoot.querySelector(".button2").style.display = "none";
         }   
 
+        new Audio("../../../audio/notification.wav").play();
+
         this._attachEventListeners();
         if(this.temporary){
             setTimeout(() => {
@@ -45,16 +47,19 @@ export class PopUp extends HTMLElement{
 
     _handleCloseClick(){
         this.decline();
+        new Audio("../../../audio/decline.wav").play();
         this._app.removeChild(this);
     }
 
     _handleAcceptClick(){
         this.accept();
+        new Audio("../../../audio/accept.wav").play();
         this._app.removeChild(this);
     }
 
     _handleDeclineClick(){
         this.decline();
+        new Audio("../../../audio/decline.wav").play();
         this._app.removeChild(this);
     }
 

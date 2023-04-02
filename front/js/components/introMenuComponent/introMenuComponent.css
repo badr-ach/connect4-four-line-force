@@ -9,39 +9,39 @@
 }
 
 .active-waves{
-    animation: waves 2.9s infinite;
+    animation: waves 2s infinite;
 }
 
 @keyframes waves {
     0% {
         width: 50vmin;
         height: 50vh;
-        border: 1px solid white;
+        border: 1.5px solid white;
     }
     15% {
         width: 52vmin;
         height: 52vh;
-        border: 1px solid rgba(255, 255, 255, 0.863);
+        border: 1.2px solid rgba(255, 255, 255, 0.863);
     }
     30% {
         width: 54vmin;
         height: 54vh;
-        border: 0.8px solid rgba(255, 255, 255, 0.705);
+        border: 0.9px solid rgba(255, 255, 255, 0.705);
     }
     45% {
         width: 56vmin;
         height: 56vh;
-        border: 0.6px solid rgba(255, 255, 255, 0.658);
+        border: 0.7px solid rgba(255, 255, 255, 0.658);
     }
     60% {
         width: 58vmin;
         height: 58vh;
-        border: 0.4px solid rgba(255, 255, 255, 0.493);
+        border: 0.5px solid rgba(255, 255, 255, 0.493);
     }
     75% {
         width: 60vmin;
         height: 60vh;
-        border: 0.2px solid rgba(255, 255, 255, 0.247);
+        border: 0.3px solid rgba(255, 255, 255, 0.247);
     }
     90% {
         width: 61vmin;
@@ -56,8 +56,8 @@
 }
 
 .wrapper{
-    width: 150px;
-    height: 150px;
+    width: 50vmin;
+    height: 50vh;
 }
 
 .card-group{
@@ -127,11 +127,11 @@
 .big-card-wrapper{
     width: 45vmin;
     height: 45vh;
-
+    
 
     border-radius: 40vmin;
     background-color: rgb(192, 238, 228);
-
+    
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -175,7 +175,7 @@
 
 .little-card:nth-child(2) a{
     display: block;
-    transform: skew(-20deg);
+    transform: skew(-20deg); 
     color: inherit;
 }
 
@@ -185,7 +185,7 @@
 }
 
 .little-card:nth-child(3) a{
-    display: block;
+    display: block; 
 }
 
 .little-card:nth-child(4){
