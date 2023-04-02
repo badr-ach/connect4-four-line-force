@@ -10,7 +10,8 @@ export const init_chat_socket = (io) => {
 
       const users = [];
 
-      io.of("/api/chat").sockets[socket.id] = socket;
+      if(Object.values(io.of("/api/friends").sockets).filter((sock) => sock.username === socket.username).length === 0)
+        io.of("/api/chat").sockets[socket.id] = socket;
 
       for (let [id, socket] of io.of("/api/chat").sockets) {
         //todo: check if user is friend with socket.username
@@ -35,6 +36,7 @@ export const init_chat_socket = (io) => {
       });
 
       socket.on("disconnect", () => {
+        delete io.of("/api/chat").sockets[socket.id];
         socket.broadcast.emit("user disconnected", socket.id);
       });
 
