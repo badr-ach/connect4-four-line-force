@@ -1,0 +1,76 @@
+<style>
+  @import url("./js/components/onlineGameComponent/onlineGameComponent.css");
+</style>
+<h1 id="winner"></h1>
+<div id="wrapper">
+  <table>
+  <thead>
+    <tr class="column-selector">
+        <td class="column"><span class="hidden arrow" column=0>&darr;</span></td>
+        <td class="column"><span class="hidden arrow" column=1>&darr;</span></td>
+        <td class="column"><span class="hidden arrow" column=2>&darr;</span></td>
+        <td class="column"><span class="hidden arrow" column=3>&darr;</span></td>
+        <td class="column"><span class="hidden arrow" column=4>&darr;</span></td>
+        <td class="column"><span class="hidden arrow" column=5>&darr;</span></td>
+        <td class="column"><span class="hidden arrow" column=6>&darr;</span></td>
+    </tr>
+  </thead>
+  <tbody id="board">
+    <tr>
+      <td class="tile" row=0 column=0></td>
+      <td class="tile" row=0 column=1></td>
+      <td class="tile" row=0 column=2></td>
+      <td class="tile" row=0 column=3></td>
+      <td class="tile" row=0 column=4></td>
+      <td class="tile" row=0 column=5></td>
+      <td class="tile" row=0 column=6></td>
+    </tr>
+    <tr>
+      <td class="tile" row=1 column=0></td>
+      <td class="tile" row=1 column=1></td>
+      <td class="tile" row=1 column=2></td>
+      <td class="tile" row=1 column=3></td>
+      <td class="tile" row=1 column=4></td>
+      <td class="tile" row=1 column=5></td>
+      <td class="tile" row=1 column=6></td>
+    </tr>
+    <tr>
+      <td class="tile" row=2 column=0></td>
+      <td class="tile" row=2 column=1></td>
+      <td class="tile" row=2 column=2></td>
+      <td class="tile" row=2 column=3></td>
+      <td class="tile" row=2 column=4></td>
+      <td class="tile" row=2 column=5></td>
+      <td class="tile" row=2 column=6></td>
+    </tr>
+    <tr>
+      <td class="tile" row=3 column=0></td>
+      <td class="tile" row=3 column=1></td>
+      <td class="tile" row=3 column=2></td>
+      <td class="tile" row=3 column=3></td>
+      <td class="tile" row=3 column=4></td>
+      <td class="tile" row=3 column=5></td>
+      <td class="tile" row=3 column=6></td>
+    </tr>
+    <tr>
+      <td class="tile" row=4 column=0></td>
+      <td class="tile" row=4 column=1></td>
+      <td class="tile" row=4 column=2></td>
+      <td class="tile" row=4 column=3></td>
+      <td class="tile" row=4 column=4></td>
+      <td class="tile" row=4 column=5></td>
+      <td class="tile" row=4 column=6></td>
+    </tr>
+    <tr>
+      <td class="tile" row=5 column=0></td>
+      <td class="tile" row=5 column=1></td>
+      <td class="tile" row=5 column=2></td>
+      <td class="tile" row=5 column=3></td>
+      <td class="tile" row=5 column=4></td>
+      <td class="tile" row=5 column=5></td>
+      <td class="tile" row=5 column=6></td>
+    </tr>
+  </tbody>
+</table>
+<button id="save-btn"> SAVE THE GAME STATE </button>
+</div>

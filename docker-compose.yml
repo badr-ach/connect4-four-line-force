@@ -3,7 +3,7 @@ services:
   app:
     build: .
     ports:
-      - 8000:8000
+      - 80:8000
     environment:
       MONGO_URI: mongodb://mongodb:27017/
     depends_on:
@@ -15,7 +15,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
-
+    command: mongod --quiet --logpath /dev/null
     volumes:
       - mongodb:/data/db
 volumes:

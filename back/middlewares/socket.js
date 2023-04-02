@@ -5,21 +5,22 @@ const auth = async (socket, next) => {
 
   try {
     const token = socket.handshake.auth.token;
-    console.log(token, "token")
     if(token === "guest"){
-      socket.handshake.auth.id = "guest";
+      socket.username = "guest";
       return next();
     }
 
     let decodedData;
-    
-    if (token) {      
+
+    if (token) {
       decodedData = jwt.verify(token, secret);
       socket.handshake.auth.id = decodedData?.id;
-    }    
+      socket.username = decodedData?.username;
+    }
 
     if(!decodedData) {
-      console.log("in error")
+      console.log("in error", decodedData)
+      console.log("in error token", token)
       return next(new Error("Invalid token"));
     }
 

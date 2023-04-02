@@ -1,0 +1,185 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000000;
+}
+
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 0 10px #fff;
+    width: 600px;
+    margin-right: 100px;
+}
+
+.history {
+    border-radius: 10px;
+    padding: 20px;
+    height: 300px;
+    box-shadow: 0 0 10px #fff;
+    background: #ffffff;
+    width: 600px;
+    height: 358px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-name{
+    padding-left: 20px;
+}
+
+.avatar-img {
+    float: left;
+    margin-right: 20px;
+    width: 30%;
+    height: auto;
+    border-radius: 50%;
+}
+
+.rank-img{
+    float: left;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.profile h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.info-element{
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stats {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.stat {
+    display: inline-block;
+    flex-basis: 30%;
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    text-align: center;
+    background: linear-gradient(to right, #ff7e23, #ffb600);
+    margin-bottom: 10px;
+    justify-content: center;
+    align-content: center;
+}
+.stat:not(:last-child) {
+    margin-right: 20px;
+}
+
+.stat h2 {
+    font-size: 24px;
+    margin-bottom: 3px;
+}
+
+.stat p {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.infos{
+    display: inline-block;
+}
+
+
+
+.history-list {
+    overflow-y: scroll;
+    height: 80%;
+    box-shadow: 0 0 5px #808080;
+}
+
+.trophee-list {
+    height: 80%;
+    box-shadow: 0 0 5px #808080;
+}
+
+.history-tab{
+    background: #fff900;
+}
+
+.history h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.history-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progress-bar {
+    height: 20px;
+    background-color: #ddd;
+    border-radius: 5px;
+    display: inline-block;
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.progress-bar-inner {
+    height: 100%;
+    background-color: #ffda00;
+    text-align: right;
+    padding-right: 10px;
+    line-height: 20px;
+    transition: width 0.5s ease;
+}
+
+.progressions {
+    margin-top : 20px;
+}
+
+.thead {
+    background: linear-gradient(to right, #e5e573, #b29e5d);
+}

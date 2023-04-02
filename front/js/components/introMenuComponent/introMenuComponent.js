@@ -1,5 +1,8 @@
 import { events } from "../../events/events.js";
 import { Animator } from "../../scripts/animator.js";
+import { Login } from "../loginPageComponent/loginPageComponent.js";
+import { Register } from "../registerPageComponent/registerPageComponent.js";
+import { PlayMode } from "../playModeComponent/playModeComponent.js";
 
 export class IntroMenu extends HTMLElement {
   constructor(app) {
@@ -7,8 +10,9 @@ export class IntroMenu extends HTMLElement {
     this.attachShadow({ mode: "open" });
 
     this._app = app;
-    this.toggle = false;
     this._animator = new Animator();
+
+    this.toggle = false;
   }
 
   async connectedCallback() {
@@ -32,26 +36,35 @@ export class IntroMenu extends HTMLElement {
 
   _handleLoginClick() {
     this._handleCircleClick();
+    new Audio("../../../audio/click_mode.wav").play();
     this._animator.beginAnimation("slide-left", this, () => {
-      this._app.dispatchEvent(new CustomEvent(events.loginClicked));
+        this._app.removeChild(this);
+        this._app.appendChild(new Login(this._app));
     });
   }
 
   _handleSignUpClick() {
     this._handleCircleClick();
+    new Audio("../../../audio/click_mode.wav").play();
     this._animator.beginAnimation("slide-left", this, () => {
-      this._app.dispatchEvent(new CustomEvent(events.signUpClicked));
+        this._app.removeChild(this);
+        this._app.appendChild(new Register(this._app));
     });
   }
 
   _handleGuestClick() {
     this._handleCircleClick();
+    new Audio("../../../audio/click_mode.wav").play();
     this._animator.beginAnimation("slide-left", this, () => {
-      this._app.dispatchEvent(new CustomEvent(events.guestClicked));
+        this._app.removeChild(this);
+        this._app.appendChild(new PlayMode(this._app));
     });
   }
 
   _handleCircleClick() {
+    let audio = new Audio("../../../audio/circle_click.wav");
+    audio.play();
+
     if (this.toggle === false) {
       this.waves.classList.remove("active-waves");
       this.circle.style.left = "30%";

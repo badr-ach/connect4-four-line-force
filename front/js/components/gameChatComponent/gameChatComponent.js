@@ -1,25 +1,59 @@
-export class GameChat extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode: "open" });
+import { Animator } from "../../scripts/animator.js";
+import { WebSocket } from "../../utils/WebSocket.js";
 
-      this.shadowRoot.innerHTML = `
-        <style>
-            @import url("../gameChatComponent/gameChatComponent.css");
-        </style>
-        <div>
-            <div class="chat-container">
-                <div class="chat">
-                    <div class="message"><b>username : </b> <span>message</span></div>
-                </div>
-                <div class="message-sender">
-                    <input type="text" class="message-box">
-                    <button class="send-button"><img src="https://icons-for-free.com/iconfiles/png/512/part+1+message-1320568353446515556.png"></button>
-                </div>
-            </div>
-            <button class="chat-open-button" ><img class="chat-icon" src="https://icons-for-free.com/iconfiles/png/512/part+1+message-1320568353446515556.png"></button>
-        </div>
-      `;
+export class GameChat extends HTMLElement {
+    constructor( app, username, messages, pushMessageToState) {
+        super();
+        this.attachShadow({ mode: "open" });
+        this._app = app;
+        this.username = username;
+        this._animator = new Animator();
+        this._message = "";
+        this._messageList = messages;
+        this._pushMessageToState = pushMessageToState;
+        this._chat_socket =  WebSocket.getSocketByNameSpace("/api/chat",{ auth: { token: this._app.token ? this._app.token : "guest" } });
+
+        this._chat_socket.on("private message", (data) => {
+            let messageList = this.shadowRoot.querySelector("#message-list");
+            messageList.innerHTML += `<li class="message">${data.from} : ${data.content}</li>`;
+        });
+    }
+
+    async connectedCallback() {
+        this.shadowRoot.innerHTML = await fetch("./js/components/gameChatComponent/gameChatComponent.html")
+        .then((r) => r.text())
+        .then((html) => html);
+        this._messageInput = this.shadowRoot.querySelector("#message-input");
+        this._messageInput.addEventListener("keyup", (e) => {
+            if(e.keyCode === 13) {
+                this._handleMessageSubmit();
+            }
+        });
+        let messageList = this.shadowRoot.querySelector("#message-list");
+        for(let i = 0; i < this._messageList.length; i++) {
+            messageList.innerHTML += `<li class="message">${this._messageList[i][0]} : ${this._messageList[i][1]}</li>`;
+        }
+        this._messageSubmit = this.shadowRoot.querySelector("#submit-btn");
+        this._closeBtn = this.shadowRoot.querySelector(".close-button");
+        this._closeBtn.addEventListener("click", () => this._handleCloseBtnClick());
+        this._messageSubmit.addEventListener("click", () => this._handleMessageSubmit());
+    }
+
+
+
+    _handleMessageSubmit() {
+
+        this._message = this._messageInput.value;
+        let messageList = this.shadowRoot.querySelector("#message-list");
+        messageList.innerHTML += `<li class="message">${this._app.user.username} : ${this._message}</li>`;
+        this._messageInput.value = "";
+
+        this._chat_socket.emit("private message", { content: this._message, to: this.username });
+        this._pushMessageToState(this.username,this._message);
+    }
+
+    _handleCloseBtnClick() {
+        this._app.removeChild(this);
     }
 }
 

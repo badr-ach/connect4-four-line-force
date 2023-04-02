@@ -1,4 +1,4 @@
-export function addCors(request,response,next) {
+export const addCors = (request,response,next) => {
 
     // Website you wish to allow to connect to your server.
     response.setHeader('Access-Control-Allow-Origin', '*');

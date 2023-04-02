@@ -3,12 +3,6 @@ let player;
 let [firstrow,firstcol] = [null,null];
 
 
-export function setUpLocal(board,pl){
-    localboard = board;
-    player = pl;
-}
-
-
 export function setUp(starter){
     return new Promise(function (resolve, reject) {
         setTimeout(() => {
@@ -31,19 +25,6 @@ export function setUp(starter){
         }
         resolve(true);
     });
-}
-
-
-function randomMove(board) {
-    let columnPriority = [3, 2, 4, 1, 5, 0, 6];
-    let randomMove;
-    for(let i = 0; i < 7; i++){
-        if(board[0][columnPriority[i]] === 0){
-            randomMove = columnPriority[i];
-            break;
-        }
-    }
-    return  [randomMove,getAvailableRow(board, randomMove)];
 }
 
 export function nextMove(lastMove) {
@@ -78,7 +59,7 @@ function monteCarlo(board, player) {
     // Loop through each column
     for (let column = 0; column < 7; column++) {
         // If column is already full, skip it
-        if (board[0][column] !== 0) {
+        if (board[5][column] !== 0) {
             continue;
         }
 
@@ -134,7 +115,7 @@ function makeMove(board, column, player) {
 
 // Returns the row of the first available slot in the specified column
 function getAvailableRow(board, column) {
-    for (let row = 5; row >= 0; row--) {
+    for (let row = 0 ; row < 6; row++) {
         if (board[row][column] === 0) {
             return row;
         }
@@ -165,7 +146,7 @@ function simulateGame(board, currentPlayer) {
 function getAvailableColumns(board) {
     const columns = [];
     for (let column = 0; column < 7; column++) {
-        if (board[0][column] === 0) {
+        if (board[5][column] === 0) {
             columns.push(column);
         }
     }
@@ -231,3 +212,5 @@ function copyBoard(board) {
     }
     return newBoard;
 }
+
+

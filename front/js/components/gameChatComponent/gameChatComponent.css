@@ -1,67 +1,69 @@
-.chat-icon{
-    width: 20px;
-    height: 20px;
+.chat-box {
+    position: fixed;
+    bottom: 0;
+    right: 20px;
+    width: 300px;
+    height: 350px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    scrollbar-width: thin;
+    background-color: white;
+    z-index: 9000;
 }
 
-.chat-open-button{
-    border: 1px;
+.chat-history {
+    height: 80%;
+    overflow-y: scroll;
+    padding-top: 27px;
+    scrollbar-width: thin;
     background-color: white;
-    border-radius: 2px;
-    
+}
 
+.chat-input {
+    height: 18%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    padding: 0px;
+    background-color: white;
 }
 
-.chat{
-    padding: 10px;
-    width: 300px;
-    height: 250px;
-    /* border: 2px solid rgba(10, 100, 73, 0.493); */
-    border-radius: 3px;
-    background-color: rgb(134, 200, 188);
+.chat-input input[type="text"] {
+    flex: 1;
+    padding: 5px;
+    margin-right: 10px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    font-size: 16px;
+}
 
-
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+.chat-input button {
+    padding: 5px 10px;
+    background-color: #1e88e5;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    padding: 6px;
+    font-size: 20px;
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+}
+li.message::marker {
+    display: none;
 }
 
 .message{
-    color: white;
+    padding-left: 10px;
 }
 
-.message-sender{
-    width: 320px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    margin : 2px auto;
-}
-
-.message-box{
-    width: 100%;
-    height: 25px;
-    padding-left: 35px;
-    border: rgb(202, 150, 6) 1px solid;
-    border-radius: 2.5px;
-    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.432) inset;
-
-
-}
-
-.send-button{
-    border: 0px;
-    background-color: transparent;
-    /* color:rgb(191, 236, 228); */
-    font-size: 25px;
-
-    position: absolute;
-    right: 90%;
-}
-
-.send-button img{
-    width: 20px;
-    height: 20px;
-    border: 0px;
+::marker {
+    display: none;
 }

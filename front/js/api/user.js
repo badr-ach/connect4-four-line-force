@@ -2,26 +2,23 @@ import { fetcher } from "../utils/requester.js";
 import { events } from "../events/events.js";
 
 const api = fetcher();
-const rootPath = "http://localhost:8000";
+const rootPath = "http://4lineforce.connect4.academy";
 
 // Load User
 export const loadUser = () => async (dispatch) => {
   try {
 
     if(localStorage.getItem("token") === null){
-      // api.delete(Authorization);
       return;
     }
 
     const token = localStorage.getItem("token");
     api.use({Authorization: "Bearer " + token});
     const res = await api.post(rootPath+"/api/loadUser",{});
-    console.log("res",res);
     dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
 
   } catch (err) {
     localStorage.removeItem('token');
-    console.log(err);
     dispatch(new CustomEvent(events.error, {detail: err}));
   }
 };
@@ -32,10 +29,16 @@ export const signup = (body) => async (dispatch) => {
     const res = await api.post(rootPath+"/api/signup", body);
     localStorage.setItem("token", res.token);
     dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
-    alert("You have been registered successfully");
+    dispatch(new CustomEvent(events.popUp, {
+          detail: {
+            title: "Success",
+            content: "You have been signed up",
+            temporary: true,
+            accept: () => {},
+            decline: () => {}
+          }}));
   } catch (err) {
     localStorage.removeItem('token');
-    console.log(err);
     dispatch(new CustomEvent(events.error, {detail: err}));
   }
 };
@@ -44,12 +47,19 @@ export const signup = (body) => async (dispatch) => {
 export const login = (body) => async (dispatch) => {
   try {
     const res = await api.post(rootPath+"/api/login", body);
+
     localStorage.setItem("token", res.token);
     dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
-    alert("You have been logged in");
+    dispatch(new CustomEvent(events.popUp, {
+          detail: {
+            title: "Success",
+            content: "You have been logged in",
+            temporary: true,
+            accept: () => {},
+            decline: () => {}
+          }}));
   } catch (err) {
     localStorage.removeItem('token');
-    console.log(err);
     dispatch(new CustomEvent(events.error, {detail: err}));
   }
 };
@@ -59,10 +69,53 @@ export const logout = () => async (dispatch) => {
   try {
     localStorage.removeItem('token');
     dispatch(new CustomEvent(events.signedOut, {detail: null}));
-    alert("You have been logged out");
+    dispatch(new CustomEvent(events.popUp, {
+      detail: {
+        title: "Success",
+        content: "You have been logged out",
+        temporary: true,
+        accept: () => {},
+        decline: () => {}
+      }}));
   } catch (err) {
     console.log(err);
     dispatch(new CustomEvent(events.error, {detail: err}));
 
+  }
+}
+
+
+export const befriend = (body) => async (dispatch) => {
+  try{
+    if(localStorage.getItem("token") === null){
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    api.use({Authorization: "Bearer " + token});
+
+    const res = await api.post(rootPath+"/api/befriend", body);
+    dispatch(new CustomEvent(events.popUp, {detail: {title: "Success", content: "You have befriended " +
+    body.username, temporary: true, accept: () => {}, decline: () => {}}}));
+
+  }catch(err){
+    dispatch(new CustomEvent(events.error, {detail: err}));
+  }
+}
+
+export const rejectfriend = (body) => async (dispatch) => {
+  try{
+    if(localStorage.getItem("token") === null){
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    api.use({Authorization: "Bearer " + token});
+
+    const res = await api.post(rootPath+"/api/rejectfriend", body);
+    dispatch(new CustomEvent(events.popUp, {detail: {title: "Success", content: "You have rejected " +
+    body.username, temporary: true, accept: () => {}, decline: () => {}}}));
+  }catch(err){
+    dispatch(new CustomEvent(events.error, {detail: err}));
   }
 }

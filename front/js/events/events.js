@@ -13,4 +13,8 @@ export const events = {
     gameChatMessageReceived: "game-chat-message-received",
     vsComputerClicked: "vs-computer-clicked",
     vsPlayerClicked: "vs-player-clicked",
+    onlineGameClicked: "online-game-clicked",
+    popUp: "pop-up",
+    friendClicked: "friend-clicked",
+    profileClicked: "profile-clicked",
 }

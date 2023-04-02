@@ -3,7 +3,7 @@ export class WebSocket{
     static sockets = new Map();
 
     static connectToNameSapce(namespace,config){
-        const socket = io(namespace,config);
+        const socket = io(namespace,config,{ autoConnect: false });
         WebSocket.sockets.set(namespace,socket);
         return socket;
     };
