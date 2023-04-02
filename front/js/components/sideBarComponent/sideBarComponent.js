@@ -69,6 +69,88 @@ export class SideBar extends HTMLElement{
             } }));
         })
 
+        this._friends_socket.on("friend request accepted", (data) => {
+
+            //////////////////////////////////// SPAGHETTI start
+
+
+            let friends = document.querySelector(".friends");
+                    let username =  data.username;
+                    let friend = document.createElement("li");
+                    let friendName = document.createElement("a");
+
+                    let wrapper = document.createElement("div");
+                    wrapper.classList.add("friendicons-wrapper");
+
+                    let textwrapper = document.createElement("div");
+                    textwrapper.classList.add("friendname-text-wrapper");
+                    textwrapper.innerHTML = username;
+                    textwrapper.dataset.username = username;
+
+                    let msgBtn = document.createElement("i");
+                    let challengeBtn = document.createElement("i");
+                    let deleteBtn = document.createElement("i");
+
+                    msgBtn.classList.add( "fa", "fa-envelope");
+                    msgBtn.dataset.username = username;
+                    deleteBtn.classList.add( "fa", "fa-trash");
+                    deleteBtn.dataset.username = username;
+                    challengeBtn.classList.add( "fa", "fa-bolt");
+                    challengeBtn.dataset.username = username;
+
+                    friendName.appendChild(textwrapper);
+                    msgBtn.href = "#";
+                    friendName.classList.add("friend");
+                    friendName.dataset.username = username;
+                    friend.appendChild(friendName);
+                    friends.appendChild(friend);
+
+                    wrapper.appendChild(msgBtn);
+                    wrapper.appendChild(deleteBtn);
+                    wrapper.appendChild(challengeBtn);
+
+                    friendName.appendChild(wrapper);
+
+                    msgBtn.addEventListener("click", (e)=>{
+                        if(!this._chat_open){
+                            this._app.appendChild(new GameChat(this._app, e.target.dataset.username,
+                                this._messages.get(e.target.dataset.username) ? this._messages.get(e.target.dataset.username) : [],
+                                (from,message)=>{
+                                    let messages = this._messages.get(from) ? this._messages.get(from) : [];
+                                    messages.push([this._app.user.username,message]);
+                                    this._messages.set(from, messages);
+                                }));
+                        }else{
+                            this._app.removeChild(this._app.lastChild);
+                            this._app.appendChild(new GameChat(this._app, e.target.dataset.username,
+                                this._messages.get(e.target.dataset.username) ? this._messages.get(e.target.dataset.username) : [],
+                                (from,message)=>{
+                                    let messages = this._messages.get(from) ? this._messages.get(from) : [];
+                                    messages.push([this._app.user.username,message]);
+                                    this._messages.set(from, messages);
+                                }));
+                        }
+
+                    });
+
+                    challengeBtn.addEventListener("click", (e)=>{
+                        this._friends_socket.emit("challenge", { username: e.target.dataset.username });
+                    });
+
+                    deleteBtn.addEventListener("click", (e)=>{
+                        friends.removeChild(friend);
+                        console.log(friend);
+                        this._friends_socket.emit("delete friend", { username: e.target.dataset.username });
+                    });
+
+
+
+
+            ///////////////////////////////// SPAGHETTI OVER
+            
+
+        });
+
         this._friends_socket.on("friend request", (data) => {
             this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
                 title: "Friend request",
