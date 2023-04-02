@@ -178,7 +178,7 @@ export class LocalGame extends HTMLElement {
             win = "Yellow Wins";
         }
         this.gameOver = true;
-        
+
     }
 
 
