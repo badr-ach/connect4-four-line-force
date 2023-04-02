@@ -214,13 +214,13 @@ export const profile = async (req, res) => {
 
     try {
 
-        const user = await UserModal.findOne(username);
+        const user = await UserModal.findOne({username : username});
 
         if (!user) return res.status(404).json({ message: "User doesn't exist" });
 
         const projection = { gameId: 1, playerOne: 1, playerTwo: 1,winner: 1};
 
-        let history = await GameModal.findAll( {$or: [{ playerOne: req.username }, { playerTwo: req.username }]}, projection);
+        let history = await GameModal.findAll( {$or: [{ playerOne: username }, { playerTwo: username }]}, projection);
 
         const data = { user : user, history: history }
 
