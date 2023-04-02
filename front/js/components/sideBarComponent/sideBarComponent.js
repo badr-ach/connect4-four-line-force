@@ -264,7 +264,7 @@ export class SideBar extends HTMLElement{
         }
 
         // Select all friend a elements
-        const friendElements = document.querySelectorAll(".friend");
+        const friendElements = document.querySelectorAll(".friendname-text-wrapper");
 
         // Loop through each friend element and add click event listener
         friendElements.forEach((friendElement) => {
