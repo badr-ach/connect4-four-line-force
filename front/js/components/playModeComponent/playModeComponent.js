@@ -18,7 +18,6 @@ export class PlayMode extends HTMLElement{
         this.shadowRoot.innerHTML = await fetch("./js/components/playModeComponent/playModeComponent.html")
         .then((r) => r.text())
         .then((html) => html);
-        
         if(this._app.player === "guest"){
             let vsplayer = this.shadowRoot.querySelector("#vsPlayer");
             console.log(vsplayer);
@@ -30,7 +29,9 @@ export class PlayMode extends HTMLElement{
 
     _attachEventListeners(){
         this.shadowRoot.getElementById("vsComputer").addEventListener("click", () => this._handleVsComputerClick());
-        this.shadowRoot.getElementById("vsPlayer").addEventListener("click", () => this._handleVsPlayerClick());
+        if(!this._app.player === "guest"){
+            this.shadowRoot.getElementById("vsPlayer").addEventListener("click", () => this._handleVsPlayerClick());
+        }
         this.shadowRoot.getElementById("vsLocalPlayer").addEventListener("click", () => this._handleVsLocalPlayerClick());
     }
 
