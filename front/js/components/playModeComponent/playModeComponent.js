@@ -75,8 +75,8 @@ export class PlayMode extends HTMLElement{
             while(this._app.firstChild){
                 this._app.removeChild(this._app.firstChild);
             }
-            if(this._app.player)
-            this._app.appendChild(new SideBar(this._app));
+            let token = localStorage.getItem("token");
+            if(token) this._app.appendChild(new SideBar(this._app));
     }
 
     // _removingLoadingScreen(){

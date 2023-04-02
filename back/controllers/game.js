@@ -110,6 +110,7 @@ export async function setup(data, io, socket, activeGames, queue) {
       }
 
     } else {
+      console.log("Im resuming")
       const res = await GameModal.last({
         playerOne: socket.username,
         type: "singleplayer",
@@ -206,6 +207,8 @@ export async function newMove(data, io, socket, activeGames) {
   let game = activeGames.get(data.gameId);
 
   if (!game || game.currPlayer !== player) return;
+
+  if(game.winner !== null) return;
 
   if (socket.username !== player) return;
 

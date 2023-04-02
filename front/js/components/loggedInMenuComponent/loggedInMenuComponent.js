@@ -41,7 +41,7 @@ export class LoggedIntroMenu extends HTMLElement {
     new Audio("../../../audio/click_mode.wav").play();
     const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token  } });
     socket.emit("setup", { player: this._app.player, resume: true });
-    socket.once("setup", (data) => {
+    socket.on("setup", (data) => {
         if(data === null) {
             this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: 
                 {
