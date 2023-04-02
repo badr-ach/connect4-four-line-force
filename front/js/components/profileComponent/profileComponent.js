@@ -64,7 +64,7 @@ export class ProfileComponent extends HTMLElement{
     async _setUpHistory() {
 
         const res = await this.api.post(this.rootPath + "/api/history");
-        this.shadowRoot.getElementById("games").innerHTML = res.history.length;
+        this.shadowRoot.getElementById("games").innerHTML = res.history.filter(x => x.winner !== null).length;
         this.shadowRoot.getElementById("online-wins").innerHTML = res.history.filter(x => x.winner === this.username).length;
         console.log(res.history)
         this.shadowRoot.getElementById("tie").innerHTML = res.history.filter(x => x.winner === "Tie").length;
