@@ -110,6 +110,7 @@ export async function setup(data, io, socket, activeGames, queue) {
       }
 
     } else {
+      console.log("Im resuming")
       const res = await GameModal.last({
         playerOne: socket.username,
         type: "singleplayer",
