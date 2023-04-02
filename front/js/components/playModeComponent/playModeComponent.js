@@ -2,8 +2,11 @@ import { Animator } from "../../scripts/animator.js";
 import { WebSocket } from "../../utils/WebSocket.js";
 import { Connect4 } from "../gameComponent/gameComponent.js";
 import { LoadingPage } from "../loadingPageComponent/loadingPageComponent.js";
-import { LocalConnect4 } from "../localGameComponent/localGameComponent.js";
+
 import { SideBar } from "../sideBarComponent/sideBarComponent.js";
+import {LocalGame} from "../localGameComponent/localGameComponent.js";
+
+
 
 
 export class PlayMode extends HTMLElement{
@@ -38,7 +41,9 @@ export class PlayMode extends HTMLElement{
 
     _handleVsComputerClick() {
         new Audio("../../../audio/click_mode.wav").play();
-        this._removingMyself();
+        while(this._app.firstChild){
+            this._app.removeChild(this._app.firstChild);
+        }
         const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token ? this._app.token : "guest" } });
         socket.emit("setup", { AIplays : Math.round(Math.random()) + 1});
         socket.once("setup", (data) => {
@@ -49,7 +54,7 @@ export class PlayMode extends HTMLElement{
     _handleVsLocalPlayerClick() {
         new Audio("../../../audio/click_mode.wav").play();
         this._removingMyself();
-        this._app.appendChild(new LocalConnect4(this._app));
+        this._app.appendChild(new LocalGame(this._app));
     }
 
     _handleVsPlayerClick() {
@@ -72,7 +77,7 @@ export class PlayMode extends HTMLElement{
             while(this._app.firstChild){
                 this._app.removeChild(this._app.firstChild);
             }
-            this._app.appendChild(new SideBar(this._app));
+            if(this._app.player !== "guest") this._app.appendChild(new SideBar(this._app));
     }
 
     // _removingLoadingScreen(){

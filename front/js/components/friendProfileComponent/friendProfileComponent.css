@@ -1,0 +1,35 @@
+.but {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #ff0000;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+#challenge {
+    background: linear-gradient(to right, #de5e1b, #dc3113);
+}
+
+#delete {
+    background: linear-gradient(to right, #dc3113, #ea0808);
+}
+
+.but:hover {
+    background-color: #9d7a61;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.interaction{
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    align-content: center;
+    justify-content: center;
+}
+
