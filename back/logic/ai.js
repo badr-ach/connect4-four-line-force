@@ -10,10 +10,7 @@ export function setUpLocal(board,pl){
 
 
 export function setUp(starter){
-    return new Promise(function (resolve, reject) {
-        setTimeout(() => {
-            reject("error : Time is out");
-        }, 1000);
+
         localboard = [
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
@@ -29,8 +26,7 @@ export function setUp(starter){
         }else{
             player = 2;
         }
-        resolve(true);
-    });
+        return true;
 }
 
 
@@ -48,12 +44,11 @@ function randomMove(board) {
 
 export function nextMove(lastMove) {
 
-    return new Promise(function (resolve, reject) {
         if(lastMove.length === 0){
             //i play first
             localboard = makeMove(localboard, firstcol, player);
-            resolve([firstcol,firstrow]);
-            return;
+            return[firstcol,firstrow]
+
         }
 
         //i play second
@@ -64,8 +59,8 @@ export function nextMove(lastMove) {
         // what i play
         let [myrow,mycol] = monteCarlo(localboard, player);
         localboard = makeMove(localboard, mycol, player);
-        resolve([mycol,myrow]);
-    });
+        return[mycol,myrow];
+    
 }
 
 
@@ -231,3 +226,28 @@ function copyBoard(board) {
     }
     return newBoard;
 }
+
+
+// function displayBoard(board){
+//     let display = "";
+//     for(let i = 0; i < 6; i++){
+//         for(let j = 0; j < 7; j++){
+//             display += board[i][j] + " ";
+//         }
+//         display += "\n"
+//     }
+//     console.log(display);
+// }
+
+// let play = setUp(1);
+// if(play === true){
+//     let move = nextMove([]);
+//     while(!checkWin1(localboard) && getAvailableColumns(localboard).length !== 0){
+//         player = player === 1 ? 2 : 1;
+//         displayBoard(localboard);
+//         move = nextMove(move);
+//     }
+
+//     displayBoard(localboard);
+
+// }

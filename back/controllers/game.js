@@ -221,7 +221,6 @@ export async function newMove(data, io, socket, activeGames) {
 
   game.currPlayer = player === game.playerOne ? game.playerTwo : game.playerOne;
 
-
   if (!roomId) {
     if (!gameStatus.gameOver && game.type === "singleplayer") {
       let aiMove = await nextMove([move[1], move[0]]).then((res) => {
@@ -262,6 +261,22 @@ export async function newMove(data, io, socket, activeGames) {
     activeGames.set(data.gameId, game);
     io.of("/api/game").to(roomId).emit("updatedBoard", activeGames.get(data.gameId));
   }
+
+  // Add timeout for gameover
+  const timeout = setTimeout(() => {
+    if(!gameStatus.gameOver) {
+      game.gameOver = true;
+      game.winner = game.currPlayer === game.playerOne ? game.playerTwo : game.playerOne;
+      socket.emit("game-error", {message: "Opponent timed out"})
+      io.of("/api/game").emit("updatedBoard", activeGames.get(data.gameId));
+    }
+  }, 5000);
+
+  // Reset timeout if new move is made within 5 seconds
+  socket.once("newMove", () => {
+    clearTimeout(timeout);
+  });
+
 }
 
 export function saveGame(data, socket, activeGames) {
