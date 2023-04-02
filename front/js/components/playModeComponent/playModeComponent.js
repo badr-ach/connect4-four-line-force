@@ -34,7 +34,9 @@ export class PlayMode extends HTMLElement{
 
     _handleVsComputerClick() {
         new Audio("../../../audio/click_mode.wav").play();
-        this._removingMyself();
+        while(this._app.firstChild){
+            this._app.removeChild(this._app.firstChild);
+        }
         const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token ? this._app.token : "guest" } });
         socket.emit("setup", { AIplays : Math.round(Math.random()) + 1});
         socket.once("setup", (data) => {
