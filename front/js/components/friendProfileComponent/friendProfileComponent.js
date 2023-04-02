@@ -9,7 +9,7 @@ export class FriendProfileComponent extends HTMLElement{
         this._app = app;
         this._animator = new Animator();
         this.api = fetcher();
-        this.rootPath = "http://13.39.75.52";
+        this.rootPath = "http://4lineforce.connect4.academy";
         this.historyGames = [];
         const token = localStorage.getItem("token");
         this.api.use({Authorization: "Bearer " + token});

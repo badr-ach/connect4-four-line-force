@@ -2,7 +2,7 @@ import { fetcher } from "../utils/requester.js";
 import { events } from "../events/events.js";
 
 const api = fetcher();
-const rootPath = "http://13.39.75.52";
+const rootPath = "http://4lineforce.connect4.academy";
 
 // Get History
 export const gameHistory = async () => {
