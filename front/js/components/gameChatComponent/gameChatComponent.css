@@ -58,8 +58,12 @@
 }
 li.message::marker {
     display: none;
+}
+
+.message{
     padding-left: 10px;
 }
+
 ::marker {
     display: none;
 }
