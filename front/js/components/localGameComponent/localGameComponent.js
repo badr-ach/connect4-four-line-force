@@ -30,8 +30,25 @@ export class LocalGame extends HTMLElement {
             .then((r) => r.text())
             .then((html) => html);
 
-
+        this.switchTurn();
         this.setGame();
+        this.switchTurn();
+
+    }
+
+    switchTurn(){
+            let turn = this.shadowRoot.querySelector(".turn");
+            turn.removeChild(turn.childNodes[2]);
+            if (this.currPlayer === this.playerRed) {
+                let span = this.shadowRoot.ownerDocument.createElement("span");
+                span.classList.add("redCircle");
+                turn.appendChild(span);
+            } else if(this.currPlayer === this.playerYellow){
+                let span1 = this.shadowRoot.ownerDocument.createElement("span");
+
+                span1.classList.add("yellowCircle");
+                turn.appendChild(span1);
+            }
 
     }
     setGame() {

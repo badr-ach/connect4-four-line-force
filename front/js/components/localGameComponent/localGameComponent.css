@@ -41,10 +41,44 @@ body {
 #winner{
     font-size: 48px;
     font-family: 'Helvetica Neue', sans-serif;
-    color: #4CAF50; /* green */
+    color: #4CAF50;
     text-align: center;
-    text-shadow: 2px 2px #ccc;
+    background-color: transparent;
+}
+.turn {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    color: #ffffff;
+    position: fixed;
+    left: 200px;
+    bottom: 350px;
+    flex-wrap: nowrap;
+    flex-direction: column;
+}
 
-    background-color: #f2f2f2;
+.turnPLayer{
+    font-size: 48px;
+    font-family: 'Helvetica Neue', sans-serif;
+    color: #ffffff;
+    float: right;
+    background-color: #ffffff;
+}
+.redCircle{
+    height: 70px;
+    width: 80px;
+    margin: 10px;
+    background-color: rgb(255, 158, 158);
+    border-radius: 50%;
+    border: 3px solid rgb(10, 100, 73);
+}
+
+.yellowCircle{
+    height: 70px;
+    width: 80px;
+    margin: 10px;
+    background-color: rgb(248, 249, 136);
+    border-radius: 50%;
+    border: 3px solid rgb(10, 100, 73);
 }
 
