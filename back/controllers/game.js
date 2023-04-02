@@ -298,8 +298,8 @@ export function saveGame(data, socket, activeGames) {
     playerOne: game.playerOne,
     playerTwo: game.playerTwo,
     currPlayer: game.currPlayer,
-    gameOver: game.gameOver,
-    winner: game.winner,
+    gameOver: false,
+    winner: null,
     type: game.type,
   })
     .then((res) => {
