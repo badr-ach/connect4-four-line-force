@@ -303,7 +303,7 @@ export function saveGame(data, socket, activeGames) {
     type: game.type,
   })
     .then((res) => {
-      socket.emit("savedGame", { message: res+"Game saved successfully" });
+      socket.emit("savedGame", { message: JSON.stringify(res)+"Game saved successfully" });
     })
     .catch((err) => {
       socket.emit("savedGame", { message: "Game could not be saved" });
