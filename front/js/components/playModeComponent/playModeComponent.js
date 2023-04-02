@@ -20,7 +20,9 @@ export class PlayMode extends HTMLElement{
         .then((html) => html);
         
         if(this._app.player === "guest"){
-            this.shadowRoot.querySelector("#vsPlayer").remove();
+            let vsplayer = this.shadowRoot.querySelector("#vsPlayer");
+            console.log(vsplayer);
+            vsplayer.remove();
         }
 
         this._attachEventListeners();
