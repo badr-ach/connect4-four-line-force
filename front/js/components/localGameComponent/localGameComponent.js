@@ -1,5 +1,7 @@
 import {SideBar} from "../sideBarComponent/sideBarComponent.js";
 import {Animator} from "../../scripts/animator.js";
+import {events} from "../../events/events.js";
+import {LoggedIntroMenu} from "../loggedInMenuComponent/loggedInMenuComponent.js";
 
 
 export class LocalGame extends HTMLElement {
@@ -28,8 +30,25 @@ export class LocalGame extends HTMLElement {
             .then((r) => r.text())
             .then((html) => html);
 
-
+        this.switchTurn();
         this.setGame();
+        this.switchTurn();
+
+    }
+
+    switchTurn(){
+            let turn = this.shadowRoot.querySelector(".turn");
+            turn.removeChild(turn.childNodes[2]);
+            if (this.currPlayer === this.playerRed) {
+                let span = this.shadowRoot.ownerDocument.createElement("span");
+                span.classList.add("redCircle");
+                turn.appendChild(span);
+            } else if(this.currPlayer === this.playerYellow){
+                let span1 = this.shadowRoot.ownerDocument.createElement("span");
+
+                span1.classList.add("yellowCircle");
+                turn.appendChild(span1);
+            }
 
     }
     setGame() {
@@ -150,13 +169,37 @@ export class LocalGame extends HTMLElement {
 
     setWinner(r, c) {
         let winner = this.shadowRoot.getElementById("winner");
+        let win = "";
         if (this.board[r][c] == this.playerRed) {
             winner.innerText = "Red Wins";
+            win = "Red Wins";
         } else {
             winner.innerText = "Yellow Wins";
+            win = "Yellow Wins";
         }
         this.gameOver = true;
+        this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
+                title: win,
+                content: "Do you want to restart?",
+                accept: () => {
+                    while(this._app.firstChild){
+                        this._app.removeChild(this._app.firstChild);
+                    }
+                    this._app.appendChild(new SideBar(this._app));
+                    this._app.appendChild(new LocalGame(this._app));
+                },
+                decline: () => {
+                    while(this._app.firstChild){
+                        this._app.removeChild(this._app.firstChild);
+                    }
+                    this._app.appendChild(new SideBar(this._app));
+                    this._app.appendChild(new LoggedIntroMenu(this._app));
+                },
+                temporary: false
+            } }));
     }
+
+
 }
 
 customElements.define("local-component", LocalGame);

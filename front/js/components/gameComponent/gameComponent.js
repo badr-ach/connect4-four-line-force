@@ -50,6 +50,10 @@ export class Connect4 extends HTMLElement {
     this.shadowRoot.innerHTML = await fetch("./js/components/gameComponent/gameComponent.html")
         .then((r) => r.text())
         .then((html) => html);
+    if(this.playerRed !== "AI" && this.playerYellow !== "AI") {
+      this.shadowRoot.removeChild(this.shadowRoot.querySelector("#save-btn"));
+
+    }
     if(this.playerRed === "AI" || this.playerYellow === "AI") {
       let turn = this.shadowRoot.querySelector(".turn");
       this.shadowRoot.removeChild(turn);
@@ -87,7 +91,11 @@ export class Connect4 extends HTMLElement {
       this.shadowRoot.querySelector("#mute-btn").addEventListener("click", this._handleMute.bind(this));
       this.shadowRoot.querySelectorAll(".chat-input").forEach((e) => e.addEventListener("click", this._handleChat.bind(this)));
     }
-    this.shadowRoot.querySelector("#save-btn").addEventListener("click", this._handleSaveGame.bind(this));
+
+    if(this.playerRed === "AI" || this.playerYellow === "AI") {
+      this.shadowRoot.querySelector("#save-btn").addEventListener("click", this._handleSaveGame.bind(this));
+
+    }
   }
 
   _handleMute(e){
@@ -224,7 +232,7 @@ export class Connect4 extends HTMLElement {
         turnText.innerHTML = this.currPlayer ;
         span.classList.add("redCircle");
         turn.appendChild(span);
-      } else {
+      } else if(this.currPlayer === this.playerYellow){
         let span1 = this.shadowRoot.ownerDocument.createElement("span");
         turnText.innerHTML = this.currPlayer ;
         span1.classList.add("yellowCircle");
