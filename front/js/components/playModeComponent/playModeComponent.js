@@ -32,7 +32,7 @@ export class PlayMode extends HTMLElement{
 
     _attachEventListeners(){
         this.shadowRoot.getElementById("vsComputer").addEventListener("click", () => this._handleVsComputerClick());
-        if(!this._app.player === "guest"){
+        if(this._app.player !== "guest"){
             this.shadowRoot.getElementById("vsPlayer").addEventListener("click", () => this._handleVsPlayerClick());
         }
         this.shadowRoot.getElementById("vsLocalPlayer").addEventListener("click", () => this._handleVsLocalPlayerClick());
@@ -77,7 +77,8 @@ export class PlayMode extends HTMLElement{
             while(this._app.firstChild){
                 this._app.removeChild(this._app.firstChild);
             }
-            if(this._app.player !== "guest") this._app.appendChild(new SideBar(this._app));
+            if(!this._app.player) 
+            this._app.appendChild(new SideBar(this._app));
     }
 
     // _removingLoadingScreen(){
