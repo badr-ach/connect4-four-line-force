@@ -110,18 +110,17 @@ export async function setup(data, io, socket, activeGames, queue) {
       }
 
     } else {
-      console.log("Im resuming")
       const res = await GameModal.last({
         playerOne: socket.username,
         type: "singleplayer",
         gameOver: false,
       });
-      console.log("resume got this game",res,"for",socket.username)
       game = res.length > 0 ? res[0] : null;
       gameId = game !== null ? game.gameId : null;
       if(game)
         setUpLocal(JSON.parse(JSON.stringify(game.board)), 1);
       else
+        socket.emit("game-error", { message: "No game to resume" });
         return;
     }
 
@@ -304,7 +303,7 @@ export function saveGame(data, socket, activeGames) {
     type: game.type,
   })
     .then((res) => {
-      socket.emit("savedGame", { message: "Game saved successfully" });
+      socket.emit("savedGame", { message: res+"Game saved successfully" });
     })
     .catch((err) => {
       socket.emit("savedGame", { message: "Game could not be saved" });
