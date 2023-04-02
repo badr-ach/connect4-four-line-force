@@ -7,6 +7,7 @@ import { LoggedIntroMenu } from "../loggedInMenuComponent/loggedInMenuComponent.
 import { ProfileComponent } from "../profileComponent/profileComponent.js";
 import { LoadingPage } from "../loadingPageComponent/loadingPageComponent.js";
 import { Connect4 } from "../gameComponent/gameComponent.js";
+import {FriendProfileComponent} from "../friendProfileComponent/friendProfileComponent.js";
 
 export class SideBar extends HTMLElement{
 
@@ -181,6 +182,7 @@ export class SideBar extends HTMLElement{
 
 
     async connectedCallback(){
+        let i;
         this.innerHTML =
             await fetch("./js/components/sideBarComponent/sideBarComponent.html")
                 .then((r) => r.text())
@@ -261,8 +263,23 @@ export class SideBar extends HTMLElement{
             });
         }
 
+        // Select all friend a elements
+        const friendElements = document.querySelectorAll(".friend");
+
+        // Loop through each friend element and add click event listener
+        friendElements.forEach((friendElement) => {
+            console.log("friend is ", friendElement.dataset.username);
+            friendElement.addEventListener("click", () => {
+                this._handleFriendProfileClicked(friendElement.dataset.username);
+            });
+        });
+
+
+
+
+
         let arrow = document.querySelectorAll(".arrow");
-        for (var i = 0; i < arrow.length; i++) {
+        for (i = 0; i < arrow.length; i++) {
             arrow[i].addEventListener("click", (e)=>{
                 let arrowParent = e.target.parentElement.parentElement;
                 arrowParent.classList.toggle("showMenu");
@@ -477,6 +494,15 @@ export class SideBar extends HTMLElement{
         this._app.appendChild(new ProfileComponent(this._app));
     }
 
+    _handleFriendProfileClicked(friend) {
+        while (this._app.firstChild) {
+            this._app.removeChild(this._app.firstChild);
+        }
+        this._app.appendChild(new SideBar(this._app));
+        this._app.appendChild(new FriendProfileComponent(this._app , friend));
+
+    }
+
     _handleAddFriend(){
         console.log("add friend");
         let friendtag = document.getElementById("input-friend");
@@ -485,7 +511,6 @@ export class SideBar extends HTMLElement{
         this._friends_socket.emit("send request",{ username: friendtag.value })
         friendtag.value = "";
     }
-
 }
 
 
