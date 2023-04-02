@@ -75,7 +75,7 @@ export class PlayMode extends HTMLElement{
             while(this._app.firstChild){
                 this._app.removeChild(this._app.firstChild);
             }
-            if(!this._app.player) 
+            if(this._app.player)
             this._app.appendChild(new SideBar(this._app));
     }
 
