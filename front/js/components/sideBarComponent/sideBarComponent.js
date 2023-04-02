@@ -75,6 +75,7 @@ export class SideBar extends HTMLElement{
                 accept: () => {
                     this._friends_socket.emit("accept request", { username: data.username });
                     ////////////////////////////
+                    let friends = document.querySelector(".friends");
                     let username =  data.username;
                     let friend = document.createElement("li");
                     let friendName = document.createElement("a");
