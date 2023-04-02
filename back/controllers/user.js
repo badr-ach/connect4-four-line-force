@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import {UserModal} from "../models/user.js";
+import {GameModal} from "../models/game.js";
 
 export const secret = 'jwtS124';
 
@@ -178,7 +179,7 @@ export const unfriend = async (req, res) => {
         if(!user.friends.includes(username) || !friend.friends.includes(user.username)) return res.status(400).json({ message: "User is not your friend" });
 
         user.friends = user.friends.filter((item) => item !== username);
-        
+
         friend.friends = friend.friends.filter((item) => item !== user.username);
 
         await UserModal.updateOne({ _id: user._id }, { friends: user.friends });
@@ -194,7 +195,7 @@ export const unfriend = async (req, res) => {
 
 export const history = async (req, res) => {
     try {
-        
+
         const projection = { gameId: 1, playerOne: 1, playerTwo: 1,winner: 1};
 
         let history = await GameModal.findAll( {$or: [{ playerOne: req.username }, { playerTwo: req.username }]}, projection);
@@ -209,11 +210,11 @@ export const history = async (req, res) => {
 
 export const profile = async (req, res) => {
 
-    const {id} = req.params;
+    const {username} = req.params;
 
     try {
 
-        const user = await UserModal.findById(id);
+        const user = await UserModal.findOne(username);
 
         if (!user) return res.status(404).json({ message: "User doesn't exist" });
 
