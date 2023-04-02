@@ -120,8 +120,6 @@ export async function setup(data, io, socket, activeGames, queue) {
       gameId = game !== null ? game.gameId : null;
       if(game){
         activeGames.set(gameId, game);
-        socket.emit("setup", game);
-        console.log("here")
         setUpLocal(JSON.parse(JSON.stringify(game.board)), 1);
       }else{
         socket.emit("game-error", { message: "No game to resume" });
@@ -130,7 +128,7 @@ export async function setup(data, io, socket, activeGames, queue) {
     }
 
     activeGames.set(gameId, game);
-    socket.emit("setup", activeGames.get(gameId));
+    socket.emit("setup", game);
   }
 }
 
