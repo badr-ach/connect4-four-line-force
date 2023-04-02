@@ -191,3 +191,43 @@ export const unfriend = async (req, res) => {
         res.status(500).json({ message: "Something went wrong" });
     }
 }
+
+export const history = async (req, res) => {
+    try {
+        
+        const projection = { gameId: 1, playerOne: 1, playerTwo: 1,winner: 1};
+
+        let history = await GameModal.findAll( {$or: [{ playerOne: req.username }, { playerTwo: req.username }]}, projection);
+
+        res.status(200).json({ history: history });
+
+    }catch (err){
+        console.log("errrr ",err);
+        res.status(500).json({ message: "Something went wrong" });
+    }
+}
+
+export const profile = async (req, res) => {
+
+    const {id} = req.params;
+
+    try {
+
+        const user = await UserModal.findById(id);
+
+        if (!user) return res.status(404).json({ message: "User doesn't exist" });
+
+        const projection = { gameId: 1, playerOne: 1, playerTwo: 1,winner: 1};
+
+        let history = await GameModal.findAll( {$or: [{ playerOne: req.username }, { playerTwo: req.username }]}, projection);
+
+        const data = { user : user, history: history }
+
+        delete data.user.password;
+
+        res.status(200).json({ profile: data });
+
+    }catch (err){
+        res.status(500).json({ message: "Something went wrong" });
+    }
+}
