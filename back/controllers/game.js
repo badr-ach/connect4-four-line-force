@@ -271,7 +271,7 @@ export async function newMove(data, io, socket, activeGames) {
       socket.emit("game-error", {message: "Opponent timed out"})
       io.of("/api/game").emit("updatedBoard", activeGames.get(data.gameId));
     }
-  }, 5000);
+  }, 10000);
 
   // Reset timeout if new move is made within 5 seconds
   socket.once("newMove", () => {
