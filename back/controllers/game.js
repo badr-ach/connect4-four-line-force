@@ -112,9 +112,10 @@ export async function setup(data, io, socket, activeGames, queue) {
     } else {
       const res = await GameModal.last({
         playerOne: socket.username,
-        type: "singleplayer",
-        gameOver: false,
+        gameOver:false, 
+        type:'singleplayer'
       });
+      console.log("res", JSOn.stringify(res));
       game = res.length > 0 ? res[0] : null;
       gameId = game !== null ? game.gameId : null;
       if(game)
@@ -342,14 +343,15 @@ export async function disconnect(data, socket, activeGames, io){
   let { gameId, roomId } = data;
     if(!activeGames.has(gameId)) return;
     let game = activeGames.get(gameId);
-    if(game.playerOne == "AI" || game.playerTwo == "AI") return;
-    
+
     if(game.playerOne === socket.username || game.playerTwo === socket.username){
       socket.leave(roomId)
       activeGames.delete(gameId)
-      await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
       io.of("/api/game").to(roomId).emit("game-error",{
         message: "Opponent disconnected"
       })
+
+      if(game.playerOne == "AI" || game.playerTwo == "AI") return;
+      await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
     }  
 }
