@@ -118,11 +118,15 @@ export async function setup(data, io, socket, activeGames, queue) {
       console.log("res", JSON.stringify(res));
       game = res.length > 0 ? res[0] : null;
       gameId = game !== null ? game.gameId : null;
-      if(game)
+      if(game){
+        activeGames.set(gameId, game);
+        socket.emit("setup", game);
+        console.log("here")
         setUpLocal(JSON.parse(JSON.stringify(game.board)), 1);
-      else
+      }else{
         socket.emit("game-error", { message: "No game to resume" });
         return;
+      }
     }
 
     activeGames.set(gameId, game);
