@@ -83,10 +83,12 @@ export async function setup(data, io, socket, activeGames, queue) {
         socket.on("disconnect", async () => {
           socket.leave(roomId);
           activeGames.delete(gameId);
-          await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
-          io.of("/api/game").to(roomId).emit("game-error", {
-            message: "Opponent disconnected",
-          });
+          if(!game.gameOver){
+            await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
+            io.of("/api/game").to(roomId).emit("game-error", {
+              message: "Opponent disconnected",
+            });
+          }
         });
       }
     }
@@ -110,22 +112,26 @@ export async function setup(data, io, socket, activeGames, queue) {
       }
 
     } else {
-      console.log("Im resuming")
       const res = await GameModal.last({
         playerOne: socket.username,
-        type: "singleplayer",
-        gameOver: false,
+        gameOver:false, 
+        type:'singleplayer'
       });
+      console.log("res", JSON.stringify(res));
       game = res.length > 0 ? res[0] : null;
       gameId = game !== null ? game.gameId : null;
-      if(game)
+      if(game){
+        activeGames.set(gameId, game);
         setUpLocal(JSON.parse(JSON.stringify(game.board)), 1);
-      else
+      }else{
+        socket.emit("game-error", { message: "No game to resume" });
         return;
+      }
     }
 
     activeGames.set(gameId, game);
-    socket.emit("setup", activeGames.get(gameId));
+    socket.emit("setup", game);
+
   }
 }
 
@@ -184,15 +190,6 @@ export async function customSetup(data, io, socket, activeGames, customqueue) {
         message: "Opponent disconnected",
       });
     });
-
-    // socket.on("disconnect game", async () => {
-    //   socket.leave(roomId)
-    //   activeGames.delete(gameId)
-    //   await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
-    //   io.of("/api/game").to(roomId).emit("game-error",{
-    //     message: "Opponent disconnected"
-    //   })
-    // })
 
     activeGames.set(gameId, game);
     io.of("/api/game").to(roomId).emit("custom setup", activeGames.get(gameId));
@@ -268,7 +265,8 @@ export async function newMove(data, io, socket, activeGames) {
   // Add timeout for gameover
   const timeout = setTimeout(() => {
     let game = activeGames.get(data.gameId);
-    if(!game.gameOver) {
+
+    if(game && !game.type !=="singeplayer" && !game.gameOver) {
       game.gameOver = true;
       game.winner = game.currPlayer === game.playerOne ? game.playerTwo : game.playerOne;
       socket.emit("game-error", {message: "Opponent timed out"})
@@ -291,6 +289,9 @@ export function saveGame(data, socket, activeGames) {
     return;
   }
 
+  if(!game && game.gameOver) return;
+
+
   GameModal.create({
     gameId: game.gameId,
     board: game.board,
@@ -298,8 +299,8 @@ export function saveGame(data, socket, activeGames) {
     playerOne: game.playerOne,
     playerTwo: game.playerTwo,
     currPlayer: game.currPlayer,
-    gameOver: game.gameOver,
-    winner: game.winner,
+    gameOver: false,
+    winner: null,
     type: game.type,
   })
     .then((res) => {
@@ -351,12 +352,17 @@ export async function disconnect(data, socket, activeGames, io){
   let { gameId, roomId } = data;
     if(!activeGames.has(gameId)) return;
     let game = activeGames.get(gameId);
+
+
     if(game.playerOne === socket.username || game.playerTwo === socket.username){
       socket.leave(roomId)
       activeGames.delete(gameId)
-      await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
       io.of("/api/game").to(roomId).emit("game-error",{
         message: "Opponent disconnected"
       })
+
+      if(game.playerOne == "AI" || game.playerTwo == "AI") return;
+      await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
+
     }  
 }

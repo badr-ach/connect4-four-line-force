@@ -30,7 +30,6 @@ export class LocalGame extends HTMLElement {
             .then((r) => r.text())
             .then((html) => html);
 
-
         this.setGame();
 
 
@@ -77,6 +76,8 @@ export class LocalGame extends HTMLElement {
 
                     this.board[r][c] = this.currPlayer; //update JS board
                     let tile = this.shadowRoot.getElementById(r.toString() + "-" + c.toString());
+                    this.switchTurn();
+
                     if (this.currPlayer == this.playerRed) {
                         tile.classList.add("red-piece");
                         this.currPlayer = this.playerYellow;
@@ -149,6 +150,21 @@ export class LocalGame extends HTMLElement {
                     }
                 }
             }
+        }
+    }
+    
+    switchTurn() {
+        let turn = this.shadowRoot.querySelector(".turn");
+        turn.removeChild(turn.childNodes[2]);
+        if (this.currPlayer === this.playerYellow) {
+            let span = this.shadowRoot.ownerDocument.createElement("span");
+            span.classList.add("redCircle");
+            turn.appendChild(span);
+        }
+        if (this.currPlayer === this.playerRed) {
+            let span1 = this.shadowRoot.ownerDocument.createElement("span");
+            span1.classList.add("yellowCircle");
+            turn.appendChild(span1);
         }
     }
 
