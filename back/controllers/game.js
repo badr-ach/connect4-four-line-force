@@ -131,6 +131,7 @@ export async function setup(data, io, socket, activeGames, queue) {
 
     activeGames.set(gameId, game);
     socket.emit("setup", game);
+
   }
 }
 
@@ -264,6 +265,7 @@ export async function newMove(data, io, socket, activeGames) {
   // Add timeout for gameover
   const timeout = setTimeout(() => {
     let game = activeGames.get(data.gameId);
+
     if(game && !game.type !=="singeplayer" && !game.gameOver) {
       game.gameOver = true;
       game.winner = game.currPlayer === game.playerOne ? game.playerTwo : game.playerOne;
@@ -288,6 +290,7 @@ export function saveGame(data, socket, activeGames) {
   }
 
   if(!game && game.gameOver) return;
+
 
   GameModal.create({
     gameId: game.gameId,
@@ -350,6 +353,7 @@ export async function disconnect(data, socket, activeGames, io){
     if(!activeGames.has(gameId)) return;
     let game = activeGames.get(gameId);
 
+
     if(game.playerOne === socket.username || game.playerTwo === socket.username){
       socket.leave(roomId)
       activeGames.delete(gameId)
@@ -359,5 +363,6 @@ export async function disconnect(data, socket, activeGames, io){
 
       if(game.playerOne == "AI" || game.playerTwo == "AI") return;
       await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
+
     }  
 }
