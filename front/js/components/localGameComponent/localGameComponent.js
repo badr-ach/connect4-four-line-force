@@ -178,25 +178,7 @@ export class LocalGame extends HTMLElement {
             win = "Yellow Wins";
         }
         this.gameOver = true;
-        this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
-                title: win,
-                content: "Do you want to restart?",
-                accept: () => {
-                    while(this._app.firstChild){
-                        this._app.removeChild(this._app.firstChild);
-                    }
-                    this._app.appendChild(new SideBar(this._app));
-                    this._app.appendChild(new LocalGame(this._app));
-                },
-                decline: () => {
-                    while(this._app.firstChild){
-                        this._app.removeChild(this._app.firstChild);
-                    }
-                    this._app.appendChild(new SideBar(this._app));
-                    this._app.appendChild(new LoggedIntroMenu(this._app));
-                },
-                temporary: false
-            } }));
+        
     }
 
 
