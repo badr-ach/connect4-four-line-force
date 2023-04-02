@@ -185,15 +185,6 @@ export async function customSetup(data, io, socket, activeGames, customqueue) {
       });
     });
 
-    // socket.on("disconnect game", async () => {
-    //   socket.leave(roomId)
-    //   activeGames.delete(gameId)
-    //   await GameModal.updateOne({ gameId: gameId }, { gameOver: true, winner: game.playerOne === socket.username ? game.playerTwo : game.playerOne });
-    //   io.of("/api/game").to(roomId).emit("game-error",{
-    //     message: "Opponent disconnected"
-    //   })
-    // })
-
     activeGames.set(gameId, game);
     io.of("/api/game").to(roomId).emit("custom setup", activeGames.get(gameId));
   }
@@ -303,7 +294,7 @@ export function saveGame(data, socket, activeGames) {
     type: game.type,
   })
     .then((res) => {
-      socket.emit("savedGame", { message: JSON.stringify(res)+"Game saved successfully" });
+      socket.emit("savedGame", { message: "Game saved successfully" });
     })
     .catch((err) => {
       socket.emit("savedGame", { message: "Game could not be saved" });
@@ -351,6 +342,8 @@ export async function disconnect(data, socket, activeGames, io){
   let { gameId, roomId } = data;
     if(!activeGames.has(gameId)) return;
     let game = activeGames.get(gameId);
+    if(game.playerOne == "AI" || game.playerTwo == "AI") return;
+    
     if(game.playerOne === socket.username || game.playerTwo === socket.username){
       socket.leave(roomId)
       activeGames.delete(gameId)
