@@ -285,6 +285,8 @@ export function saveGame(data, socket, activeGames) {
     return;
   }
 
+  if(!game && game.gameOver) return;
+
   GameModal.create({
     gameId: game.gameId,
     board: game.board,
