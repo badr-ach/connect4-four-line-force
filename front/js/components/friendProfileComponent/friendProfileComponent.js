@@ -40,16 +40,15 @@ export class FriendProfileComponent extends HTMLElement{
         const deleteBtn = this.shadowRoot.getElementById("delete");
         console.log("challenge but: ",challengeBtn)
         console.log("delete but: ",deleteBtn)
+
         this._friends_socket = WebSocket.getSocketByNameSpace("/api/friends",{ auth: { token: this._app.token ? this._app.token : "guest" } });
 
         challengeBtn.addEventListener("click", (e)=>{
-            console.log("challenge is sent to: ",this.username)
-            this._friends_socket.emit("challenge", { username: e.target.dataset.username });
+            this._friends_socket.emit("challenge", { username: this.username });
         });
 
         deleteBtn.addEventListener("click", (e)=>{
-            console.log("delete : ",this.username);
-            this._friends_socket.emit("delete friend", { username: e.target.dataset.username });
+            this._friends_socket.emit("delete friend", { username: this.username });
         });
     }
 
