@@ -56,3 +56,9 @@
     border: none;
     cursor: pointer;
 }
+li.message::marker {
+    display: none;
+}
+::marker {
+    display: none;
+}
