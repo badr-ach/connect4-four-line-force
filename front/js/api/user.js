@@ -2,7 +2,7 @@ import { fetcher } from "../utils/requester.js";
 import { events } from "../events/events.js";
 
 const api = fetcher();
-const rootPath = "http://4lineforce.connect4.academy";
+const rootPath = "http://localhost/";
 
 // Load User
 export const loadUser = () => async (dispatch) => {
