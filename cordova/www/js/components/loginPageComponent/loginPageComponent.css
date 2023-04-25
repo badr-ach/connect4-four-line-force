@@ -1,0 +1,49 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: transparent;
+    height: 100vh;
+    justify-content: center;
+}
+
+/* Style the form */
+#loginForm {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    padding: 40px;
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style the input fields */
+input[type="mail"],
+input[type="password"] {
+    border: 1px solid black;
+    border-radius: 10px;
+    font-size: 18px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Style the submit button */
+.sub {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 20px 40px;
+    border-radius: 10px;
+    border: none;
+}
+
+/* Style the heading */
+h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+

@@ -139,6 +139,13 @@ export function Router() {
         registerPath(path, rest[1], "delete", rest[0]);
       }
     },
+    options: (path, ...rest) => {
+      if (rest.length === 1) {
+        registerPath(path, rest[0], "options");
+      } else {
+        registerPath(path, rest[1], "options", rest[0]);
+      } 
+    },
     bodyParse: (method) => parseMethod = method,
     listen: (port, cb) => {
       server.listen(port, cb);

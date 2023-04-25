@@ -1,0 +1,84 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+#board {
+    height: 540px;
+    width: 630px;
+    background-color: rgb(134, 200, 188);
+    /* border: 1px solid navy; */
+
+    margin: 0;
+    padding-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+
+    border: 6px solid rgb(10, 100, 73);
+    border-radius: 25px;
+}
+
+.tile {
+    height: 70px;
+    width: 80px;
+    margin: 2px;
+
+    /* Circle */
+    background-color: white;
+    border-radius: 50%;
+    border: 3px solid rgb(10, 100, 73);
+
+}
+
+.red-piece {
+    background-color: rgb(255, 158, 158);
+}
+
+.yellow-piece {
+    background-color: rgb(248, 249, 136);
+}
+
+#winner{
+    font-size: 48px;
+    font-family: 'Helvetica Neue', sans-serif;
+    color: #4CAF50;
+    text-align: center;
+    background-color: transparent;
+}
+.turn {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    color: #ffffff;
+    position: fixed;
+    left: 200px;
+    bottom: 350px;
+    flex-wrap: nowrap;
+    flex-direction: column;
+}
+
+.turnPLayer{
+    font-size: 48px;
+    font-family: 'Helvetica Neue', sans-serif;
+    color: #ffffff;
+    float: right;
+    background-color: #ffffff;
+}
+.redCircle{
+    height: 70px;
+    width: 80px;
+    margin: 10px;
+    background-color: rgb(255, 158, 158);
+    border-radius: 50%;
+    border: 3px solid rgb(10, 100, 73);
+}
+
+.yellowCircle{
+    height: 70px;
+    width: 80px;
+    margin: 10px;
+    background-color: rgb(248, 249, 136);
+    border-radius: 50%;
+    border: 3px solid rgb(10, 100, 73);
+}
+

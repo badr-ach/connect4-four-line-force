@@ -2,6 +2,10 @@ export const addCors = (request,response,next) => {
 
     // Website you wish to allow to connect to your server.
     response.setHeader('Access-Control-Allow-Origin', '*');
+    if(request.method === "OPTIONS")
+    {
+        response.setHeader('Access-Control-Allow-Origin', request.headers.origin);
+    }
     // Request methods you wish to allow.
     response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     // Request headers you wish to allow.

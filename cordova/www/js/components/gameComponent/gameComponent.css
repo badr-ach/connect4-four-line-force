@@ -1,0 +1,299 @@
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+#wrapper table{
+  margin: 0;
+  padding: 0;
+}
+
+#board2 {
+  height: 70px;
+  width: 80px;
+  background-color: rgb(134, 200, 188);
+  /* border: 1px solid navy; */
+
+  margin: 0;
+  padding-top: 2px;
+  display: flex;
+  flex-wrap: wrap;
+
+  border: 2px solid rgb(10, 100, 73);
+  border-radius: 2px;
+}
+
+#board {
+  height: 540px;
+  width: 570px;
+  background-color: rgb(134, 200, 188);
+  /* border: 1px solid navy; */
+
+  margin: 0;
+  padding-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+
+  border: 6px solid rgb(10, 100, 73);
+  border-radius: 25px;
+
+
+}
+
+.column-selector {
+  height: 70px;
+  /* width: 630px; */
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+.column {
+  width: 70px;
+  margin: 6px;
+}
+
+.column:hover .hidden {
+  display: inline-block;
+}
+
+.hidden {
+  display: none;
+}
+
+.arrow {
+  cursor: pointer;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 30px;
+  width: 100%;
+  color: red;
+
+  animation: arrow 1.5s infinite;
+}
+
+@keyframes arrow {
+  0% {
+    font-size: 30px;
+  }
+
+  50% {
+    font-size: 35px;
+  }
+
+  100% {
+    font-size: 30px;
+  }
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
+  position: fixed;
+  left: 680px;
+  top: 10px;
+}
+
+.turn {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  color: #ffffff;
+  position: fixed;
+  left: 200px;
+  bottom: 350px;
+  flex-wrap: nowrap;
+  flex-direction: column;
+}
+
+.turnPLayer{
+  font-size: 48px;
+  font-family: 'Helvetica Neue', sans-serif;
+  color: #ffffff;
+  float: right;
+  background-color: #ffffff;
+}
+
+.tile {
+  height: 70px;
+  width: 80px;
+  margin: 5px;
+
+  /* Circle */
+  background-color: white;
+  border-radius: 50%;
+  border: 3px solid rgb(10, 100, 73);
+}
+
+.red-piece {
+  background-color: rgb(255, 158, 158);
+}
+
+.yellow-piece {
+  background-color: rgb(248, 249, 136);
+}
+
+
+#winner{
+  font-size: 48px;
+  font-family: 'Helvetica Neue', sans-serif;
+  color: #4CAF50;
+  text-align: center;
+  background-color: transparent;
+}
+
+
+
+
+.chat-box {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  width: 300px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 9999;
+}
+
+.chat-messages {
+  height: 50px;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.chat-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.chat-input {
+  border: none;
+  outline: none;
+  background-color: rgb(134, 200, 188);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.mute-icon {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgb(134, 200, 188);
+  color: #fff;
+  width: 60px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.mute-icon i {
+  font-size: 20px;
+}
+
+.bubble {
+  position: fixed;
+  font-family: sans-serif;
+  font-size: 12px;
+  line-height: 24px;
+  width: 200px;
+  background: #fff;
+  border-radius: 40px;
+  padding: 24px;
+  text-align: center;
+  color: #000;
+  right: 60px;
+  bottom:300px;
+
+}
+
+.bubble-bottom-left:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 24px solid #fff;
+  border-right: 12px solid transparent;
+  border-top: 12px solid #fff;
+  border-bottom: 20px solid transparent;
+  left: 32px;
+  bottom: -24px;
+}
+
+
+.bubble1 {
+  position: fixed;
+  font-family: sans-serif;
+  font-size: 12px;
+  line-height: 24px;
+  width: 200px;
+  background: #fff;
+  border-radius: 40px;
+  padding: 24px;
+  text-align: center;
+  color: #000;
+  left: 125px;
+  bottom:560px;
+}
+
+.bubble-bottom-left1:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 24px solid #fff;
+  border-right: 12px solid transparent;
+  border-top: 12px solid #fff;
+  border-bottom: 20px solid transparent;
+  left: 32px;
+  bottom: -24px;
+}
+
+#save-btn{
+  border: none;
+  outline: none;
+  background-color: rgb(134, 200, 188);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  position: fixed;
+  top: 30px;
+  right: 50px;
+}
+
+.redCircle{
+  height: 70px;
+  width: 80px;
+  margin: 10px;
+  background-color: rgb(255, 158, 158);
+  border-radius: 50%;
+  border: 3px solid rgb(10, 100, 73);
+}
+
+.yellowCircle{
+  height: 70px;
+  width: 80px;
+  margin: 10px;
+  background-color: rgb(248, 249, 136);
+  border-radius: 50%;
+  border: 3px solid rgb(10, 100, 73);
+}
+
+
