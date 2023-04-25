@@ -5,6 +5,7 @@ import { LoadingPage } from "../loadingPageComponent/loadingPageComponent.js";
 
 import { SideBar } from "../sideBarComponent/sideBarComponent.js";
 import {LocalGame} from "../localGameComponent/localGameComponent.js";
+import {IntroMenu} from "../introMenuComponent/introMenuComponent.js";
 
 
 
@@ -26,6 +27,14 @@ export class PlayMode extends HTMLElement{
             console.log(vsplayer);
             vsplayer.remove();
         }
+
+        let home = this.shadowRoot.getElementById("home-link");
+        home.addEventListener("click", () => {
+            while(this._app.firstChild){
+                this._app.removeChild(this._app.firstChild);
+            }
+            this._app.appendChild(new IntroMenu(this._app));
+        });
 
         this._attachEventListeners();
     }
