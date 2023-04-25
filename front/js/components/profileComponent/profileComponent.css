@@ -5,6 +5,7 @@
 }
 
 body {
+    height: auto;
     font-family: Arial, sans-serif;
     background-color: #000000;
 }
@@ -183,3 +184,57 @@ th {
 .thead {
     background: linear-gradient(to right, #e5e573, #b29e5d);
 }
+
+@media screen and (max-width: 800px) {
+    .body{
+        height: auto;
+    }
+    .container{
+        flex-direction: column;
+    }
+    .profile {
+        width: 300px;
+        margin: 300px 0px 50px 50px;
+    }
+    .user-info{
+        display: grid;
+    }
+    .avatar-img{
+        margin: 0 auto 20px;
+    }
+    .progress-bar{
+        width: 70%;
+    }
+    .history {
+        width: 300px;
+        margin-left: 50px;
+        margin-bottom: 30px;
+    }
+    .history-tab{
+        display: none;
+    }
+    .stat {
+        flex-basis: 100%;
+        margin-bottom: 20px;
+    }
+    .stat:not(:last-child) {
+        margin-right: 10px;
+    }
+    .infos {
+        display: block;
+    }
+    .infos p {
+        margin-bottom: 10px;
+    }
+    .infos p:last-child {
+        margin-bottom: 0;
+    }
+    .infos p:first-child {
+        margin-right: 10px;
+    }
+    .infos p:nth-child(2) {
+        margin-right: 10px;
+    }
+}
+
+
