@@ -235,6 +235,16 @@ th {
     .infos p:nth-child(2) {
         margin-right: 10px;
     }
+    td,th {
+        font-size: 10px;
+        padding: 5px;
+    }
+    .stat h2 {
+        font-size: 16px;
+    }
+    .stat p {
+        font-size: 15px;
+    }
 }
 
 
