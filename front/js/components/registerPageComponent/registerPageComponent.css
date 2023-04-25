@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 body {
     font-family: Arial, sans-serif;
     background-color: transparent;
@@ -47,6 +49,20 @@ input[type="text"], input[type="email"], input[type="password"] {
     background-color: #3E8E41;
 }
 
+.home-btn {
+    width: auto;
+    padding: 10px;
+    background-color: #fafafa;
+    color: #100f0f;
+    font-size: 20px;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 30px;
+    left: 30px;
+}
+
 @media screen and (max-width: 500px) {
     form {
         width: 50%;
@@ -73,5 +89,9 @@ input[type="text"], input[type="email"], input[type="password"] {
         justify-content: center;
         align-items: center;
         margin: 0 auto;
+    }
+
+    .home-btn {
+        font-size: 15px;
     }
 }

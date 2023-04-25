@@ -41,6 +41,21 @@ input[type="password"] {
     border: none;
 }
 
+
+.home-btn {
+    width: auto;
+    padding: 10px;
+    background-color: #fafafa;
+    color: #100f0f;
+    font-size: 20px;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 30px;
+    left: 30px;
+}
+
 /* Style the heading */
 h1 {
     font-size: 36px;
@@ -84,6 +99,10 @@ h1 {
         align-items: center;
         margin: 0;
         text-align: center;
+    }
+
+    .home-btn {
+        font-size: 15px;
     }
 
 }

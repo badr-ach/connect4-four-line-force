@@ -1,5 +1,6 @@
 import { Animator } from "../../scripts/animator.js";
 import {login} from "../../api/user.js";
+import {IntroMenu} from "../introMenuComponent/introMenuComponent.js";
 
 export class Login extends HTMLElement{
     constructor(app){
@@ -13,6 +14,14 @@ export class Login extends HTMLElement{
         this.shadowRoot.innerHTML = await fetch("./js/components/loginPageComponent/loginPageComponent.html")
             .then((r) => r.text())
             .then((html) => html);
+
+        let home = this.shadowRoot.getElementById("home-link");
+        home.addEventListener("click", () => {
+            while(this._app.firstChild){
+                this._app.removeChild(this._app.firstChild);
+            }
+            this._app.appendChild(new IntroMenu(this._app));
+        });
 
         this._attachEventListeners();
     }
