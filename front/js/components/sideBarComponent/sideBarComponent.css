@@ -266,26 +266,45 @@
 }
 
 @media (max-width: 400px) {
-    .sidebar.close .nav-links li .sub-menu{
-        display: none;
-    }
-    .sidebar.close .nav-links li .sub-menu1{
-        display: none;
-    }
-    .sidebar{
-        width: 78px;
+    .sidebar .nav-links li i{
+        height: 50px;
+        min-width: 50px;
+        text-align: center;
+        line-height: 50px;
+        color: #fff;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
     .sidebar.close{
-        width: 0;
+        width: 50px;
     }
-    .home-section{
-        left: 78px;
-        width: calc(100% - 78px);
-        z-index: 100;
+    .alter {
+        color: #fff;
+        font-size: 15px;
+        padding: 20px 0;
+        white-space: nowrap;
+        transition: all 0.3s ease;
     }
-    .sidebar.close ~ .home-section{
-        width: 100%;
+
+    element.style {
+    }
+    .sidebar .nav-links li a .link_name {
+        font-size: 13px;
+        font-weight: 400;
+        color: #fff;
+        transition: all 0.4s ease;
+    }
+    .sidebar {
+        position: fixed;
+        top: 0;
         left: 0;
+        height: 100%;
+        width: 110px;
+        background: #151515;
+        z-index: 100;
+        transition: all 0.5s ease;
+        border-right: 0.5px solid #393939;
     }
 }
 
@@ -461,11 +480,11 @@
 }
 
 .friendicons-wrapper i{
-    
+
     min-width: 30px !important;
     max-width: 30px !important;
 }
 
 .friendname-text-wrapper{
-    
+
 }
