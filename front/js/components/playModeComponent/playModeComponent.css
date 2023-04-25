@@ -56,12 +56,14 @@ button {
     .container {
         max-width: 600px;
         margin: 0 auto;
+        display: block;
     }
     .title {
         font-size: 26px;
     }
     .centered {
         margin-bottom: 20px;
+        display: table-caption;
     }
     button {
         font-size: 1em;
