@@ -250,16 +250,13 @@
     }
 
     .little-card:nth-child(2) a {
-        font-size: 10px;
-        left: 55%;
+        font-size: 15px;
     }
     .little-card:nth-child(3) a {
-        font-size: 10px;
-        left: 55%;
+        font-size: 15px;
     }
     .little-card:nth-child(4) a {
-        font-size: 10px;
-        left: 55%;
+        font-size: 15px;
     }
 
 
