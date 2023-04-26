@@ -2,14 +2,23 @@
     @import url("./js/components/registerPageComponent/registerPageComponent.css");
 </style>
 
+<div class="home-btn" id="home-link">
+    home <i class='fa fa-home'></i>
+</div>
+
 <div class="wrapper">
 
 <form id="signupForm" action="#">
     <h1>Register</h1>
-    <input type="email" name="mail" id="mail" placeholder="Email" required>
-    <input type="text" name="username" id="username" placeholder="Username" required>
-    <input type="password" name="password" id="pwd" placeholder="Password" required>
-
+    <div class="">
+        <input type="email" name="mail" id="mail" placeholder="Email" required>
+    </div>
+    <div class="">
+        <input type="text" name="username" id="username" placeholder="Username" required>
+    </div>
+    <div class="">
+        <input type="password" name="password" id="pwd" placeholder="Password" required>
+    </div>
     <button id="signup-btn" class="sub" type="submit">Sign up</button>
 </form>
 </div>

@@ -1,32 +1,42 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Connect 4</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="./js/components/app.js" type="module"></script>
+    <link rel="stylesheet" href="./css/resetting-again.css" />
+    <link rel="stylesheet" href="./css/stylesheet.css" />
+    <link rel="stylesheet" href="./css/animation.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  </head>
+  <body>
+    <app-component></app-component>
+    <img
+      class="logo"
+      src="https://cdn.game.tv/game-tv-content/images_3/fb18d4991b4f4112deb57f206a857829/Logo.png"
+    />
+  </body>
+  <script>
+    document.addEventListener("deviceready", onDeviceReady, false);
 
-<head>
-  <title>Connect 4</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="./js/components/app.js" type="module"></script>
-  <link rel="stylesheet" href="./css/resetting-again.css"/>
-  <link rel="stylesheet" href="./css/stylesheet.css"/>
-  <link rel="stylesheet" href="./css/animation.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-</head>
-<body>
-      <app-component></app-component>
-      <img class="logo" src="https://cdn.game.tv/game-tv-content/images_3/fb18d4991b4f4112deb57f206a857829/Logo.png"/>
-</body>
-<script>
-  document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        window.addEventListener("batterylow", onBatteryLow, false);
+        StatusBar.hide();
+        alert(navigator.vibrate);
+        screen.orientation.unlock();
+        screen.orientation.addEventListener("change", function () {
+        console.log(screen.orientation.type); // e.g. portrait
+      });
+    }
 
-  function onDeviceReady() {
-    StatusBar.hide();
-      console.log(navigator.vibrate);
-  }
-      // allow user rotate
-    screen.orientation.unlock();
-    screen.orientation.addEventListener('change', function(){
-    console.log(screen.orientation.type); // e.g. portrait
-  });
-</script>
+    function onBatteryLow(status) {
+      alert("Battery Level Low " + status.level + "%");
+    }
+
+  </script>
 </html>

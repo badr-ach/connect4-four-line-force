@@ -1,6 +1,8 @@
 import {Animator} from "../../scripts/animator.js";
 import {fetcher} from "../../utils/requester.js";
 import {WebSocket} from "../../utils/WebSocket.js";
+import {SideBar} from "../sideBarComponent/sideBarComponent.js";
+import {LoggedIntroMenu} from "../loggedInMenuComponent/loggedInMenuComponent.js";
 
 
 export class FriendProfileComponent extends HTMLElement{
@@ -10,7 +12,7 @@ export class FriendProfileComponent extends HTMLElement{
         this._app = app;
         this._animator = new Animator();
         this.api = fetcher();
-        this.rootPath = "http://4lineforce.connect4.academy";
+        this.rootPath = "http://localhost/";
         this.historyGames = [];
         const token = localStorage.getItem("token");
         this.api.use({Authorization: "Bearer " + token});
@@ -49,7 +51,16 @@ export class FriendProfileComponent extends HTMLElement{
 
         deleteBtn.addEventListener("click", (e)=>{
             this._friends_socket.emit("delete friend", { username: this.username });
+            this._removingMyself();
         });
+    }
+
+    _removingMyself(){
+        while(this._app.firstChild){
+            this._app.removeChild(this._app.firstChild);
+        }
+        this._app.appendChild(new SideBar(this._app));
+        this._app.appendChild(new LoggedIntroMenu(this._app));
     }
 
     async _setUpUser() {

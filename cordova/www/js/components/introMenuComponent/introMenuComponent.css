@@ -127,11 +127,11 @@
 .big-card-wrapper{
     width: 45vmin;
     height: 45vh;
-    
+
 
     border-radius: 40vmin;
     background-color: rgb(192, 238, 228);
-    
+
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -175,7 +175,7 @@
 
 .little-card:nth-child(2) a{
     display: block;
-    transform: skew(-20deg); 
+    transform: skew(-20deg);
     color: inherit;
 }
 
@@ -185,7 +185,7 @@
 }
 
 .little-card:nth-child(3) a{
-    display: block; 
+    display: block;
 }
 
 .little-card:nth-child(4){

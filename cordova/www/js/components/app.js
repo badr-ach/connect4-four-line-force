@@ -27,8 +27,6 @@ export class App extends HTMLElement {
         ambient.loop = true;
         ambient.volume = 0.2;
         ambient.play();
-
-        alert("I got called")
     }
 
     attachEventListeners() {

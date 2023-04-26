@@ -9,7 +9,7 @@ export class ProfileComponent extends HTMLElement{
         this._app = app;
         this._animator = new Animator();
         this.api = fetcher();
-        this.rootPath = "http://4lineforce.connect4.academy";
+        this.rootPath = "http://localhost/";
         this.historyGames = [];
         const token = localStorage.getItem("token");
         this.api.use({Authorization: "Bearer " + token});

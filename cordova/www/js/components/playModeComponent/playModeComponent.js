@@ -5,6 +5,7 @@ import { LoadingPage } from "../loadingPageComponent/loadingPageComponent.js";
 
 import { SideBar } from "../sideBarComponent/sideBarComponent.js";
 import {LocalGame} from "../localGameComponent/localGameComponent.js";
+import {IntroMenu} from "../introMenuComponent/introMenuComponent.js";
 
 
 
@@ -26,6 +27,10 @@ export class PlayMode extends HTMLElement{
             console.log(vsplayer);
             vsplayer.remove();
         }
+        if(this._app.player !== "guest"){
+            let homebtn = this.shadowRoot.querySelector("#home-link");
+            homebtn.remove();
+        }
 
         this._attachEventListeners();
     }
@@ -36,8 +41,16 @@ export class PlayMode extends HTMLElement{
             this.shadowRoot.getElementById("vsPlayer").addEventListener("click", () => this._handleVsPlayerClick());
         }
         this.shadowRoot.getElementById("vsLocalPlayer").addEventListener("click", () => this._handleVsLocalPlayerClick());
-    }
 
+        if(this._app.player === "guest"){
+            let home = this.shadowRoot.getElementById("home-link");
+            home.addEventListener("click", () => {
+                while(this._app.firstChild){
+                    this._app.removeChild(this._app.firstChild);
+                }
+                this._app.appendChild(new IntroMenu(this._app));
+            });        }
+    }
 
     _handleVsComputerClick() {
         new Audio("../../../audio/click_mode.wav").play();
@@ -84,6 +97,7 @@ export class PlayMode extends HTMLElement{
     //         if(node.id === "loading-page") this._app.removeChild(node);
     //     }
     // }
+
 }
 
 customElements.define("play-mode-component", PlayMode);

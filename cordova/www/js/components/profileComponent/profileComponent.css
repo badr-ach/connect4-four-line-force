@@ -5,6 +5,7 @@
 }
 
 body {
+    height: auto;
     font-family: Arial, sans-serif;
     background-color: #000000;
 }
@@ -122,6 +123,7 @@ body {
 }
 
 .trophee-list {
+    overflow-y: scroll;
     height: 80%;
     box-shadow: 0 0 5px #808080;
 }
@@ -183,3 +185,155 @@ th {
 .thead {
     background: linear-gradient(to right, #e5e573, #b29e5d);
 }
+
+@media screen and (max-width: 800px){
+    .body{
+        height: auto;
+    }
+    .container{
+        flex-direction: column;
+        width: 100%;
+    }
+    .profile {
+        width: 300px;
+        margin: 300px 0px 50px 50px;
+    }
+    .user-info{
+        display: grid;
+    }
+    .avatar-img{
+        margin: 0 auto 20px;
+    }
+    .progress-bar{
+        width: 70%;
+    }
+    .history {
+        width: 300px;
+        margin-left: 50px;
+        margin-bottom: 30px;
+    }
+    .history-tab{
+        display: none;
+    }
+    .stat {
+        flex-basis: 100%;
+        margin-bottom: 20px;
+    }
+    .stat:not(:last-child) {
+        margin-right: 10px;
+    }
+    .infos {
+        display: block;
+    }
+    .infos p {
+        margin-bottom: 10px;
+    }
+    .infos p:last-child {
+        margin-bottom: 0;
+    }
+    .infos p:first-child {
+        margin-right: 10px;
+    }
+    .infos p:nth-child(2) {
+        margin-right: 10px;
+    }
+    td,th {
+        font-size: 10px;
+        padding: 5px;
+    }
+    .stat h2 {
+        font-size: 16px;
+    }
+    .stat p {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 1000px) and (min-width: 800px), (max-height: 500px){
+    .body {
+        height: auto;
+    }
+    .profile {
+        margin: 600px 0px 50px 50px;
+        width: 400px;
+    }
+    .profile h1{
+        margin-bottom: 0;
+        font-size: 20px;
+    }
+    .rank-img {
+        float: left;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+    .container{
+        flex-direction: column;
+        width: 100%;
+    }
+    .user-info{
+        display: grid;
+    }
+    .avatar-img{
+        margin: 0 auto 20px;
+    }
+    .progress-bar{
+        width: 70%;
+    }
+    .history {
+        width: 400px;
+        margin-left: 50px;
+        margin-bottom: 30px;
+    }
+    .history h2 {
+        font-size: 16px;
+    }
+    .stat {
+        flex-basis: 100%;
+        margin-bottom: 20px;
+    }
+    .stat:not(:last-child) {
+        margin-right: 10px;
+    }
+    .infos {
+        display: block;
+    }
+    .infos p {
+        margin-bottom: 10px;
+    }
+    .infos p:last-child {
+        margin-bottom: 0;
+    }
+    .infos p:first-child {
+        margin-right: 10px;
+    }
+    .infos p:nth-child(2) {
+        margin-right: 10px;
+    }
+    td,th {
+        font-size: 10px;
+        padding: 5px;
+    }
+    .stat h2 {
+        font-size: 16px;
+    }
+    .stat p {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-height: 700px) {
+    .trophee-list {
+        height: 200px;
+    }
+}
+@media screen and (max-height: 600px) {
+    .trophee-list {
+        height: 100px;
+    }
+}
+
+
+
+
+

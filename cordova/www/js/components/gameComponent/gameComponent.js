@@ -126,7 +126,7 @@ export class Connect4 extends HTMLElement {
 
       const button2 = this.shadowRoot.ownerDocument.createElement("button");
       button2.classList.add("chat-input");
-      button2.textContent = "You're a beast!";
+      button2.textContent = "Beast Mode!";
 
       const button3 = this.shadowRoot.ownerDocument.createElement("button");
       button3.classList.add("chat-input");
@@ -302,30 +302,24 @@ export class Connect4 extends HTMLElement {
 
   dropPiece(e) {
     if (this.gameOver) {
-      navigator.vibrate(500)
       return;
     }
 
     if (this.currPlayer !== this._app.player) {
-      navigator.vibrate(500)
       return;
     }
 
     if(e.target.getAttribute("column") === null ||
       e.target.getAttribute("row") === null ||
-      e.target.tagName !== "TD"){
-        navigator.vibrate(500)
+      e.target.tagName !== "TD")
       return;
-      }
 
     let column = e.target.getAttribute("column");
     if (column === 0) {
-      navigator.vibrate(500)
       return;
     }
     let row = this.currColumns[column];
     if (row < 0) {
-      navigator.vibrate(500)
       return;
     }
 

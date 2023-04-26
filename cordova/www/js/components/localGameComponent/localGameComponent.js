@@ -2,6 +2,7 @@ import {SideBar} from "../sideBarComponent/sideBarComponent.js";
 import {Animator} from "../../scripts/animator.js";
 import {events} from "../../events/events.js";
 import {LoggedIntroMenu} from "../loggedInMenuComponent/loggedInMenuComponent.js";
+import {IntroMenu} from "../introMenuComponent/introMenuComponent.js";
 
 
 export class LocalGame extends HTMLElement {
@@ -29,6 +30,19 @@ export class LocalGame extends HTMLElement {
         this.shadowRoot.innerHTML = await fetch("./js/components/localGameComponent/localGameComponent.html")
             .then((r) => r.text())
             .then((html) => html);
+
+        if(this._app.player !== "guest"){
+            let homebtn = this.shadowRoot.querySelector("#home-link");
+            homebtn.remove();
+        }else {
+            let home = this.shadowRoot.getElementById("home-link");
+            home.addEventListener("click", () => {
+                while(this._app.firstChild){
+                    this._app.removeChild(this._app.firstChild);
+                }
+                this._app.appendChild(new IntroMenu(this._app));
+            });
+        }
 
         this.setGame();
 
@@ -152,7 +166,7 @@ export class LocalGame extends HTMLElement {
             }
         }
     }
-    
+
     switchTurn() {
         let turn = this.shadowRoot.querySelector(".turn");
         turn.removeChild(turn.childNodes[2]);

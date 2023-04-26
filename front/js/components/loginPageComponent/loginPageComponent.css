@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 .container {
     display: flex;
     flex-direction: column;
@@ -21,7 +23,7 @@
 }
 
 /* Style the input fields */
-input[type="mail"],
+input[type="email"],
 input[type="password"] {
     border: 1px solid black;
     border-radius: 10px;
@@ -41,9 +43,88 @@ input[type="password"] {
     border: none;
 }
 
+
+.home-btn {
+    width: auto;
+    padding: 10px;
+    background-color: #fafafa;
+    color: #100f0f;
+    font-size: 20px;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 30px;
+    left: 30px;
+}
+
 /* Style the heading */
 h1 {
     font-size: 36px;
     margin-bottom: 20px;
+}
+
+
+/***  Responsive ***/
+
+@media screen and (max-width: 500px) {
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 0 10px;
+    }
+    #loginForm {
+        width: 50%;
+        padding: 30px
+    }
+    h1 {
+        text-align: center;
+        margin-top: 0;
+        font-size: 26px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    input[type="email"],
+    input[type="password"] {
+        width: 90%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+    #login-btn {
+        width: 20%;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        text-align: center;
+    }
+
+    .home-btn {
+        font-size: 15px;
+    }
+
+}
+
+@media screen and (max-height: 500px) {
+    #loginForm {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 26px;
+        margin-top: 0;
+    }
+    input[type="email"], input[type="password"] {
+        font-size: 13px;
+        padding: 10px;
+        width: 190px;
+    }
+    .sub{
+        padding: 10px 20px;
+    }
 }
 
