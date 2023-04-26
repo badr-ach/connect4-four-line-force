@@ -126,7 +126,7 @@ export class Connect4 extends HTMLElement {
 
       const button2 = this.shadowRoot.ownerDocument.createElement("button");
       button2.classList.add("chat-input");
-      button2.textContent = "You're a beast!";
+      button2.textContent = "Beast Mode!";
 
       const button3 = this.shadowRoot.ownerDocument.createElement("button");
       button3.classList.add("chat-input");

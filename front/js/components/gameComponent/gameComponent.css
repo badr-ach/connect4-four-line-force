@@ -295,7 +295,7 @@
   border-radius: 50%;
   border: 3px solid rgb(10, 100, 73);
 }
-@media (max-width: 400px) {
+@media (max-width: 550px) {
 
   element.style {
   }
@@ -335,20 +335,20 @@
     /* height: 10vh; */
     position: absolute;
     left: 130px;
-    top: 150px;
+    top: 1110px;
   }
   .chat-box {
     position: fixed;
     bottom: 44px;
     right: 25px;
-    width: 100px;
+    width: 140px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
     z-index: 9999;
   }
   .chat-messages {
-    height: 50px;
+    height: 37px;
     overflow: hidden;
     padding: 1px;
   }
@@ -368,13 +368,13 @@
     border-radius: 10px;
     font-size: 11px;
     margin-bottom: 10px;
-    margin-left: 10px;
+    margin-left: 23px;
     margin-top: 0px;
-    margin-right: 3px;
+    margin-right: 9px;
     cursor: pointer;
     padding-top: 1px;
     padding-bottom: 3px;
-    padding-right: 4px;
+    padding-right: 8px;
     padding-left: 8px;
     padding-top: 0px;
     padding-bottom: 0px;
@@ -382,11 +382,11 @@
   .mute-icon {
     position: absolute;
     top: 10px;
-    left: 32px;
+    left: 48px;
     background-color: rgb(134, 200, 188);
     color: #fff;
     width: 40px;
-    height: 30px;
+    height: 28px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
