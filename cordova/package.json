@@ -15,6 +15,7 @@
   "devDependencies": {
     "cordova-android": "^10.1.2",
     "cordova-plugin-battery-status": "^2.0.3",
+    "cordova-plugin-cleartext": "^1.0.0",
     "cordova-plugin-geolocation": "^4.1.0",
     "cordova-plugin-splashscreen": "^6.0.2",
     "cordova-plugin-statusbar": "^3.0.0"
@@ -29,7 +30,8 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-geolocation": {
         "GPS_REQUIRED": "true"
-      }
+      },
+      "cordova-plugin-cleartext": {}
     }
   }
 }

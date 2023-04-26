@@ -3,7 +3,7 @@ export class WebSocket{
     static sockets = new Map();
 
     static connectToNameSapce(namespace,config){
-        const socket = io(namespace,config,{ autoConnect: false });
+        const socket = io("ws://13.39.75.52"+namespace,config,{ autoConnect: false });
         WebSocket.sockets.set(namespace,socket);
         return socket;
     };
