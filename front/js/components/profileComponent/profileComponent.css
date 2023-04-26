@@ -185,12 +185,13 @@ th {
     background: linear-gradient(to right, #e5e573, #b29e5d);
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 800px){
     .body{
         height: auto;
     }
     .container{
         flex-direction: column;
+        width: 100%;
     }
     .profile {
         width: 300px;
@@ -246,5 +247,72 @@ th {
         font-size: 15px;
     }
 }
+
+@media screen and (max-width: 1500px) and (min-width: 800px){
+    .body{
+        height: auto;
+    }
+    .container{
+        flex-direction: column;
+        width: 100%;
+    }
+    .profile {
+        width: 500px;
+        margin: 300px 0px 50px 50px;
+    }
+    .user-info{
+        display: grid;
+    }
+    .avatar-img{
+        margin: 0 auto 20px;
+    }
+    .progress-bar{
+        width: 70%;
+    }
+    .history {
+        width: 500px;
+        margin-left: 50px;
+        margin-bottom: 30px;
+    }
+    .stat {
+        flex-basis: 100%;
+        margin-bottom: 20px;
+    }
+    .stat:not(:last-child) {
+        margin-right: 10px;
+    }
+    .infos {
+        display: block;
+    }
+    .infos p {
+        margin-bottom: 10px;
+    }
+    .infos p:last-child {
+        margin-bottom: 0;
+    }
+    .infos p:first-child {
+        margin-right: 10px;
+    }
+    .infos p:nth-child(2) {
+        margin-right: 10px;
+    }
+    td,th {
+        font-size: 10px;
+        padding: 5px;
+    }
+    .stat h2 {
+        font-size: 16px;
+    }
+    .stat p {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 1500px) and (min-width: 800px) {
+
+}
+
+
+
 
 

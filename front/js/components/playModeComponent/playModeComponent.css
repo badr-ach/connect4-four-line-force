@@ -72,4 +72,19 @@ button {
     }
 }
 
+@media screen and (min-width: 500px) and (max-width: 900px) {
+
+    .title {
+        font-size: 26px;
+    }
+
+    button {
+        font-size: 1em;
+        padding: 1em 1em;
+        width: 200px;
+    }
+}
+
+
+
 
