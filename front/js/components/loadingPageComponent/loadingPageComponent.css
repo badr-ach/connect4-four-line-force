@@ -96,3 +96,17 @@ body {
 
 }
 
+@media screen and (max-height: 500px) {
+    .loader{
+        width: 10%;
+        height: 0%;
+    }
+    .lettre{
+        font-size: 12px;
+        letter-spacing: 5px;
+        margin-bottom: 50px;
+    }
+
+}
+
+
