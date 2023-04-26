@@ -109,3 +109,22 @@ h1 {
 
 }
 
+@media screen and (max-height: 500px) {
+    #loginForm {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 26px;
+        margin-top: 0;
+    }
+    input[type="email"], input[type="password"] {
+        font-size: 13px;
+        padding: 10px;
+        width: 190px;
+    }
+    .sub{
+        padding: 10px 20px;
+    }
+}
+

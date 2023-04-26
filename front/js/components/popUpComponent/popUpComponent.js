@@ -23,7 +23,7 @@ export class PopUp extends HTMLElement{
         if(this.temporary){
             this.shadowRoot.querySelector(".button1").style.display = "none";
             this.shadowRoot.querySelector(".button2").style.display = "none";
-        }   
+        }
 
         new Audio("../../../audio/notification.wav").play();
 
@@ -33,7 +33,7 @@ export class PopUp extends HTMLElement{
                 this._animator.beginAnimation("slide-left", this, () => {
                     this._app.removeChild(this);
                 });
-            }, 2000);
+            }, 200000);
         }
     }
 
