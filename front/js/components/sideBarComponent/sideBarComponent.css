@@ -352,6 +352,10 @@
         white-space: nowrap;
         transition: all 0.3s ease;
     }
+    .fa-chevron-down{
+        font-size: 10px;
+
+    }
 
     element.style {
     }
