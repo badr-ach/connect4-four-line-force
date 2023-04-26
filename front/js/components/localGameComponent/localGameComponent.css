@@ -81,8 +81,25 @@ body {
     border-radius: 50%;
     border: 3px solid rgb(10, 100, 73);
 }
-@media (max-width: 550px) {
 
+.home-btn {
+    width: auto;
+    padding: 10px;
+    background-color: #fafafa;
+    color: #100f0f;
+    font-size: 20px;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 30px;
+    left: 30px;
+}
+
+@media (max-width: 550px) {
+    .home-btn {
+        font-size: 15px;
+    }
     .tile {
         height: 30px;
         width: 30px;
