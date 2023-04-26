@@ -132,18 +132,18 @@ body {
         align-items: center;
         color: #ffffff;
         position: fixed;
-        left: 200px;
-        bottom: 60px;
+        left: 180px;
+        bottom: 120px;
         flex-wrap: nowrap;
         flex-direction: column;
     }
     .turn-text{
-        font-size: 20px;
+        font-size: 30px;
 
     }
     .redCircle{
-        height: 35px;
-        width: 35px;
+        height: 45px;
+        width: 45px;
         margin: 1px;
         background-color: rgb(255, 158, 158);
         border-radius: 50%;
@@ -151,8 +151,8 @@ body {
     }
 
     .yellowCircle{
-        height: 35px;
-        width: 35px;
+        height: 45px;
+        width: 45px;
         margin: 1px;
         background-color: rgb(248, 249, 136);
         border-radius: 50%;
@@ -166,12 +166,15 @@ body {
         background-color: rgb(248, 249, 136);
     }
 
-    #winner{
+    #winner {
         font-size: 40px;
         font-family: 'Helvetica Neue', sans-serif;
         color: #4CAF50;
         text-align: center;
         background-color: transparent;
+        position: fixed;
+        top: 100px;
+        right: 100px;
     }
 
 }
@@ -179,7 +182,7 @@ body {
 @media (max-height: 550px) {
     .tile {
         height: 30px;
-        width: 35px;
+        width: 30px;
         margin: 3px;
 
         /* Circle */
@@ -204,8 +207,8 @@ body {
         border-radius: 25px;
     }
     .redCircle{
-        height: 35px;
-        width: 35px;
+        height: 45px;
+        width: 45px;
         margin: 1px;
         background-color: rgb(255, 158, 158);
         border-radius: 50%;
@@ -213,8 +216,8 @@ body {
     }
 
     .yellowCircle{
-        height: 35px;
-        width: 35px;
+        height: 45px;
+        width: 45px;
         margin: 1px;
         background-color: rgb(248, 249, 136);
         border-radius: 50%;
@@ -237,12 +240,12 @@ body {
         color: #ffffff;
         position: fixed;
         left: 130px;
-        bottom: 200px;
+        bottom: 160px;
         flex-wrap: nowrap;
         flex-direction: column;
     }
     .turn-text{
-        font-size: 22px;
+        font-size: 30px;
     }
     #winner {
         font-size: 30px;

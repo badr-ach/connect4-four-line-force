@@ -27,8 +27,6 @@ export class PopUp extends HTMLElement{
 
         new Audio("../../../audio/notification.wav").play();
 
-        navigator.vibrate(500);
-
         this._attachEventListeners();
         if(this.temporary){
             setTimeout(() => {

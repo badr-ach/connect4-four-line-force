@@ -29,16 +29,16 @@
         window.addEventListener("batterylow", onBatteryLow, false);
         StatusBar.hide();
         screen.orientation.unlock();
-        function onConfirm(buttonIndex) {
-          alert('You selected button ' + buttonIndex);
-        }
+        // function onConfirm(buttonIndex) {
+        //   alert('You selected button ' + buttonIndex);
+        // }
 
-        navigator.notification.confirm(
-            'You are the winner!', // message
-            onConfirm,            // callback to invoke with index of button pressed
-            'Game Over',           // title
-            ['Restart','Exit']     // buttonLabels
-        );
+        // navigator.notification.confirm(
+        //     'You are the winner!', // message
+        //     onConfirm,            // callback to invoke with index of button pressed
+        //     'Game Over',           // title
+        //     ['Restart','Exit']     // buttonLabels
+        // );
     }
 
     function onBatteryLow(status) {
