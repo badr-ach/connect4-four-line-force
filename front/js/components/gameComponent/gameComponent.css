@@ -488,7 +488,7 @@
   }
 
 }
-@media (max-height: 450px) {
+@media (max-height: 550px) {
   .tile {
     height: 40px;
     width: 80px;
