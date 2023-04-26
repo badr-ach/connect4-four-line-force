@@ -265,6 +265,72 @@
 
 }
 
+@media (max-height: 450px) {
+    .sidebar.close {
+        width: 78px;
+    }
+
+
+    .sidebar .nav-links li i {
+        height: 40px;
+        min-width: 70px;
+        text-align: center;
+        line-height: 40px;
+        color: #fff;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    element.style {
+    }
+    .friend {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .friend {
+        color: #fff;
+        font-size: 13px;
+        padding: 0px 8px 0px 0px;
+        white-space: nowrap;
+        opacity: 0.6;
+        transition: all 0.3s ease;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-wrap: nowrap;
+        text-decoration: none;
+    }
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 170px;
+        background: #151515;
+        z-index: 100;
+        transition: all 0.5s ease;
+        border-right: 0.5px solid #393939;
+    }
+    .sidebar .nav-links li a .link_name {
+        font-size: 13px;
+        font-weight: 400;
+        color: #fff;
+        transition: all 0.4s ease;
+    }
+    .fa-chevron-down{
+        font-size: 10px;
+
+    }
+    .sidebar .nav-links {
+        height: 100%;
+        padding: 0px 0px 0px 0px;
+        overflow: auto;
+    }
+}
+
 @media (max-width: 500px) {
     .sidebar .nav-links li i{
         height: 50px;
