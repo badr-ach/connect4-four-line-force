@@ -257,13 +257,9 @@ th {
         margin: 600px 0px 50px 50px;
         width: 400px;
     }
-    .profile {
+    .profile h1{
         margin-bottom: 0;
-        font-size: 12px;
-    }
-    h1 {
-        font-size: 10px;
-        margin-bottom: 0;
+        font-size: 20px;
     }
     .rank-img {
         float: left;
@@ -274,10 +270,6 @@ th {
     .container{
         flex-direction: column;
         width: 100%;
-    }
-    .profile {
-        width: 500px;
-        margin: 300px 0px 50px 50px;
     }
     .user-info{
         display: grid;
