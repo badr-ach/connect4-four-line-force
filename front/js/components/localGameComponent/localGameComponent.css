@@ -179,7 +179,7 @@ body {
 @media (max-height: 550px) {
     .tile {
         height: 30px;
-        width: 35px;
+        width: 30px;
         margin: 3px;
 
         /* Circle */
