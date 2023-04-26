@@ -7,6 +7,7 @@
     <allow-intent href="https://*/*" />
     <preference name="Scheme" value="http"/>
     <icon src="res/screen/android/icon.png" platform="ios" width="57" height="57" density="mdpi" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
     <platform name="android">
         <splash src="res/screen/android/splash-land-hdpi.png" density="port-hdpi" />
         <splash src="res/screen/android/splash-land-ldpi.png" density="port-ldpi" />

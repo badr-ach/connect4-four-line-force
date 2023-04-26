@@ -16,4 +16,17 @@
       <app-component></app-component>
       <img class="logo" src="https://cdn.game.tv/game-tv-content/images_3/fb18d4991b4f4112deb57f206a857829/Logo.png"/>
 </body>
+<script>
+  document.addEventListener("deviceready", onDeviceReady, false);
+
+  function onDeviceReady() {
+    StatusBar.hide();
+      console.log(navigator.vibrate);
+  }
+      // allow user rotate
+    screen.orientation.unlock();
+    screen.orientation.addEventListener('change', function(){
+    console.log(screen.orientation.type); // e.g. portrait
+  });
+</script>
 </html>
