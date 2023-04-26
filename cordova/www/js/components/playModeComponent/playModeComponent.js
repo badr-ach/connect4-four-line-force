@@ -53,6 +53,7 @@ export class PlayMode extends HTMLElement{
     }
 
     _handleVsComputerClick() {
+        this.__checkBatteryLevel();
         new Audio("../../../audio/click_mode.wav").play();
         this._removingMyself();
         const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token ? this._app.token : "guest" } });
@@ -63,12 +64,14 @@ export class PlayMode extends HTMLElement{
     }
 
     _handleVsLocalPlayerClick() {
+        this.__checkBatteryLevel();
         new Audio("../../../audio/click_mode.wav").play();
         this._removingMyself();
         this._app.appendChild(new LocalGame(this._app));
     }
 
     _handleVsPlayerClick() {
+        this.__checkBatteryLevel();
         new Audio("../../../audio/click_mode.wav").play();
         this._removingMyself();
         const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token ? this._app.token : "guest" } });
@@ -90,6 +93,20 @@ export class PlayMode extends HTMLElement{
             }
             let token = localStorage.getItem("token");
             if(token) this._app.appendChild(new SideBar(this._app));
+    }
+
+    _checkBatteryLevel(){
+        navigator.getBattery().then((battery) => {
+            if(battery.level < 0.2){
+                this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
+                    title: "Low battery",
+                    content: "Your battery is low, think of plugging in your device before playing",
+                    accept: () => {},
+                    decline: () => {},
+                    temporary: true
+                } }));
+            }
+        });
     }
 
     // _removingLoadingScreen(){

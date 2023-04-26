@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="./js/components/app.js" type="module"></script>
+    <script src="cordova.js"></script> 
     <link rel="stylesheet" href="./css/resetting-again.css" />
     <link rel="stylesheet" href="./css/stylesheet.css" />
     <link rel="stylesheet" href="./css/animation.css" />
@@ -27,15 +28,21 @@
     function onDeviceReady() {
         window.addEventListener("batterylow", onBatteryLow, false);
         StatusBar.hide();
-        alert(navigator.vibrate);
         screen.orientation.unlock();
-        screen.orientation.addEventListener("change", function () {
-        console.log(screen.orientation.type); // e.g. portrait
-      });
+        function onConfirm(buttonIndex) {
+          alert('You selected button ' + buttonIndex);
+        }
+
+        navigator.notification.confirm(
+            'You are the winner!', // message
+            onConfirm,            // callback to invoke with index of button pressed
+            'Game Over',           // title
+            ['Restart','Exit']     // buttonLabels
+        );
     }
 
     function onBatteryLow(status) {
-      alert("Battery Level Low " + status.level + "%");
+      alert("Battery Level Low " + status.level + "% Do you still wanna play?");
     }
 
   </script>

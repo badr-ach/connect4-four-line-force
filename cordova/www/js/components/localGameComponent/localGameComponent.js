@@ -72,6 +72,7 @@ export class LocalGame extends HTMLElement {
 
                 tile.addEventListener("click",  () => {
                     if (this.gameOver) {
+                        navigator.vibrate(500);
                         return;
                     }
                     console.log("clicked: ", yes);
@@ -85,6 +86,7 @@ export class LocalGame extends HTMLElement {
                     r = this.currColumns[c];
 
                     if (r < 0) { // board[r][c] != ' '
+                        navigator.vibrate(500);
                         return;
                     }
 
@@ -194,7 +196,7 @@ export class LocalGame extends HTMLElement {
             win = "Yellow Wins";
         }
         this.gameOver = true;
-
+        navigator.vibrate(500);
     }
 
 
