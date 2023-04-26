@@ -35,6 +35,7 @@ export class PopUp extends HTMLElement{
                 });
             }, 200000);
         }
+        navigator.vibrate(500);
     }
 
     _attachEventListeners(){
