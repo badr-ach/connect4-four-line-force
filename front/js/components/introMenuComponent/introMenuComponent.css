@@ -10,6 +10,7 @@
 
 .active-waves{
     animation: waves 2s infinite;
+    cursor: pointer;
 }
 
 @keyframes waves {
@@ -212,5 +213,6 @@
 .little-card a{
     z-index: -1;
 }
+
 
 
