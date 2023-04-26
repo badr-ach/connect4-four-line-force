@@ -67,7 +67,12 @@ export class IntroMenu extends HTMLElement {
 
     if (this.toggle === false) {
       this.waves.classList.remove("active-waves");
-      this.circle.style.left = "30%";
+      const screenWidth = window.innerWidth;
+      if (screenWidth < 500) {
+        this.circle.style.left = "15%";
+      } else {
+        this.circle.style.left = "30%";
+      }
       for (let i = 0; i < this.lilCards.length; i++) {
         this.lilCards[i].style.left = "50%";
       }

@@ -36,14 +36,14 @@ export class LoggedIntroMenu extends HTMLElement {
 
 
   _handleResumeClick() {
-    
+
     this._app.removeChild(this);
     new Audio("../../../audio/click_mode.wav").play();
     const socket = WebSocket.getSocketByNameSpace("/api/game", { auth: { token: this._app.token  } });
     socket.emit("setup", { player: this._app.player, resume: true });
     socket.on("setup", (data) => {
         if(data === null) {
-            this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: 
+            this._app.dispatchEvent(new CustomEvent(events.popUp, { detail:
                 {
                     title: "No games to resume",
                     content: "You have no games to resume",
@@ -58,7 +58,7 @@ export class LoggedIntroMenu extends HTMLElement {
         }
     });
 
-     
+
   }
 
   _handlePlayClicked() {
@@ -83,7 +83,12 @@ export class LoggedIntroMenu extends HTMLElement {
     }
     if (this.toggle === false) {
       this.waves.classList.remove("active-waves");
-      this.circle.style.left = "30%";
+      const screenWidth = window.innerWidth;
+      if (screenWidth < 500) {
+        this.circle.style.left = "15%";
+      } else {
+        this.circle.style.left = "30%";
+      }
       for (let i = 0; i < this.lilCards.length; i++) {
         this.lilCards[i].style.left = "50%";
       }
