@@ -24,7 +24,11 @@ app.listen(port, () => {
   console.log("Server started on port " + port);
 });
 
-const socket = new Server(app._server);
+const socket = new Server(app._server,{
+  cors: {
+      origin: '*',
+  }
+});
 
 initSocket(socket);
 
