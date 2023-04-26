@@ -265,7 +265,7 @@
 
 }
 
-@media (max-width: 400px) {
+@media (max-width: 500px) {
     .sidebar .nav-links li i{
         height: 50px;
         min-width: 50px;
