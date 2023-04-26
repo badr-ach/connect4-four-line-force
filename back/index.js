@@ -14,7 +14,7 @@ const app = Router();
 
 app.global(addCors);
 
-app.options("*", (req, res) => { res.status(200).end();});
+app.options("/", (req, res) => { res.status(200).end();});
 
 app.use("/api", router);
 
