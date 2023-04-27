@@ -146,7 +146,16 @@ li.message::marker {
         margin-right: 10px;
         border: none;
         border-bottom: 1px solid #ccc;
-        font-size: 15px;
+        font-size: 12px;
+    }
+    .chat-input button {
+        padding: 5px 10px;
+        background-color: #1e88e5;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 11px;
+        cursor: pointer;
     }
 
 }
