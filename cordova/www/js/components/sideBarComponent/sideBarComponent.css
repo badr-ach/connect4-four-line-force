@@ -360,7 +360,7 @@
     element.style {
     }
     .sidebar .nav-links li a .link_name {
-        font-size: 13px;
+        font-size: 16px;
         font-weight: 400;
         color: #fff;
         transition: all 0.4s ease;
@@ -370,12 +370,16 @@
         top: 0;
         left: 0;
         height: 100%;
-        width: 180px;
+        width: 200px;
         background: #151515;
         z-index: 920000;
         transition: all 0.5s ease;
         border-right: 0.5px solid #393939;
     }
+    .sidebar .nav-links li .sub-menu li {
+        margin: 1px 0;
+    }
+
 }
 
 .friend-requests {
