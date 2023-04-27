@@ -36,6 +36,40 @@ export class Login extends HTMLElement{
         });
     }
 
+
+    _sendLoginNotification() {
+        const acceptAction = {
+            id: 'accept-action',
+            title: 'Accept',
+            foreground: true,
+            destructive: false
+        };
+
+        const declineAction = {
+            id: 'decline-action',
+            title: 'Decline',
+            foreground: true,
+            destructive: true
+        };
+
+        // Programmer la notification
+        cordova.plugins.notification.local.schedule({
+            title: 'You are in the login page',
+            text: 'Do you want to login ?',
+            foreground: true,
+            // actions: [acceptAction, declineAction]
+        });
+
+        // Ajouter des gestionnaires d'événements pour les boutons de la notification
+        cordova.plugins.notification.local.on('accept-action', function(notification) {
+            console.log('Accept action clicked');
+        });
+
+        cordova.plugins.notification.local.on('decline-action', function(notification) {
+            console.log('Decline action clicked');
+        });
+
+    }
 }
 
 customElements.define("login-component", Login);

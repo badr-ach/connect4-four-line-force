@@ -71,8 +71,9 @@ export class SideBar extends HTMLElement{
 
         this._friends_socket.on("friend request accepted", (data) => {
 
-            loadUser()(this._app.dispatchEvent.bind(this._app));
-            
+
+            location.reload();
+            // loadUser()(this._app.dispatchEvent.bind(this._app));
 
             // //////////////////////////////////// SPAGHETTI start
             
@@ -171,6 +172,9 @@ export class SideBar extends HTMLElement{
                 content: data.message,
                 accept: () => {
                     this._friends_socket.emit("accept request", { username: data.username });
+                    location. reload();
+                    loadUser()(this._app.dispatchEvent.bind(this._app));
+
                     ////////////////////////////
                     let friends = document.querySelector(".friends");
                     let username =  data.username;
@@ -242,6 +246,7 @@ export class SideBar extends HTMLElement{
                         friends.removeChild(friend);
                         console.log(friend);
                         this._friends_socket.emit("delete friend", { username: e.target.dataset.username });
+                        location. reload()
                         loadUser()(this._app.dispatchEvent.bind(this._app));
                     });
 

@@ -8,17 +8,17 @@ const rootPath = "http://13.39.75.52/";
 export const loadUser = () => async (dispatch) => {
   try {
 
-    if(localStorage.getItem("token") === null){
+    if(window.localStorage.getItem("token") === null){
       return;
     }
 
-    const token = localStorage.getItem("token");
+    const token = window.localStorage.getItem("token");
     api.use({Authorization: "Bearer " + token});
     const res = await api.post(rootPath+"/api/loadUser",{});
     dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
 
   } catch (err) {
-    localStorage.removeItem('token');
+    window.localStorage.removeItem('token');
     dispatch(new CustomEvent(events.error, {detail: err}));
   }
 };
@@ -27,7 +27,7 @@ export const loadUser = () => async (dispatch) => {
 export const signup = (body) => async (dispatch) => {
   try {
     const res = await api.post(rootPath+"/api/signup", body);
-    localStorage.setItem("token", res.token);
+    window.localStorage.setItem("token", res.token);
     dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
     dispatch(new CustomEvent(events.popUp, {
           detail: {
@@ -38,7 +38,7 @@ export const signup = (body) => async (dispatch) => {
             decline: () => {}
           }}));
   } catch (err) {
-    localStorage.removeItem('token');
+    window.localStorage.removeItem('token');
     dispatch(new CustomEvent(events.error, {detail: err}));
   }
 };
@@ -48,7 +48,7 @@ export const login = (body) => async (dispatch) => {
   try {
     const res = await api.post(rootPath+"/api/login", body);
 
-    localStorage.setItem("token", res.token);
+    window.localStorage.setItem("token", res.token);
     dispatch(new CustomEvent(events.userLoaded, {detail: res.user}));
     dispatch(new CustomEvent(events.popUp, {
           detail: {
@@ -59,7 +59,7 @@ export const login = (body) => async (dispatch) => {
             decline: () => {}
           }}));
   } catch (err) {
-    localStorage.removeItem('token');
+    window.localStorage.removeItem('token');
     dispatch(new CustomEvent(events.error, {detail: err}));
   }
 };
@@ -67,7 +67,7 @@ export const login = (body) => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   try {
-    localStorage.removeItem('token');
+    window.localStorage.removeItem('token');
     dispatch(new CustomEvent(events.signedOut, {detail: null}));
     dispatch(new CustomEvent(events.popUp, {
       detail: {
@@ -87,11 +87,11 @@ export const logout = () => async (dispatch) => {
 
 export const befriend = (body) => async (dispatch) => {
   try{
-    if(localStorage.getItem("token") === null){
+    if(window.localStorage.getItem("token") === null){
       return;
     }
 
-    const token = localStorage.getItem("token");
+    const token = window.localStorage.getItem("token");
     api.use({Authorization: "Bearer " + token});
 
     const res = await api.post(rootPath+"/api/befriend", body);
@@ -105,11 +105,11 @@ export const befriend = (body) => async (dispatch) => {
 
 export const rejectfriend = (body) => async (dispatch) => {
   try{
-    if(localStorage.getItem("token") === null){
+    if(window.localStorage.getItem("token") === null){
       return;
     }
 
-    const token = localStorage.getItem("token");
+    const token = window.localStorage.getItem("token");
     api.use({Authorization: "Bearer " + token});
 
     const res = await api.post(rootPath+"/api/rejectfriend", body);

@@ -12,7 +12,7 @@ export class App extends HTMLElement {
     constructor() {
         super();
         this._animator = new Animator();
-        this.token = localStorage.getItem("token");
+        this.token = window.localStorage.getItem("token");
         this.connected = false;
         this.player = "guest";
     }
@@ -44,7 +44,7 @@ export class App extends HTMLElement {
         this.user = detail;
         this.connected = true;
         this.player = detail.username;
-        this.token = localStorage.getItem("token");
+        this.token = window.localStorage.getItem("token");
 
         console.log("I got called")
         this.appendChild(new SideBar(this));                                                                                        
