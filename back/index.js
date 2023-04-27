@@ -27,6 +27,7 @@ app.listen(port, () => {
 const socket = new Server(app._server,{
   cors: {
       origin: '*',
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
   }
 });
 

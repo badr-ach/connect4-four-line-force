@@ -107,7 +107,7 @@ export const acceptRequest = async (data, io, socket) => {
     
                         console.log("I am here in send request 4")
     
-                        socket.to(sock.id).emit("notify", { message: `${socket.username} accepted your friend request.` });
+                        socket.to(sock.id).emit("notify", { message: `${socket.username} accepted your friend request.`, username: socket.username });
 
                         socket.to(sock.id).emit("friend request accepted", { username: socket.username});
     
