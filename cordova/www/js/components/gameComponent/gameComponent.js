@@ -3,21 +3,22 @@ import { WebSocket } from "../../utils/WebSocket.js";
 import {events} from "../../events/events.js";
 import {fetcher} from "../../utils/requester.js";
 import {LoggedIntroMenu} from "../loggedInMenuComponent/loggedInMenuComponent.js";
+import {IntroMenu} from "../introMenuComponent/introMenuComponent.js";
 
 export class Connect4 extends HTMLElement {
   constructor({
-    app,
-    gameId,
-    roomId,
-    playerOne,
-    playerTwo,
-    board,
-    currPlayer,
-    currColumns,
-    lastPlayer,
-    gameOver,
-    winner,
-  }) {
+                app,
+                gameId,
+                roomId,
+                playerOne,
+                playerTwo,
+                board,
+                currPlayer,
+                currColumns,
+                lastPlayer,
+                gameOver,
+                winner,
+              }) {
     super();
     this.attachShadow({ mode: "open" });
 
@@ -50,6 +51,19 @@ export class Connect4 extends HTMLElement {
     this.shadowRoot.innerHTML = await fetch("./js/components/gameComponent/gameComponent.html")
         .then((r) => r.text())
         .then((html) => html);
+    if(this._app.player !== "guest"){
+      let homebtn = this.shadowRoot.querySelector("#home-link");
+      homebtn.remove();
+    }else {
+      let home = this.shadowRoot.getElementById("home-link");
+      home.addEventListener("click", () => {
+        while (this._app.firstChild) {
+          this._app.removeChild(this._app.firstChild);
+        }
+        this._app.appendChild(new IntroMenu(this._app));
+      });
+    }
+
     if(this.playerRed !== "AI" && this.playerYellow !== "AI") {
       this.shadowRoot.removeChild(this.shadowRoot.querySelector("#save-btn"));
 
@@ -82,8 +96,8 @@ export class Connect4 extends HTMLElement {
     for (let i = 0; i < arrows.length; i++) {
       arrows[i].addEventListener("click", this.dropPiece.bind(this));
       arrows[i].addEventListener(
-        "mouseover",
-        this._handleMouseHover.bind(this)
+          "mouseover",
+          this._handleMouseHover.bind(this)
       );
       arrows[i].addEventListener("mouseout", this._handleMouseOut.bind(this));
     }
@@ -173,32 +187,32 @@ export class Connect4 extends HTMLElement {
     this._socket = WebSocket.getSocketByNameSpace("/api/game");
 
     this._socket.on("updatedBoard", (data) => {
-        this.board = data.board;
-        this.currColumns = data.currColumns;
-        this.currPlayer = data.currPlayer;
+      this.board = data.board;
+      this.currColumns = data.currColumns;
+      this.currPlayer = data.currPlayer;
 
-        this.switchTurn();
-        if (data.gameOver) {
-          this.gameOver = true;
-          this.winner = data.winner;
-        }
+      this.switchTurn();
+      if (data.gameOver) {
+        this.gameOver = true;
+        this.winner = data.winner;
+      }
 
-        this.renderBoard();
-        setTimeout(() =>{
-          new Audio("../../../audio/piece_down.wav").play();
-        }, 500);
+      this.renderBoard();
+      setTimeout(() =>{
+        new Audio("../../../audio/piece_down.wav").play();
+      }, 500);
     });
 
 
 
     this._socket.once("game-error", (data) => {
       this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
-        title: "Error",
-        content: data.message,
-        accept: () => {},
-        decline: () => {},
-        temporary: true
-      } }));
+          title: "Error",
+          content: data.message,
+          accept: () => {},
+          decline: () => {},
+          temporary: true
+        } }));
       for(let i = 0; i < this._app.children.length; i++){
         if(this._app.children[i].id === "side-bar") continue;
         this._app.removeChild(this._app.children[i]);
@@ -245,29 +259,29 @@ export class Connect4 extends HTMLElement {
     this._socket.emit("saveGame", { gameId: this._gameId });
     this._socket.once("savedGame", (data) => {
       this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
-        title: "Notification",
-        content: data.message,
-        accept: () => {},
-        decline: () => {},
-        temporary: true
-      } }));
+          title: "Notification",
+          content: data.message,
+          accept: () => {},
+          decline: () => {},
+          temporary: true
+        } }));
     });
 
 
-      for(let node of this._app.children){
-        if(node.id === "side-bar") continue;
-        this._app.removeChild(node);
-      }
-      this._app.appendChild(new LoggedIntroMenu(this._app));
+    for(let node of this._app.children){
+      if(node.id === "side-bar") continue;
+      this._app.removeChild(node);
+    }
+    this._app.appendChild(new LoggedIntroMenu(this._app));
 
-      /*this._app.dispatch(new CustomEvent(events.popUp, {
-        detail: {
-          title: "",
-          content: "This game has been saved",
-          temporary: true,
-          accept: () => {},
-          decline: () => {}
-      }}));*/
+    /*this._app.dispatch(new CustomEvent(events.popUp, {
+      detail: {
+        title: "",
+        content: "This game has been saved",
+        temporary: true,
+        accept: () => {},
+        decline: () => {}
+    }}));*/
 
 
 
@@ -302,30 +316,24 @@ export class Connect4 extends HTMLElement {
 
   dropPiece(e) {
     if (this.gameOver) {
-      navigator.vibrate(500);
       return;
     }
 
     if (this.currPlayer !== this._app.player) {
-      navigator.vibrate(500);
       return;
     }
 
     if(e.target.getAttribute("column") === null ||
-      e.target.getAttribute("row") === null ||
-      e.target.tagName !== "TD"){
-        navigator.vibrate(500);
+        e.target.getAttribute("row") === null ||
+        e.target.tagName !== "TD")
       return;
-      }
 
     let column = e.target.getAttribute("column");
     if (column === 0) {
-      navigator.vibrate(500);
       return;
     }
     let row = this.currColumns[column];
     if (row < 0) {
-      navigator.vibrate(500);
       return;
     }
 
@@ -356,11 +364,9 @@ export class Connect4 extends HTMLElement {
 
     if (this.winner !== null) {
       this.shadowRoot.querySelector("#winner").innerHTML =
-        this.winner === "Tie" ? "Tie!" : this.winner + " wins!";
-        
-      navigator.vibrate(500);
-        }
+          this.winner === "Tie" ? "Tie!" : this.winner + " wins!";
     }
+  }
 
 
   reset() {
