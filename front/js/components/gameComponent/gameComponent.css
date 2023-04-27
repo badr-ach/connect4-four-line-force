@@ -467,7 +467,7 @@
     text-align: center;
     color: #000;
     right: 30px;
-    bottom: 740px;
+    bottom: 80vh;
   }
   .bubble-bottom-left:before {
     content: "";
@@ -493,7 +493,7 @@
     text-align: center;
     color: #000;
     left: 70px;
-    bottom: 740px;
+    bottom: 80vh;
   }
   .bubble-bottom-left1:before {
     content: "";
@@ -683,7 +683,7 @@
     text-align: center;
     color: #000;
     right: 60px;
-    bottom: 300px;
+    bottom: 68vh;
   }
   .bubble1 {
     position: fixed;
@@ -697,7 +697,7 @@
     text-align: center;
     color: #000;
     left: 100px;
-    bottom: 300px;
+    bottom: 68vh;
   }
   .bubble-bottom-left1:before {
     content: "";
