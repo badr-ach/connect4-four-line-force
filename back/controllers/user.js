@@ -44,9 +44,13 @@ export const signin = async (req, res) => {
     const { mail, password, username } = req.body;
 
     try {
-        const oldUser = await UserModal.findOne({ mail });
+        let oldUser = await UserModal.findOne({ mail });
 
         if (oldUser) return res.status(400).json({ message: "Email already exists in the users list" });
+
+        oldUser = await UserModal.findOne({ username });
+
+        if (oldUser) return res.status(400).json({ message: "Username already exists in the users list" });
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
