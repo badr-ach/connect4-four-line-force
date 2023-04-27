@@ -18,7 +18,21 @@ export const sendRequest = async (data, io, socket) => {
 
         if (receiver) {
 
-            console.log(JSON.stringify(receiver))
+            if(!receiver.friends){
+                receiver.friends = [];
+            }
+
+            if(!receiver.incomingFriendRequests){
+                receiver.incomingFriendRequests = [];
+            }
+
+            if(!receiver.outgoingFriendRequests){
+                receiver.outgoingFriendRequests = [];
+            }
+
+            if(!sender.friends){
+                sender.outgoingFriendRequests = [];
+            }
 
             if (receiver.friends.includes(socket.username)) {
 
@@ -86,6 +100,30 @@ export const acceptRequest = async (data, io, socket) => {
         let receiver = await UserModal.findOne({ username: socket.username });
 
         if (sender) {
+
+            if(!sender.friends){
+                sender.friends = [];
+            }
+
+            if(!sender.incomingFriendRequests){
+                sender.incomingFriendRequests = [];
+            }
+
+            if(!sender.outgoingFriendRequests){
+                sender.outgoingFriendRequests = [];
+            }
+
+            if(!receiver.friends){
+                receiver.friends = [];
+            }
+
+            if(!receiver.incomingFriendRequests){
+                receiver.incomingFriendRequests = [];
+            }
+
+            if(!receiver.outgoingFriendRequests){
+                receiver.outgoingFriendRequests = [];
+            }
 
             if (!sender.friends.includes(socket.username) && !receiver.friends.includes(data.username)) {
 
