@@ -24,6 +24,7 @@ export class GameChat extends HTMLElement {
         .then((r) => r.text())
         .then((html) => html);
         this._messageInput = this.shadowRoot.querySelector("#message-input");
+        this._chatHistory = this.shadowRoot.querySelector("#chat-history");
         this._messageInput.addEventListener("keyup", (e) => {
             if(e.keyCode === 13) {
                 this._handleMessageSubmit();
@@ -37,6 +38,27 @@ export class GameChat extends HTMLElement {
         this._closeBtn = this.shadowRoot.querySelector(".close-button");
         this._closeBtn.addEventListener("click", () => this._handleCloseBtnClick());
         this._messageSubmit.addEventListener("click", () => this._handleMessageSubmit());
+        if(window.innerWidth < 500) {
+            const chatBox = this.shadowRoot.querySelector(".chat-box");
+            const handleBlur = () => {
+                setTimeout(() => {
+                    if (!this._messageInput.matches(":focus") && !this._messageSubmit.matches(":focus")) {
+                        chatBox.classList.remove("above-keyboard");
+                        chatBox.classList.add("chat-box");
+                    }
+                }, 0);
+            };
+
+            this._messageInput.addEventListener("focus", () => {
+                chatBox.classList.add("above-keyboard");
+            });
+
+            this._messageInput.addEventListener("blur", handleBlur);
+
+            this._messageSubmit.addEventListener("mousedown", () => {
+                this._messageSubmit.addEventListener("mouseup", handleBlur, { once: true });
+            });
+        }
     }
 
 
