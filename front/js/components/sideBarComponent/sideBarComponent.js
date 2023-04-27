@@ -274,7 +274,7 @@ export class SideBar extends HTMLElement{
             // Calcul de l'angle de déplacement
             var angle = Math.atan2(distY, distX) * 180 / Math.PI;
         
-            if(Maths.abs(distX) > 100 || Maths.abs(distY) > 100) {
+            if(Math.abs(distX) > 50 || Math.abs(distY) > 50) {
                 // Détermination de la direction du swipe en fonction de l'angle
                 if (angle >= -45 && angle < 45) {
                     // Swipe à droite
