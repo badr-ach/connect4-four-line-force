@@ -59,6 +59,32 @@ export class GameChat extends HTMLElement {
                 this._messageSubmit.addEventListener("mouseup", handleBlur, { once: true });
             });
         }
+        if(window.innerHeight < 500) {
+
+            const chatBox = this.shadowRoot.querySelector(".chat-box");
+            const inputChat = this.shadowRoot.querySelector(".chat-input");
+            const handleBlur = () => {
+                setTimeout(() => {
+                    if (!this._messageInput.matches(":focus") && !this._messageSubmit.matches(":focus")) {
+                        chatBox.classList.remove("chat-boxjn");
+                        inputChat.classList.remove("chat-inputjn");
+                        chatBox.classList.add("chat-box");
+                        inputChat.classList.add("chat-input");
+                    }
+                }, 0);
+            };
+
+            this._messageInput.addEventListener("focus", () => {
+                chatBox.classList.add("chat-boxjn");
+                inputChat.classList.add("chat-inputjn");
+            });
+
+            this._messageInput.addEventListener("blur", handleBlur);
+
+            this._messageSubmit.addEventListener("mousedown", () => {
+                this._messageSubmit.addEventListener("mouseup", handleBlur, { once: true });
+            });
+        }
     }
 
 
