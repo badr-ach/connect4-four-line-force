@@ -3,6 +3,7 @@ import { WebSocket } from "../../utils/WebSocket.js";
 import {events} from "../../events/events.js";
 import {fetcher} from "../../utils/requester.js";
 import {LoggedIntroMenu} from "../loggedInMenuComponent/loggedInMenuComponent.js";
+import {IntroMenu} from "../introMenuComponent/introMenuComponent.js";
 
 export class Connect4 extends HTMLElement {
   constructor({
@@ -50,6 +51,19 @@ export class Connect4 extends HTMLElement {
     this.shadowRoot.innerHTML = await fetch("./js/components/gameComponent/gameComponent.html")
         .then((r) => r.text())
         .then((html) => html);
+    if(this._app.player !== "guest"){
+      let homebtn = this.shadowRoot.querySelector("#home-link");
+      homebtn.remove();
+    }else {
+      let home = this.shadowRoot.getElementById("home-link");
+      home.addEventListener("click", () => {
+        while (this._app.firstChild) {
+          this._app.removeChild(this._app.firstChild);
+        }
+        this._app.appendChild(new IntroMenu(this._app));
+      });
+    }
+
     if(this.playerRed !== "AI" && this.playerYellow !== "AI") {
       this.shadowRoot.removeChild(this.shadowRoot.querySelector("#save-btn"));
 
