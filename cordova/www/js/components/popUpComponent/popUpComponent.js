@@ -33,7 +33,7 @@ export class PopUp extends HTMLElement{
                 this._animator.beginAnimation("slide-left", this, () => {
                     this._app.removeChild(this);
                 });
-            }, 200000);
+            }, 2000);
         }
         navigator.vibrate(500);
     }
