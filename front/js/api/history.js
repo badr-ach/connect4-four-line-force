@@ -2,7 +2,7 @@ import { fetcher } from "../utils/requester.js";
 import { events } from "../events/events.js";
 
 const api = fetcher();
-const rootPath = "http://localhost/";
+const rootPath = "http://13.39.75.52/";
 
 // Get History
 export const gameHistory = async () => {
