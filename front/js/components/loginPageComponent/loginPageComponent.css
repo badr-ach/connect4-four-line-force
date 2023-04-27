@@ -46,16 +46,16 @@ input[type="password"] {
 
 .home-btn {
     width: auto;
-    padding: 10px;
-    background-color: #fafafa;
-    color: #100f0f;
-    font-size: 20px;
+    padding: 8px 20px;
+    background-color: white;
+    color: #4CAF50;
+    font-size: 14px;
     border-radius: 10px;
     justify-content: center;
     align-items: center;
     position: fixed;
     top: 30px;
-    left: 30px;
+    left: 50px;
 }
 
 /* Style the heading */
