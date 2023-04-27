@@ -67,3 +67,73 @@ li.message::marker {
 ::marker {
     display: none;
 }
+@media (max-width:500px ) {
+    .chat-box {
+        position: fixed;
+        bottom: 350px;
+        right: 10px;
+        width: 300px;
+        height: 350px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        overflow: hidden;
+        scrollbar-width: thin;
+        background-color: white;
+        z-index: 9000;
+    }
+
+}
+
+
+@media (max-height: 500px) {
+    .chat-box {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        width: 250px;
+        height: 250px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        overflow: hidden;
+        scrollbar-width: thin;
+        background-color: white;
+        z-index: 9000;
+    }
+    .close-button {
+        position: absolute;
+        top: 0;
+        right: 5px;
+        padding: 6px;
+        font-size: 20px;
+        background-color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+    .chat-history {
+        height: 80%;
+        overflow-y: scroll;
+        padding-top: 17px;
+        scrollbar-width: thin;
+        background-color: white;
+    }
+    .message {
+        padding-left: 10px;
+        font-size: 15px;
+    }
+    .chat-input {
+        height: 18%;
+        display: flex;
+        align-items: center;
+        padding: 0px;
+        background-color: white;
+    }
+    .chat-input input[type="text"] {
+        flex: 1;
+        padding: 1px;
+        margin-right: 10px;
+        border: none;
+        border-bottom: 1px solid #ccc;
+        font-size: 15px;
+    }
+
+}
