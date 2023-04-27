@@ -55,6 +55,8 @@ export class Connect4 extends HTMLElement {
       let homebtn = this.shadowRoot.querySelector("#home-link");
       homebtn.remove();
     }else {
+      let savebtn = this.shadowRoot.querySelector("#save-btn");
+      savebtn.remove();
       let home = this.shadowRoot.getElementById("home-link");
       home.addEventListener("click", () => {
         while (this._app.firstChild) {
