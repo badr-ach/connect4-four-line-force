@@ -38,7 +38,6 @@ export class Login extends HTMLElement{
 
 
     _sendLoginNotification() {
-
         const acceptAction = {
             id: 'accept-action',
             title: 'Accept',
