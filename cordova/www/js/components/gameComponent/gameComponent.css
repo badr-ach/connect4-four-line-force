@@ -334,8 +334,8 @@
     align-items: center;
     /* height: 10vh; */
     position: absolute;
-    left: 130px;
-    top: 1110px;
+    left: 15vh;
+    top: 20vh;
   }
   .chat-box {
     position: fixed;
@@ -381,8 +381,8 @@
   }
   .mute-icon {
     position: absolute;
-    top: 10px;
-    left: 48px;
+    top: 1vh;
+    left: 13vw;
     background-color: rgb(134, 200, 188);
     color: #fff;
     width: 40px;
@@ -427,8 +427,8 @@
     align-items: center;
     color: #ffffff;
     position: fixed;
-    left: 100px;
-    bottom: 120px;
+    left: 31vw;
+    bottom: 13vh;
     flex-wrap: nowrap;
     flex-direction: column;
   }
@@ -552,8 +552,8 @@
 
   .chat-box {
     position: fixed;
-    bottom: 25px;
-    right: 20px;
+    bottom: 6vh;
+    right: 2vw;
     width: 60px;
     background-color: #fff;
     border-radius: 10px;

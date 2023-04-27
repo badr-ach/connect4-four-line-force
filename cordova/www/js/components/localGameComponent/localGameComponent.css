@@ -132,8 +132,8 @@ body {
         align-items: center;
         color: #ffffff;
         position: fixed;
-        left: 180px;
-        bottom: 120px;
+        left: 34vw;
+        bottom: 14vh;
         flex-wrap: nowrap;
         flex-direction: column;
     }
@@ -173,8 +173,8 @@ body {
         text-align: center;
         background-color: transparent;
         position: fixed;
-        top: 100px;
-        right: 100px;
+        top: 14vh;
+        right: 24vw;
     }
 
 }
@@ -239,8 +239,8 @@ body {
         align-items: center;
         color: #ffffff;
         position: fixed;
-        left: 130px;
-        bottom: 160px;
+        left: 16vw;
+        bottom: 34vh;
         flex-wrap: nowrap;
         flex-direction: column;
     }
