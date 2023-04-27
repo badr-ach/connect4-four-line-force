@@ -47,8 +47,8 @@ input[type="password"] {
 .home-btn {
     width: auto;
     padding: 8px 20px;
-    background-color: rgb(134, 200, 188);
-    color: #ffffff;
+    background-color: white;
+    color: #4CAF50;
     font-size: 14px;
     border-radius: 10px;
     justify-content: center;
