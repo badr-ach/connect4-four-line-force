@@ -18,6 +18,8 @@ export const sendRequest = async (data, io, socket) => {
 
         if (receiver) {
 
+            console.log(JSON.stringify(receiver))
+
             if (receiver.friends.includes(socket.username)) {
 
                 socket.emit("notify", { message: "You are already friends with this user." });
@@ -36,6 +38,8 @@ export const sendRequest = async (data, io, socket) => {
                 socket.emit("notify", { message: "You have already sent a friend request to this user." });
                 return;
             }
+
+            
 
             receiver.incomingFriendRequests.push(sender.username);
 
