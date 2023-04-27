@@ -84,6 +84,7 @@ export class Connect4 extends HTMLElement {
 
   async disconnectedCallback(){
     this._socket.emit("disconnect game", {gameId : this._gameId, roomId : this.roomId});
+    location.reload();
   }
 
 
@@ -208,6 +209,9 @@ export class Connect4 extends HTMLElement {
 
 
     this._socket.once("game-error", (data) => {
+      location.reload();
+      setTimeout(() => {
+
       this._app.dispatchEvent(new CustomEvent(events.popUp, { detail: {
         title: "Error",
         content: data.message,
@@ -215,11 +219,12 @@ export class Connect4 extends HTMLElement {
         decline: () => {},
         temporary: true
       } }));
-      for(let i = 0; i < this._app.children.length; i++){
-        if(this._app.children[i].id === "side-bar") continue;
-        this._app.removeChild(this._app.children[i]);
-      }
-      this._app.appendChild(new LoggedIntroMenu(this._app));
+    }, 100);
+      // for(let i = 0; i < this._app.children.length; i++){
+      //   if(this._app.children[i].id === "side-bar") continue;
+      //   this._app.removeChild(this._app.children[i]);
+      // }
+      // this._app.appendChild(new LoggedIntroMenu(this._app));
     });
 
     this._socket.on("new message", (data) => {

@@ -1,5 +1,5 @@
 import auth from "../middlewares/socket.js";
-import { sendRequest, acceptRequest, deleteFriend } from "../controllers/friends.js";
+import { sendRequest, acceptRequest, deleteFriend, declineRequest } from "../controllers/friends.js";
 
 export const init_friends_socket = (io) => {
 
@@ -15,6 +15,8 @@ export const init_friends_socket = (io) => {
         socket.on("send request", (data) => sendRequest(data, io, socket));
 
         socket.on("accept request", (data) => acceptRequest(data, io, socket));
+
+        socket.on("decline request", (data) => { declineRequest(data, io, socket) });
 
         socket.on("delete friend", (data) => deleteFriend(data, io, socket));
   

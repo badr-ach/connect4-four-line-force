@@ -49,7 +49,6 @@ export class GameChat extends HTMLElement {
         this._messageInput.value = "";
 
         this._chat_socket.emit("private message", { content: this._message, to: this.username });
-        this._sendLoginNotification(this._message, this.username)
         this._pushMessageToState(this.username,this._message);
     }
 
@@ -57,16 +56,16 @@ export class GameChat extends HTMLElement {
         this._app.removeChild(this);
     }
 
-    _sendLoginNotification(message, user) {
+    // _sendLoginNotification(message, user) {
 
-        // Programmer la notification
-        cordova.plugins.notification.local.schedule({
-            title: 'New message from',
-            text: user+' : '+message,
-            foreground: false,
-        });
+    //     // Programmer la notification
+    //     cordova.plugins.notification.local.schedule({
+    //         title: 'New message',
+    //         text: user+' : '+message,
+    //         foreground: false,
+    //     });
 
-    }
+    // }
 
 }
 
