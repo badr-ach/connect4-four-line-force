@@ -249,6 +249,41 @@ export class SideBar extends HTMLElement{
 
     }
 
+    _handleSwipe(){       
+        let startX, startY, endX, endY;
+
+        document.addEventListener("touchstart", function(event) {
+            // Récupération des coordonnées de départ
+            startX = event.touches[0].pageX;
+            startY = event.touches[0].pageY;
+        });
+        
+        document.addEventListener("touchend", function(event) {
+            // Récupération des coordonnées d'arrivée
+            endX = event.changedTouches[0].pageX;
+            endY = event.changedTouches[0].pageY;
+        
+            let sidebar = document.querySelector(".sidebar");
+            // Calcul de la distance parcourue en X et en Y
+            var distX = endX - startX;
+            var distY = endY - startY;
+        
+            // Calcul de l'angle de déplacement
+            var angle = Math.atan2(distY, distX) * 180 / Math.PI;
+        
+            if(Maths.abs(distX) > 100 || Maths.abs(distY) > 100) {
+                // Détermination de la direction du swipe en fonction de l'angle
+                if (angle >= -45 && angle < 45) {
+                    // Swipe à droite
+                    sidebar.classList.toggle("close");
+                } else {
+                    // Swipe à gauche
+                    sidebar.classList.toggle("close");
+                }
+            }
+        });
+
+    }
 
     _attachEventListeners(){
         this.logoutBtn = document.getElementById("logout-link");
@@ -257,6 +292,7 @@ export class SideBar extends HTMLElement{
         this.logoutBtn.addEventListener("click", () => this._handleLogoutClicked());
         this.addFriendBtn.addEventListener("click", () => this._handleAddFriend());
         document.getElementById("profile").addEventListener("click", () => this._handleProfileClicked());
+        this._handleSwipe();
     }
 
 
