@@ -129,6 +129,7 @@
     width: 45vmin;
     height: 45vh;
 
+    cursor: pointer;
 
     border-radius: 40vmin;
     background-color: rgb(192, 238, 228);
@@ -233,6 +234,7 @@
     .big-card-wrapper {
         width: 200px;
         height: 200px;
+        cursor: pointer;
     }
 
     .big-card{
